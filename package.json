@@ -15,9 +15,13 @@
     "@mantine/core": "^7.13.4",
     "@mantine/form": "^7.13.4",
     "@mantine/hooks": "^7.13.4",
+<<<<<<< HEAD
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "github:supabase/ssr",
     "@supabase/supabase-js": "^2.58.0",
+=======
+    "@supabase/ssr": "github:supabase/ssr",
+>>>>>>> c93b62ec63d9b29af254440075ac0ccf4251bcb8
     "@tabler/icons-react": "^3.21.0",
     "build": "^0.1.4",
     "bulid": "^1.0.0",
@@ -47,6 +51,10 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.3.3",
     "standard": "^17.1.2",
+<<<<<<< HEAD
+=======
+    "supabase": "^2.45.5",
+>>>>>>> c93b62ec63d9b29af254440075ac0ccf4251bcb8
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
   },
