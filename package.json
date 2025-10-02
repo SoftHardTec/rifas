@@ -11,52 +11,41 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@mantine/carousel": "^7.13.4",
-    "@mantine/core": "^7.13.4",
-    "@mantine/form": "^7.13.4",
-    "@mantine/hooks": "^7.13.4",
-<<<<<<< HEAD
+    "@mantine/carousel": "^8.3.2",
+    "@mantine/core": "^8.3.2",
+    "@mantine/form": "^8.3.2",
+    "@mantine/hooks": "^8.3.2",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
-    "@supabase/ssr": "github:supabase/ssr",
     "@supabase/supabase-js": "^2.58.0",
-=======
-    "@supabase/ssr": "github:supabase/ssr",
->>>>>>> c93b62ec63d9b29af254440075ac0ccf4251bcb8
-    "@tabler/icons-react": "^3.21.0",
-    "build": "^0.1.4",
-    "bulid": "^1.0.0",
+    "@tabler/icons-react": "^3.35.0",
     "cloudinary": "^2.7.0",
-    "embla-carousel-react": "^7.1.0",
+    "embla-carousel-react": "^8.6.0",
     "formidable": "^3.5.4",
-    "mysql2": "^3.15.0",
-    "next": "^15.0.1",
+    "mysql2": "^3.15.1",
+    "next": "^15.5.4",
     "next-cloudinary": "^6.16.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "streamifier": "^0.1.1",
-    "tailwind-preset-mantine": "^1.2.1"
+    "tailwind-preset-mantine": "^3.0.0"
   },
   "devDependencies": {
     "@types/formidable": "^3.4.5",
-    "@types/node": "^22.18.6",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/node": "^24.6.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
     "@types/streamifier": "^0.1.2",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^15.0.1",
-    "eslint-config-prettier": "^8.10.0",
-    "postcss": "^8.4.47",
-    "postcss-preset-mantine": "^1.17.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.36.0",
+    "eslint-config-next": "^15.5.4",
+    "eslint-config-prettier": "^10.1.8",
+    "postcss": "^8.5.6",
+    "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
-    "prettier": "^3.3.3",
+    "prettier": "^3.6.2",
     "standard": "^17.1.2",
-<<<<<<< HEAD
-=======
-    "supabase": "^2.45.5",
->>>>>>> c93b62ec63d9b29af254440075ac0ccf4251bcb8
-    "tailwindcss": "^3.4.14",
-    "typescript": "^5.6.3"
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5.9.3"
   },
-  "packageManager": "pnpm@9.12.2"
+  "packageManager": "pnpm@10.17.1"
 }
