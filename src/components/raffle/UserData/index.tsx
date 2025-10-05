@@ -102,6 +102,9 @@ export default function UserData({ methodPage, ticketCount }: UserDataProps) {
     values: typeof form.values,
     imageUrl: string,
   ): Promise<Response> => {
+    if (!(methodPage === "venezuela" || methodPage === "mercantil")) {
+      values.bank = "Moneda extranjera";
+    }
     const formdata = new FormData();
     formdata.append("email", values.email);
     formdata.append("name", values.name);
@@ -116,7 +119,7 @@ export default function UserData({ methodPage, ticketCount }: UserDataProps) {
     formdata.append("ticketCount", ticketCount ? ticketCount.toString() : "0");
     formdata.append("amount", amount());
 
-    const response = await fetch("api/supabase", {
+    const response = await fetch("api/supabase/post", {
       method: "POST",
       body: formdata,
     });

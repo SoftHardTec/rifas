@@ -1,13 +1,14 @@
 import { NextResponse, NextRequest } from "next/server";
 import { createClient } from '@/app/api/supabase/server';
+import { createUniqueTickets } from "@/utils/CreateTickets";
 
 
 export async function POST(req: NextRequest) {
-
+  
   const supabase = await createClient()
   try {
     const formData = await req.formData();
-
+    
     // Extraer
     const nameEntry = formData.get("name");
     const emailEntry = formData.get("email");
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
     const methodPayEntry = formData.get("method_pay");
     const amountEntry = formData.get("amount");
     const ticketCountEntry = formData.get("ticketCount");
-
+    
     
     
     // Sanear valores
@@ -37,8 +38,9 @@ export async function POST(req: NextRequest) {
     const method_pay = typeof methodPayEntry === "string" ? methodPayEntry : undefined;
     const amount = typeof amountEntry === "string" ? amountEntry : undefined;
     const ticketCount = typeof ticketCountEntry === "string" ? parseInt(ticketCountEntry, 10) : undefined;
-
-    console.log({ name, email, card_id, phone, ticketCount });
+    const tickets = await createUniqueTickets(ticketCount || 0);
+    
+    console.log({ name, email, card_id, phone, ticketCount, tickets });
 
     //insert user_data
     const { error: error_user } = await supabase
@@ -71,7 +73,15 @@ console.log({file_url, reference, bank, method_pay, amount});
     if (error_pay) {
       throw error_pay;
     }
-
+    //insert tickets
+    if (tickets.length > 1) {
+      const { error: error_tickets } = await supabase
+        .from("tickets")
+        .insert(tickets.map(t => ({ tickets: t.tickets })));
+      if (error_tickets) {
+        throw error_tickets;
+      }
+    }
     return NextResponse.json({ message: "Datos guardados con éxito"});
   } catch (error) {
     console.error("Supabase insert error:", error);
