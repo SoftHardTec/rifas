@@ -13,36 +13,66 @@ export async function POST(req: NextRequest) {
     const emailEntry = formData.get("email");
     const numberIdEntry = formData.get("NumberId");
     const numberPhoneEntry = formData.get("NumberPhone");
+    const referenceEntry = formData.get("reference");
+    const bankEntry = formData.get("bank");
+    const fileUrlEntry = formData.get("fileUrl");
+    const methodPayEntry = formData.get("method_pay");
+    const amountEntry = formData.get("amount");
+    const ticketCountEntry = formData.get("ticketCount");
 
+    
+    
     // Sanear valores
     const name = typeof nameEntry === "string" ? nameEntry : undefined;
     const email = typeof emailEntry === "string" ? emailEntry : undefined;
     const card_id =
-      typeof numberIdEntry === "string"
-        ? parseInt(numberIdEntry, 10)
-        : undefined;
-    const phone =
-      typeof numberPhoneEntry === "string"
-        ? parseInt(numberPhoneEntry, 10)
-        : undefined;
-console.log({ name, email, card_id, phone });
-    const {data, error } = await supabase
+    typeof numberIdEntry === "string"
+    ? parseInt(numberIdEntry, 10)
+    : undefined;
+    const phone = typeof numberPhoneEntry === "string" ? parseInt(numberPhoneEntry, 10) : undefined;
+    
+    const file_url = fileUrlEntry
+    const reference = typeof referenceEntry === "string" ? referenceEntry : undefined;
+    const bank = typeof bankEntry === "string" ? bankEntry : null;
+    const method_pay = typeof methodPayEntry === "string" ? methodPayEntry : undefined;
+    const amount = typeof amountEntry === "string" ? amountEntry : undefined;
+    const ticketCount = typeof ticketCountEntry === "string" ? parseInt(ticketCountEntry, 10) : undefined;
+
+    console.log({ name, email, card_id, phone, ticketCount });
+
+    //insert user_data
+    const { error: error_user } = await supabase
       .from("user_data")
       .insert([
         {
           name: name,
           email: email,
-          id_card: Number.isFinite(card_id as number) ? (card_id as number) : undefined,
-          phone: Number.isFinite(phone as number) ? (phone as number) : undefined,
+          id_card: card_id,
+          phone: phone,
+          number_tickets: ticketCount,
         },
       ])
-      .select();
-
-    if (error) {
-      throw error;
+    if (error_user) {
+      throw error_user;
     }
 
-    return NextResponse.json({ message: "Datos guardados con éxito", data });
+console.log({file_url, reference, bank, method_pay, amount});
+
+    //insert pay_data
+    const { error: error_pay } = await supabase.from("pay_data").insert([
+      {
+        method_pay: method_pay,
+        voucher: file_url,
+        reference: reference,
+        bank: bank,
+        amount: amount,
+      },
+    ])
+    if (error_pay) {
+      throw error_pay;
+    }
+
+    return NextResponse.json({ message: "Datos guardados con éxito"});
   } catch (error) {
     console.error("Supabase insert error:", error);
     return NextResponse.json(

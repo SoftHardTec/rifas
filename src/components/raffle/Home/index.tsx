@@ -49,7 +49,7 @@ export function HomeRaffle() {
         <Grid gutter="md">
           <Grid.Col>
             <Skeleton radius="md" animate={false} visible={false}>
-              <UserData methodPage={methodPage} />
+              <UserData ticketCount={ticketCount} methodPage={methodPage} />
             </Skeleton>
           </Grid.Col>
         </Grid>

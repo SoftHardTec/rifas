@@ -18,11 +18,13 @@ import { useState } from "react";
 
 interface UserDataProps {
   methodPage: string | null;
+  ticketCount: number | null;
 }
-export default function UserData({ methodPage }: UserDataProps) {
+export default function UserData({ methodPage, ticketCount }: UserDataProps) {
   const [file, setFile] = useState<File | null>(null);
 
   console.log("methodPage:", methodPage);
+  console.log("ticketCount:", ticketCount);
   const selectPhoneCode = countries.map((PhoneCode) => ({
     label: `${PhoneCode.flagEmoji} ${PhoneCode.phoneCode}`,
     value: `${PhoneCode.phoneCode} ${PhoneCode.name}`,
@@ -34,9 +36,17 @@ export default function UserData({ methodPage }: UserDataProps) {
   const selectBankData = banks.map((bank) => {
     return {
       label: `${bank.CODE} - ${bank.NAME}`,
-      value: bank.CODE,
+      value: `${bank.CODE} - ${bank.NAME}`,
     };
   });
+  function amount() {
+    if (methodPage === "venezuela" || methodPage === "mercantil") {
+      const mount = ticketCount ? ticketCount * 180 : undefined;
+      return `${mount}.00 bss`;
+    } else {
+      return `${ticketCount}$`;
+    }
+  }
   // Configuración del formulario
   const form = useForm({
     mode: "uncontrolled",
@@ -101,7 +111,10 @@ export default function UserData({ methodPage }: UserDataProps) {
     formdata.append("NumberId", values.NumberId);
     formdata.append("bank", values.bank);
     formdata.append("reference", values.reference);
-    formdata.append("file_url", imageUrl);
+    formdata.append("fileUrl", imageUrl);
+    formdata.append("method_pay", methodPage || "");
+    formdata.append("ticketCount", ticketCount ? ticketCount.toString() : "0");
+    formdata.append("amount", amount());
 
     const response = await fetch("api/supabase", {
       method: "POST",
@@ -116,7 +129,7 @@ export default function UserData({ methodPage }: UserDataProps) {
         onSubmit={form.onSubmit(async (values) => {
           try {
             const imageUrl = await cloudinaryFilesubmit();
-
+            console.log("URL de la imagen:", imageUrl);
             if (imageUrl) {
               const responseSupabase = await supabaseSubmit(values, imageUrl);
 
