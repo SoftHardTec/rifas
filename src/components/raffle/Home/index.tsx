@@ -17,11 +17,16 @@ import UserData from "../UserData";
 import DataPage from "../DataPage";
 import TicketChecker from "../TicketChecker";
 import ButtonContact from "../ButtonContact";
+import Tickets from "../Tickets";
+import BarProgressTickets from "../BarProgressTickets";
 import { useState } from "react";
 
 export function HomeRaffle() {
   const [ticketCount, setTicketCount] = useState<number | null>(2);
   const [methodPage, setMethodPage] = useState<string | null>("venezuela");
+  const [consultUser, setConsultUser] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
   return (
     <Container my="md" size="xl">
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
@@ -32,6 +37,7 @@ export function HomeRaffle() {
           <Grid.Col>
             <Skeleton radius="md" animate={false} visible={false}>
               <InfoRaffle />
+              <BarProgressTickets key={refreshKey} />
               <Conditions />
             </Skeleton>
           </Grid.Col>
@@ -49,7 +55,11 @@ export function HomeRaffle() {
         <Grid gutter="md">
           <Grid.Col>
             <Skeleton radius="md" animate={false} visible={false}>
-              <UserData ticketCount={ticketCount} methodPage={methodPage} />
+              <UserData
+                ticketCount={ticketCount}
+                methodPage={methodPage}
+                onTicketPurchase={() => setRefreshKey((prev) => prev + 1)}
+              />
             </Skeleton>
           </Grid.Col>
         </Grid>
@@ -61,8 +71,9 @@ export function HomeRaffle() {
         </Button>
       </Group>
       <Group justify="center" mt={80}>
-        <TicketChecker />
+        <TicketChecker onSubmit={setConsultUser} />
       </Group>
+      <Tickets userId={consultUser} />
       <ButtonContact />
     </Container>
   );

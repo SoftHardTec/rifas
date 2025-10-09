@@ -1,7 +1,9 @@
 // postcss.config.mjs
 const config = {
   plugins: {
+    "@tailwindcss/postcss": {},
     "postcss-import": {},
+    "postcss-nesting": {},
     "postcss-preset-mantine": {},
     "postcss-simple-vars": {
       variables: {
@@ -13,8 +15,6 @@ const config = {
       },
     },
     autoprefixer: {},
-    "tailwindcss/nesting": {},
-    tailwindcss: {},
   },
 };
 

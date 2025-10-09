@@ -19,15 +19,20 @@ import { useState } from "react";
 interface UserDataProps {
   methodPage: string | null;
   ticketCount: number | null;
+  onTicketPurchase: () => void;
 }
-export default function UserData({ methodPage, ticketCount }: UserDataProps) {
+export default function UserData({
+  methodPage,
+  ticketCount,
+  onTicketPurchase,
+}: UserDataProps) {
   const [file, setFile] = useState<File | null>(null);
 
   console.log("methodPage:", methodPage);
   console.log("ticketCount:", ticketCount);
   const selectPhoneCode = countries.map((PhoneCode) => ({
     label: `${PhoneCode.flagEmoji} ${PhoneCode.phoneCode}`,
-    value: `${PhoneCode.phoneCode} ${PhoneCode.name}`,
+    value: PhoneCode.phoneCode,
   }));
   const selectId = optionId.map((id) => ({
     label: id.label,
@@ -139,6 +144,8 @@ export default function UserData({ methodPage, ticketCount }: UserDataProps) {
               if (responseSupabase.ok) {
                 console.log("Respuesta de Supabase:", responseSupabase);
                 alert("¡Formulario enviado con éxito!");
+                onTicketPurchase(); // ¡Llamamos a la función para actualizar!
+                form.reset(); // Limpiar el formulario después de enviar
               } else {
                 const errorData = await responseSupabase.json();
                 console.error("Error de Supabase:", errorData);
@@ -213,7 +220,7 @@ export default function UserData({ methodPage, ticketCount }: UserDataProps) {
               rightSection={<div />}
               placeholder="Teléfono"
               minLength={7}
-              maxLength={10}
+              maxLength={11}
               allowDecimal={false}
               key={form.key("NumberPhone")}
               {...form.getInputProps("NumberPhone")}

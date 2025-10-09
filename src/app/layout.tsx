@@ -23,7 +23,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Next App Mantine Tailwind Template",
+  title: "Gana con la Pampara",
   description: "Next App Mantine Tailwind Template",
 };
 
@@ -43,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
-        <title>RifaApp</title>
+        <title>Gana con la Pampara</title>
       </head>
       <body className="antialiased">
         <MantineProvider theme={theme}>

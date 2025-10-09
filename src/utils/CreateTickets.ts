@@ -1,15 +1,18 @@
-import { createClient} from "@/app/api/supabase/server";
+import { createClient } from "@/app/api/supabase/server";
 
+interface TicketDB {
+  tickets: number;
+}
 
 export async function getAvailableTickets(desiredNumbers: number[]): Promise<number[]> {
-    const supabase = await createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("tickets")
     .select("tickets")
     .in("tickets", desiredNumbers);
   if (error) throw error;
-  const existing = data?.map(t => t.tickets) ?? [];
-  return desiredNumbers.filter(n => !existing.includes(n));
+  const existing: number[] = (data as TicketDB[] | null)?.map((t) => t.tickets) ?? [];
+  return desiredNumbers.filter((n) => !existing.includes(n));
 }
 
 export async function createUniqueTickets(count: number): Promise<{ tickets: string }[]> {
@@ -19,7 +22,7 @@ export async function createUniqueTickets(count: number): Promise<{ tickets: str
   while (available.length < count && intentos < 10) {
     // Generar candidatos aleatorios
     const generated: Set<number> = new Set();
-    while (generated.size < (count - available.length)) {
+    while (generated.size < count - available.length) {
       generated.add(Math.floor(Math.random() * maxTickets));
     }
     const candidates = Array.from(generated);
@@ -28,11 +31,11 @@ export async function createUniqueTickets(count: number): Promise<{ tickets: str
     available.push(...existing);
     intentos++;
   }
-  
   const finalTickets = available.slice(0, count);
   // Formatear a 5 dígitos con ceros a la izquierda
-  const submitTickets = finalTickets.map(n => ({ tickets: n.toString().padStart(5, '0') }));
-  if (submitTickets.length === 0) return [];
+  const submitTickets = finalTickets.map((n) => ({ tickets: n.toString().padStart(5, "0") }));
+  if (submitTickets.length === 0)
+    throw new Error("No hay más tickets disponibles. Todos los números han sido asignados.");
   return submitTickets;
 }
 
