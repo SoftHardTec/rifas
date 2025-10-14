@@ -10,22 +10,33 @@ import {
   FileInput,
   Button,
 } from "@mantine/core";
+import { forwardRef, useImperativeHandle } from "react";
 import { countries } from "@/utils/PhoneCode";
 import { optionId } from "@/utils/OptionId";
 import { banks } from "@/utils/bankData";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
 
+export interface UserDataRef {
+  submit: () => void;
+}
+
 interface UserDataProps {
   methodPage: string | null;
   ticketCount: number | null;
-  onTicketPurchase: () => void;
+  onTicketPurchase: (purchaseData: any) => void;
+  onSubmittingChange: (isSubmitting: boolean) => void;
 }
-export default function UserData({
-  methodPage,
-  ticketCount,
-  onTicketPurchase,
-}: UserDataProps) {
+
+const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
+  {
+    methodPage,
+    ticketCount,
+    onTicketPurchase,
+    onSubmittingChange,
+  }: UserDataProps,
+  ref,
+) {
   const [file, setFile] = useState<File | null>(null);
 
   console.log("methodPage:", methodPage);
@@ -131,40 +142,56 @@ export default function UserData({
     return response;
   };
 
+  const handleSubmit = form.onSubmit(async (values) => {
+    onSubmittingChange(true); // <-- AVISA AL PADRE QUE EMPIECE LA CARGA
+    try {
+      const imageUrl = await cloudinaryFilesubmit();
+      console.log("URL de la imagen:", imageUrl);
+      if (imageUrl) {
+        const responseSupabase = await supabaseSubmit(values, imageUrl);
+
+        if (responseSupabase.ok) {
+          const result = await responseSupabase.json();
+          alert("¡Formulario enviado con éxito!");
+          onTicketPurchase(result.data); // Pasamos los datos de la compra al padre
+          form.reset();
+          setFile(null); // Limpiar el formulario después de enviar
+        } else {
+          const errorData = await responseSupabase.json();
+          console.error("Error de Supabase:", errorData);
+          form.reset();
+          setFile(null);
+          alert(
+            `Error al guardar los datos: ${
+              errorData.error || "Inténtalo de nuevo."
+            }`,
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error en el proceso de envío:", error);
+      alert("Ocurrió un error inesperado. Por favor, inténtalo de nuevo.");
+    } finally {
+      onSubmittingChange(false); // <-- AVISA AL PADRE QUE TERMINE LA CARGA (siempre se ejecuta)
+    }
+  });
+
+  useImperativeHandle(ref, () => ({
+    submit: () => {
+      handleSubmit();
+    },
+  }));
+
   return (
     <Card radius="md" withBorder mt="md">
       <form
-        onSubmit={form.onSubmit(async (values) => {
-          try {
-            const imageUrl = await cloudinaryFilesubmit();
-            console.log("URL de la imagen:", imageUrl);
-            if (imageUrl) {
-              const responseSupabase = await supabaseSubmit(values, imageUrl);
-
-              if (responseSupabase.ok) {
-                console.log("Respuesta de Supabase:", responseSupabase);
-                alert("¡Formulario enviado con éxito!");
-                onTicketPurchase(); // ¡Llamamos a la función para actualizar!
-                form.reset(); // Limpiar el formulario después de enviar
-              } else {
-                const errorData = await responseSupabase.json();
-                console.error("Error de Supabase:", errorData);
-                alert(
-                  `Error al guardar los datos: ${
-                    errorData.error || "Inténtalo de nuevo."
-                  }`,
-                );
-              }
-            }
-          } catch (error) {
-            console.error("Error en el proceso de envío:", error);
-            alert(
-              "Ocurrió un error inesperado. Por favor, inténtalo de nuevo.",
-            );
-          }
-        })}
+        // El onSubmit se puede quitar de aquí si no tienes un botón de submit dentro de este form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
       >
-        <SimpleGrid spacing="lg">
+        <SimpleGrid mt="xs" mb="xs" spacing="lg">
           <TextInput
             withAsterisk
             label="Email"
@@ -267,9 +294,10 @@ export default function UserData({
             value={file}
             onChange={setFile}
           />
-          <Button type="submit">enviar</Button>
         </SimpleGrid>
       </form>
     </Card>
   );
-}
+});
+
+export default UserData;

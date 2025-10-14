@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
       throw error;
     }
     return NextResponse.json({ data });
+    
   }
   catch (error) {
     console.error("[API] Error en el servidor:", error);

@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const emailEntry = formData.get("email");
     const numberIdEntry = formData.get("NumberId");
     const numberPhoneEntry = formData.get("NumberPhone");
-    const phoneCodeEntry = formData.get("phoneCode");
+    const phoneCodeEntry = formData.get("PhoneCode");
     const referenceEntry = formData.get("reference");
     const bankEntry = formData.get("bank");
     const fileUrlEntry = formData.get("fileUrl");
@@ -45,15 +45,20 @@ export async function POST(req: NextRequest) {
     // Verificar si el usuario ya existe
     const { data: data_user_existing, error: error_user_existing } = await supabase
       .from("user_data")
-      .select("id_user")
+      .select("*") // Seleccionamos todos los datos del usuario
       .eq("id_card", card_id);
 
     if (error_user_existing) throw error_user_existing;
 
     let id_user: number | null = null;
+    // Como no usamos .single(), data_user_existing es un array.
+    // Declaramos finalUserData para que contenga un solo objeto de usuario o null.
+    let finalUserData: (typeof data_user_existing)[0] | null = null;
+
     if (data_user_existing && data_user_existing.length > 0) {
       // El usuario ya existe, tomar su id_user
-      id_user = data_user_existing[0].id_user;
+      finalUserData = data_user_existing[0];
+      id_user = finalUserData.id_user;
     } else {
       // No existe, insertar y obtener el id_user
       const { data: data_user_insert, error: error_user_insert } = await supabase
@@ -67,16 +72,20 @@ export async function POST(req: NextRequest) {
             phone: phone,
           },
         ])
-        .select("id_user")
-        .single();
+        .select("*") // Seleccionamos todos los datos del nuevo usuario
+
       if (error_user_insert) throw error_user_insert;
-      id_user = data_user_insert.id_user;
+
+      if (data_user_insert && data_user_insert.length > 0) {
+        finalUserData = data_user_insert[0];
+        id_user = finalUserData.id_user;
+      }
     }
 
 console.log({file_url, reference, bank, method_pay, amount, tickets});
 
     //insert pay_data
-    const { error: error_pay } = await supabase.from("pay_data").insert([
+    const { data: data_pay, error: error_pay } = await supabase.from("pay_data").insert([
       {
         method_pay: method_pay,
         voucher: file_url,
@@ -85,17 +94,18 @@ console.log({file_url, reference, bank, method_pay, amount, tickets});
         amount: amount,
         user_id: id_user,
       },
-    ])
+    ]).select("*");
     if (error_pay) {
       throw error_pay;
     }
 
     //insert tickets
 
-      if (tickets.length > 1) {
+      if (tickets.length > 0) {
       const {data: tickets_user, error: error_tickets } = await supabase
         .from("tickets")
-        .insert(tickets.map(t => ({ tickets: t.tickets, user_id: id_user })));
+        .insert(tickets.map(t => ({ tickets: t.tickets, user_id: id_user, pay_id: data_pay[0].id_pay  })))
+        .select(); // <-- AÑADE ESTO para que devuelva los tickets insertados
       if (error_tickets) {
         throw error_tickets;
       }
@@ -106,12 +116,20 @@ console.log({file_url, reference, bank, method_pay, amount, tickets});
         { 
           user_tickets: ticketCount,
           user_id: id_user,
+          pay_id: data_pay[0].id_pay 
         }
     ])
     if (error_user_tickets) {
       throw error_user_tickets;
     }
-    return NextResponse.json({ message: "Datos guardados con éxito"});
+
+    const data = {
+      userData:finalUserData, 
+      tickets: tickets.map(t => t.tickets), 
+      data_pay: data_pay}
+
+
+    return NextResponse.json({ data});
   } catch (error) {
     console.error("Supabase insert error:", error);
     return NextResponse.json(

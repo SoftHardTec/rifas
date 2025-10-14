@@ -1,19 +1,14 @@
 "use client";
 
-import { Progress, Text } from "@mantine/core";
+import { Group, Progress, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 export default function BarProgressTickets() {
   const [soldTickets, setSoldTickets] = useState(0);
   const totalTickets = 10000; // O el número total de boletos de tu rifa
 
   useEffect(() => {
-    // Hacemos la consulta a la API cuando el componente se monta.
-    // No enviamos ningún `idCard` para que la API nos devuelva
-    // la información de todos los boletos.
     async function fetchSoldTickets() {
       try {
-        // Hacemos una petición POST a nuestra API, pero sin cuerpo (body).
-        // Esto le indicará a la API que queremos todos los boletos.
         const res = await fetch("/api/supabase/getTickets", {
           method: "GET",
         });
@@ -40,19 +35,26 @@ export default function BarProgressTickets() {
   }, []); // El array vacío asegura que se ejecute solo una vez.
 
   const progressPercentage = (soldTickets / totalTickets) * 100;
+  const progressPercentageInt = parseInt(progressPercentage.toFixed(0), 10);
 
   return (
     <>
-      <Progress
-        value={progressPercentage}
-        size="xl"
-        radius="xl"
-        mt="md"
-        animated
-      />
-      <Text ta="center" mt={5}>
-        {soldTickets} de {totalTickets} boletos vendidos
-      </Text>
+      <Group justify="center" mt="md" mb="md">
+        <Progress
+          value={progressPercentage}
+          size="xl"
+          radius="xl"
+          mt="md"
+          w={500}
+          h={25}
+          animated
+          striped
+          color="teal"
+        />
+        <Text ta="center" fz="md" fw={700}>
+          {progressPercentageInt}% de boletos vendidos
+        </Text>
+      </Group>
     </>
   );
 }

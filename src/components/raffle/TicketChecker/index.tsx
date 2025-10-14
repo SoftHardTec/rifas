@@ -6,9 +6,13 @@ import { useForm } from "@mantine/form";
 
 interface TicketCheckerProps {
   onSubmit?: (idCard: string) => void;
+  isLoading: boolean;
 }
 
-export default function TicketChecker({ onSubmit }: TicketCheckerProps) {
+export default function TicketChecker({
+  onSubmit,
+  isLoading,
+}: TicketCheckerProps) {
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -50,7 +54,7 @@ export default function TicketChecker({ onSubmit }: TicketCheckerProps) {
               Ingresa tu numero de cedula
             </Text>
             <Group justify="center" mb={20}>
-              <Button type="submit" mt="xl" size="md">
+              <Button type="submit" mt="xl" size="md" loading={isLoading}>
                 <IconSearch size={20} />
                 Verificar
               </Button>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Card, Text, List } from "@mantine/core";
+import { Card, Text, Badge, Group, Stack, Title, Flex } from "@mantine/core";
 
 interface Ticket {
-  tickets: string; // o number, según tu base de datos
+  tickets: number;
 }
 
 interface PayData {
@@ -24,16 +24,22 @@ interface User {
 
 interface TicketsProps {
   userId: string | null;
+  onSubmittingChange: (isSubmitting: boolean) => void;
 }
 
-export default function Tickets({ userId }: TicketsProps) {
+export default function Tickets({ userId, onSubmittingChange }: TicketsProps) {
   const [users, setUsers] = useState<User[]>([]);
   const [searched, setSearched] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      setUsers([]);
+      setSearched(false);
+      return;
+    }
     async function fetchId() {
+      onSubmittingChange(true);
+      setSearched(false);
       const formData = new FormData();
       formData.append("idCard", userId ?? "");
       const res = await fetch("api/supabase/get", {
@@ -43,47 +49,84 @@ export default function Tickets({ userId }: TicketsProps) {
       const data = await res.json();
       setUsers(Array.isArray(data.data) ? data.data : []);
       setSearched(true);
-      setLoading(false);
+      onSubmittingChange(false);
     }
 
-    setLoading(true);
-    setSearched(false);
     fetchId();
   }, [userId]);
 
   if (!userId) return null;
 
   if (searched && users.length === 0) {
-    return <Card>No se encontraron datos para este usuario.</Card>;
+    return (
+      <Card h={300} mt={20}>
+        <Flex
+          justify="center"
+          align="center"
+          h={"100%"}
+          direction="column"
+          gap="md"
+        >
+          <Title order={2} ta="center" c="dimmed">
+            No se encontraron Tickets.
+          </Title>
+          <Text ta="center" c="dimmed">
+            Que esperas para ganar con la Pampara! Compra tus boletos ya.
+          </Text>
+        </Flex>
+      </Card>
+    );
   }
 
   if (users.length > 0) {
     return (
-      <>
+      <Stack mt={20}>
         {users.map((user) => (
           <Card key={user.id_card} radius="md" withBorder mt="md">
-            <Text>Nombre: {user.name}</Text>
-            <Text>
-              Pago validado:{" "}
-              {user.pay_data && user.pay_data.length > 0
-                ? user.pay_data[0].validated
-                  ? "Confirmado"
-                  : "Pendiente"
-                : "No hay datos de pago"}
-            </Text>
-            <Text>Tickets:</Text>
-            <List size="sm" spacing="xs">
+            <Stack gap="xs">
+              <Text>
+                <Text span fw={700}>
+                  Nombre:
+                </Text>{" "}
+                {user.name}
+              </Text>
+              <Text>
+                <Text span fw={700}>
+                  Estado del Pago:
+                </Text>{" "}
+                {user.pay_data && user.pay_data.length > 0 ? (
+                  <Badge
+                    color={user.pay_data[0].validated ? "green" : "orange"}
+                  >
+                    {user.pay_data[0].validated ? "Confirmado" : "Pendiente"}
+                  </Badge>
+                ) : (
+                  "No hay datos de pago"
+                )}
+              </Text>
+              <Text fw={700}>Boletos Asignados:</Text>
               {user.tickets && user.tickets.length > 0 ? (
-                user.tickets.map((t, i) => (
-                  <List.Item key={i}>{t.tickets}</List.Item>
-                ))
+                <Group gap="xs">
+                  {user.tickets.map((ticket) => (
+                    <Badge
+                      key={ticket.tickets}
+                      variant="light"
+                      size="lg"
+                      radius="sm"
+                    >
+                      {ticket.tickets.toString().padStart(4, "0")}
+                    </Badge>
+                  ))}
+                </Group>
               ) : (
-                <List.Item>No tiene tickets asignados</List.Item>
+                <Text size="sm" c="dimmed">
+                  No hay boletos asignados.
+                </Text>
               )}
-            </List>
+            </Stack>
           </Card>
         ))}
-      </>
+      </Stack>
     );
   }
 }
