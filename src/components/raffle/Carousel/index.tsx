@@ -1,16 +1,28 @@
 import { Carousel } from "@mantine/carousel";
-import { useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
 
 export default function ImageCarousel() {
-  const autoplay = useRef(Autoplay({ delay: 2000, stopOnInteraction: false }));
+  // Creamos la instancia del plugin. No es necesario usar useRef si solo se pasa al carrusel.
+  const autoplay = Autoplay({
+    delay: 2000,
+    stopOnInteraction: false, // El autoplay no se detiene si el usuario interactúa con el carrusel
+    stopOnMouseEnter: true, // El autoplay se detiene al pasar el ratón por encima
+  });
   return (
     <Carousel
       withIndicators
-      h="100%"
-      plugins={[autoplay.current]}
-      onMouseEnter={autoplay.current.stop} // Detiene el autoplay al pasar el mouse
-      onMouseLeave={autoplay.current.reset} // Reanuda el autoplay al quitar el mouse
+      height="100%"
+      plugins={[autoplay]}
+      styles={{
+        indicator: {
+          width: "auto",
+          height: 4,
+          transition: "width 250ms ease",
+          "&[data-active]": {
+            width: 40,
+          },
+        },
+      }}
     >
       <Carousel.Slide>1</Carousel.Slide>
       <Carousel.Slide>2</Carousel.Slide>
