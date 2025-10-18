@@ -6,12 +6,11 @@ export default function ImageCarousel() {
   const autoplay = useRef(Autoplay({ delay: 2000, stopOnInteraction: false }));
   return (
     <Carousel
-      loop
       withIndicators
       h="100%"
       plugins={[autoplay.current]}
-      onMouseEnter={autoplay.current.stop}
-      onMouseLeave={autoplay.current.reset}
+      onMouseEnter={autoplay.current.stop} // Detiene el autoplay al pasar el mouse
+      onMouseLeave={autoplay.current.reset} // Reanuda el autoplay al quitar el mouse
     >
       <Carousel.Slide>1</Carousel.Slide>
       <Carousel.Slide>2</Carousel.Slide>
