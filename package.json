@@ -11,7 +11,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@mantine/carousel": "^8.3.2",
+    "@mantine/carousel": "^8.3.5",
     "@mantine/core": "^8.3.2",
     "@mantine/form": "^8.3.2",
     "@mantine/hooks": "^8.3.2",
@@ -21,6 +21,7 @@
     "@tabler/icons-react": "^3.35.0",
     "cloudinary": "^2.7.0",
     "dotenv": "^17.2.3",
+    "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "formidable": "^3.5.4",
     "mailersend": "^2.6.0",
@@ -53,6 +54,5 @@
     "prettier": "^3.6.2",
     "tailwindcss": "^4.1.14",
     "typescript": "^5.9.3"
-  },
-  "packageManager": "pnpm@10.17.1"
+  }
 }
