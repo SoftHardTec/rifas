@@ -2,12 +2,20 @@ import { NextResponse, NextRequest } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import streamifier from "streamifier";
 
+// --- Environment Variable Validation ---
+const { NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, NEXT_PUBLIC_CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
+
+if (!NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || !NEXT_PUBLIC_CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
+  console.error("Cloudinary environment variables are not set");
+  // In a real app, you might want to throw an error at startup
+}
+
 // --- Cloudinary Configuration ---
 // Moved outside the POST handler to run only once on module load.
 cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: NEXT_PUBLIC_CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_API_SECRET,
 });
 
 // --- Types ---

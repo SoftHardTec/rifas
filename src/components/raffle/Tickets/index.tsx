@@ -38,22 +38,32 @@ export default function Tickets({ userId, onSubmittingChange }: TicketsProps) {
       return;
     }
     async function fetchId() {
+      const abortController = new AbortController();
       onSubmittingChange(true);
       setSearched(false);
-      const formData = new FormData();
-      formData.append("idCard", userId ?? "");
-      const res = await fetch("api/supabase/get", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      setUsers(Array.isArray(data.data) ? data.data : []);
-      setSearched(true);
-      onSubmittingChange(false);
+      try {
+        const formData = new FormData();
+        formData.append("idCard", userId ?? "");
+        const res = await fetch("api/supabase/get", {
+          method: "POST",
+          body: formData,
+          signal: abortController.signal, // Asociar el controlador
+        });
+        const data = await res.json();
+        setUsers(Array.isArray(data.data) ? data.data : []);
+      } catch (error: any) {
+        if (error.name !== "AbortError") {
+          console.error("Error fetching tickets:", error);
+          setUsers([]); // Limpiar en caso de error
+        }
+      } finally {
+        setSearched(true);
+        onSubmittingChange(false);
+      }
     }
 
     fetchId();
-  }, [userId]);
+  }, [userId, onSubmittingChange]);
 
   if (!userId) return null;
 
