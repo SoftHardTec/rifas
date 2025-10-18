@@ -10,6 +10,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "@mantine/carousel/styles.css";
 import { Footer } from "@/components/ui/Footer";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -50,6 +51,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </MantineProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
