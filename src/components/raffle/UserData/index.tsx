@@ -8,7 +8,6 @@ import {
   Select,
   Group,
   FileInput,
-  Button,
 } from "@mantine/core";
 import { forwardRef, useImperativeHandle } from "react";
 import { countries } from "@/utils/PhoneCode";
@@ -16,6 +15,9 @@ import { optionId } from "@/utils/OptionId";
 import { banks } from "@/utils/bankData";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
+import CloudinaryFileSubmit from "./Cloudinarysubmit";
+import supabaseSubmit from "./SupabaseSubmit";
+import HandleError from "@/utils/HandleError";
 
 export interface UserDataRef {
   submit: () => void;
@@ -37,10 +39,12 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
   }: UserDataProps,
   ref,
 ) {
-  const [file, setFile] = useState<File | null>(null);
+  const [errorInfo, setErrorInfo] = useState<{
+    opened: boolean;
+    title: string;
+    text: string;
+  }>({ opened: false, title: "", text: "" });
 
-  console.log("methodPage:", methodPage);
-  console.log("ticketCount:", ticketCount);
   const selectPhoneCode = countries.map((PhoneCode) => ({
     label: `${PhoneCode.flagEmoji} ${PhoneCode.phoneCode}`,
     value: PhoneCode.phoneCode,
@@ -56,10 +60,20 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
     };
   });
   function amount() {
+    if (!ticketCount || ticketCount === 0) {
+      throw new Error("La cantidad de boletos no puede ser cero.");
+    }
+
     if (methodPage === "venezuela" || methodPage === "mercantil") {
-      const mount = ticketCount ? ticketCount * 180 : undefined;
-      return `${mount}.00 bss`;
+      const mount = ticketCount * 180;
+      return `${mount.toFixed(2)} bss`;
     } else {
+      if (ticketCount < 6) {
+        console.log("erropr");
+        throw new Error(
+          "La cantidad mínima de boletos para este método de pago es 6.",
+        );
+      }
       return `${ticketCount}$`;
     }
   }
@@ -84,219 +98,181 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       NumberPhone: (value) => (value ? null : "Teléfono requerido"),
       id: (value) => (value ? null : "requerido"),
       NumberId: (value) => (value ? null : "Cédula requerida"),
-      bank: (value) => (value ? null : "Banco requerido"),
+      bank: (value) =>
+        methodPage === "venezuela" || methodPage === "mercantil"
+          ? value
+            ? null
+            : "Banco requerido"
+          : null,
       reference: (value) => (value ? null : "Referencia requerida"),
+      file: (value) => (value ? null : "Comprobante requerido"),
     },
   });
-  const cloudinaryFilesubmit = async (): Promise<string | undefined> => {
-    if (!file) {
-      alert("Por favor, selecciona un comprobante.");
-      return;
-    }
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const response = await fetch("/api/cloudinary/upload", {
-        method: "POST",
-        body: formData,
-      });
-      if (response.ok) {
-        const data = await response.json();
-        return data.url;
-      } else {
-        alert("Error al subir la imagen. Por favor, inténtalo de nuevo.");
-        return;
-      }
-    } catch (error) {
-      console.error("Error al subir a Cloudinary:", error);
-      alert("Ocurrió un error de red al subir la imagen.");
-      return;
-    }
-  };
-
-  const supabaseSubmit = async (
-    values: typeof form.values,
-    imageUrl: string,
-  ): Promise<Response> => {
-    if (!(methodPage === "venezuela" || methodPage === "mercantil")) {
-      values.bank = "Moneda extranjera";
-    }
-    const formdata = new FormData();
-    formdata.append("email", values.email);
-    formdata.append("name", values.name);
-    formdata.append("PhoneCode", values.PhoneCode);
-    formdata.append("NumberPhone", values.NumberPhone);
-    formdata.append("id", values.id);
-    formdata.append("NumberId", values.NumberId);
-    formdata.append("bank", values.bank);
-    formdata.append("reference", values.reference);
-    formdata.append("fileUrl", imageUrl);
-    formdata.append("method_pay", methodPage || "");
-    formdata.append("ticketCount", ticketCount ? ticketCount.toString() : "0");
-    formdata.append("amount", amount());
-
-    const response = await fetch("api/supabase/post", {
-      method: "POST",
-      body: formdata,
-    });
-    return response;
-  };
 
   const handleSubmit = form.onSubmit(async (values) => {
-    onSubmittingChange(true); // <-- AVISA AL PADRE QUE EMPIECE LA CARGA
     try {
-      const imageUrl = await cloudinaryFilesubmit();
-      console.log("URL de la imagen:", imageUrl);
+      // 1. Validar todo lo que pueda lanzar un error ANTES de cualquier acción.
+      const calculatedAmount = amount();
+
+      // 2. Si las validaciones pasan, ahora sí iniciamos el estado de carga.
+      onSubmittingChange(true);
+
+      // La validación del archivo ahora es automática gracias a `form.onSubmit`.
+      const imageUrl = await CloudinaryFileSubmit({ file: values.file });
       if (imageUrl) {
-        const responseSupabase = await supabaseSubmit(values, imageUrl);
+        const responseSupabase = await supabaseSubmit({
+          values,
+          imageUrl,
+          methodPage,
+          ticketCount,
+          amount: calculatedAmount,
+        });
 
         if (responseSupabase.ok) {
           const result = await responseSupabase.json();
           alert("¡Formulario enviado con éxito!");
           onTicketPurchase(result.data); // Pasamos los datos de la compra al padre
           form.reset();
-          setFile(null); // Limpiar el formulario después de enviar
         } else {
           const errorData = await responseSupabase.json();
-          console.error("Error de Supabase:", errorData);
-          form.reset();
-          setFile(null);
-          alert(
-            `Error al guardar los datos: ${
-              errorData.error || "Inténtalo de nuevo."
-            }`,
-          );
+          throw new Error(errorData.error || "Error al guardar los datos.");
         }
       }
     } catch (error) {
-      console.error("Error en el proceso de envío:", error);
-      alert("Ocurrió un error inesperado. Por favor, inténtalo de nuevo.");
+      onSubmittingChange(false);
+      const errorMessage =
+        error instanceof Error ? error.message : "Ocurrió un error inesperado.";
+      console.error("Error en el proceso de envío:", errorMessage);
+      setErrorInfo({
+        opened: true,
+        title: "Error en el envío",
+        text: errorMessage,
+      });
     } finally {
-      onSubmittingChange(false); // <-- AVISA AL PADRE QUE TERMINE LA CARGA (siempre se ejecuta)
+      onSubmittingChange(false);
     }
   });
 
   useImperativeHandle(ref, () => ({
-    submit: () => {
-      handleSubmit();
-    },
+    submit: handleSubmit,
   }));
 
   return (
-    <Card radius="md" withBorder mt="md">
-      <form
-        // El onSubmit se puede quitar de aquí si no tienes un botón de submit dentro de este form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
-        <SimpleGrid mt="xs" mb="xs" spacing="lg">
-          <TextInput
-            withAsterisk
-            label="Email"
-            placeholder="tucorreo@gmail.com"
-            key={form.key("email")}
-            {...form.getInputProps("email")}
-          />
-          <Group>
-            <Select
-              withAsterisk
-              label="Cédula"
-              placeholder=""
-              key={form.key("id")}
-              {...form.getInputProps("id")}
-              data={selectId}
-              w={70}
-              nothingFoundMessage="No hay resultados..."
-            />
-            <NumberInput
-              rightSection={<div />}
-              label=" "
-              placeholder="Cédula"
-              minLength={7}
-              maxLength={8}
-              key={form.key("NumberId")}
-              {...form.getInputProps("NumberId")}
-              allowDecimal={false}
-              allowLeadingZeros={false}
-              allowNegative={false}
-              style={{ flex: 1 }}
-            />
-          </Group>
-          <TextInput
-            withAsterisk
-            label="Nombre completo"
-            placeholder="Pedro Perez"
-            key={form.key("name")}
-            {...form.getInputProps("name")}
-          />
-          <Group>
-            <Select
-              withAsterisk
-              label="Teléfono"
-              placeholder=""
-              key={form.key("PhoneCode")}
-              {...form.getInputProps("PhoneCode")}
-              data={selectPhoneCode}
-              w={110}
-              nothingFoundMessage="No hay resultados..."
-            />
-            <NumberInput
-              label=" "
-              rightSection={<div />}
-              placeholder="Teléfono"
-              minLength={7}
-              maxLength={11}
-              allowDecimal={false}
-              key={form.key("NumberPhone")}
-              {...form.getInputProps("NumberPhone")}
-              allowLeadingZeros={true}
-              allowNegative={false}
-              style={{ flex: 1 }}
-            />
-          </Group>
-          {(methodPage === "venezuela" || methodPage === "mercantil") && (
-            <Select
-              withAsterisk
-              label="Banco"
-              placeholder="Selecciona un banco"
-              key={form.key("bank")}
-              {...form.getInputProps("bank")}
-              data={selectBankData}
-              searchable
-              clearable
-              nothingFoundMessage="No hay resultados..."
-            />
-          )}
-          <NumberInput
-            withAsterisk
-            label="Referencia"
-            rightSection={<div />}
-            placeholder="Ultimo 6 Digitos"
-            key={form.key("reference")}
-            {...form.getInputProps("reference")}
-            minLength={4}
-            maxLength={8}
-            allowDecimal={false}
-            allowNegative={false}
-            trimLeadingZeroesOnBlur={false}
-          />
+    <>
+      <HandleError
+        opened={errorInfo.opened}
+        onClose={() => setErrorInfo({ ...errorInfo, opened: false })}
+        title={errorInfo.title}
+        text={errorInfo.text}
+      />
 
-          <FileInput
-            label="Comprobante"
-            clearable
-            withAsterisk
-            accept="image/png,image/jpeg"
-            key={form.key("file")}
-            {...form.getInputProps("file")}
-            placeholder="Ingresa el Comprobante de Pago"
-            value={file}
-            onChange={setFile}
-          />
-        </SimpleGrid>
-      </form>
-    </Card>
+      <Card radius="md" withBorder mt="md">
+        <form onSubmit={handleSubmit}>
+          <SimpleGrid mt="xs" mb="xs" spacing="lg">
+            <TextInput
+              withAsterisk
+              label="Email"
+              placeholder="tucorreo@gmail.com"
+              key={form.key("email")}
+              {...form.getInputProps("email")}
+            />
+            <Group>
+              <Select
+                withAsterisk
+                label="Cédula"
+                placeholder=""
+                key={form.key("id")}
+                {...form.getInputProps("id")}
+                data={selectId}
+                w={70}
+                nothingFoundMessage="No hay resultados..."
+              />
+              <NumberInput
+                rightSection={<div />}
+                label=" "
+                placeholder="Cédula"
+                minLength={7}
+                maxLength={8}
+                key={form.key("NumberId")}
+                {...form.getInputProps("NumberId")}
+                allowDecimal={false}
+                allowLeadingZeros={false}
+                allowNegative={false}
+                style={{ flex: 1 }}
+              />
+            </Group>
+            <TextInput
+              withAsterisk
+              label="Nombre completo"
+              placeholder="Pedro Perez"
+              key={form.key("name")}
+              {...form.getInputProps("name")}
+            />
+            <Group>
+              <Select
+                withAsterisk
+                label="Teléfono"
+                placeholder=""
+                key={form.key("PhoneCode")}
+                {...form.getInputProps("PhoneCode")}
+                data={selectPhoneCode}
+                w={110}
+                nothingFoundMessage="No hay resultados..."
+              />
+              <NumberInput
+                label=" "
+                rightSection={<div />}
+                placeholder="Teléfono"
+                minLength={7}
+                maxLength={11}
+                allowDecimal={false}
+                key={form.key("NumberPhone")}
+                {...form.getInputProps("NumberPhone")}
+                allowLeadingZeros={true}
+                allowNegative={false}
+                style={{ flex: 1 }}
+              />
+            </Group>
+            {(methodPage === "venezuela" || methodPage === "mercantil") && (
+              <Select
+                withAsterisk
+                label="Banco"
+                placeholder="Selecciona un banco"
+                key={form.key("bank")}
+                {...form.getInputProps("bank")}
+                data={selectBankData}
+                searchable
+                clearable
+                nothingFoundMessage="No hay resultados..."
+              />
+            )}
+            <NumberInput
+              withAsterisk
+              label="Referencia"
+              rightSection={<div />}
+              placeholder="Ultimo 6 Digitos"
+              key={form.key("reference")}
+              {...form.getInputProps("reference")}
+              minLength={4}
+              maxLength={8}
+              allowDecimal={false}
+              allowNegative={false}
+              trimLeadingZeroesOnBlur={false}
+            />
+
+            <FileInput
+              label="Comprobante"
+              clearable
+              withAsterisk
+              accept="image/png,image/jpeg"
+              key={form.key("file")}
+              {...form.getInputProps("file")}
+              placeholder="Ingresa el Comprobante de Pago"
+            />
+          </SimpleGrid>
+        </form>
+      </Card>
+    </>
   );
 });
 

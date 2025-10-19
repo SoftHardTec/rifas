@@ -61,15 +61,18 @@ export default function DataPage({
               }}
               variant="transparent"
               size="2.5rem"
-              radius="md"
+              radius="lg"
               aria-label={bank.label}
+              w={55}
+              h={55}
             >
               <Image
                 component={NextImage}
                 src={bank.img}
                 alt={bank.label}
-                width={100}
+                width={40}
                 height={40}
+                style={{ width: "auto", height: "auto" }}
               />
             </ActionIcon>
           ))}

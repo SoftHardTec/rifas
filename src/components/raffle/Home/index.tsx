@@ -14,7 +14,7 @@ import TicketSelector from "../TicketSelector";
 import Conditions from "../Conditions";
 import InfoRaffle from "../InfoRaffle";
 import UserData from "../UserData";
-import DataPage from "../PayData";
+import PayData from "../PayData";
 import TicketChecker from "../TicketChecker";
 import PurchaseData from "../PurchaseData";
 import ButtonContact from "../ButtonContact";
@@ -71,7 +71,7 @@ export function HomeRaffle() {
         </SimpleGrid>
         <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm" mt="md">
           <Card radius="md" withBorder mt="md">
-            <DataPage ticketCount={ticketCount} setMethodPage={setMethodPage} />
+            <PayData ticketCount={ticketCount} setMethodPage={setMethodPage} />
           </Card>
           <Grid gutter="md">
             <Grid.Col>

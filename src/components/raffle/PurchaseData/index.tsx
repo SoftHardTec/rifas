@@ -53,6 +53,7 @@ export default function PurchaseData({ data }: PurchaseDataProps) {
           alt="La Pampara"
           width={400}
           height={400}
+          style={{ objectFit: "contain" }}
         />
       </Container>
       <Text ta="center" mt={50} c="dimmed">
