@@ -13,12 +13,6 @@ import NextImage from "next/image";
 
 const banks = [
   {
-    key: "Venezuela",
-    label: "BDV",
-    img: "/BDV.png",
-    component: Venezuela,
-  },
-  {
     key: "Mercantil",
     label: "Mercantil",
     img: "/Mercantil.png",
@@ -43,7 +37,7 @@ export default function DataPage({
   ticketCount,
   setMethodPage,
 }: DataPageProps) {
-  const [selectedBank, setSelectedBank] = useState<string>("Venezuela");
+  const [selectedBank, setSelectedBank] = useState<string>("Mercantil");
 
   return (
     <>

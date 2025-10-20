@@ -69,7 +69,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       throw new Error("La cantidad de boletos no puede ser cero.");
     }
 
-    if (methodPage === "Venezuela" || methodPage === "Mercantil") {
+    if (methodPage === "Mercantil") {
       const mount = ticketCount * 180;
       return `${mount.toFixed(2)} bss`;
     } else {
@@ -241,7 +241,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
                 style={{ flex: 1 }}
               />
             </Group>
-            {(methodPage === "Venezuela" || methodPage === "Mercantil") && (
+            {methodPage === "Mercantil" && (
               <Select
                 withAsterisk
                 label="Banco"

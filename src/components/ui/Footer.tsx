@@ -4,9 +4,9 @@ import { useState } from "react";
 import { TermsAndConditionsModal } from "@/utils/termsAndConditions";
 
 import {
+  IconBrandFacebook,
   IconBrandInstagram,
   IconBrandTiktok,
-  IconBrandWhatsapp,
 } from "@tabler/icons-react";
 import NextImage from "next/image";
 import {
@@ -20,37 +20,8 @@ import {
 } from "@mantine/core";
 import classes from "./FooterSocial.module.css";
 
-const links = [
-  { link: "@/utils/TermsAndConditionsModal", label: "Terminos y condiciones" },
-];
-
 export function Footer() {
   const [showTerms, setShowTerms] = useState(false);
-  const items = links.map((link) =>
-    link.label === "Terminos y condiciones" ? (
-      <Anchor
-        c="dimmed"
-        key={link.label}
-        lh={1}
-        onClick={() => setShowTerms(true)}
-        size="sm"
-        style={{ cursor: "pointer" }}
-      >
-        {link.label}
-      </Anchor>
-    ) : (
-      <Anchor
-        c="dimmed"
-        key={link.label}
-        href={link.link}
-        lh={1}
-        onClick={(event) => event.preventDefault()}
-        size="sm"
-      >
-        {link.label}
-      </Anchor>
-    ),
-  );
 
   return (
     <div className={classes.footer}>
@@ -60,6 +31,8 @@ export function Footer() {
           variant="transparent"
           radius="md"
           ml={{ base: 0, sm: 10 }}
+          mt="xs"
+          mb="xs"
         >
           <Image
             component={NextImage}
@@ -69,7 +42,8 @@ export function Footer() {
             alt="logo"
           />
         </ActionIcon>
-        <Group justify="center" mt={{ base: 0, sm: 15 }} mb={10}>
+
+        <Group justify="center" mt={{ base: 30, sm: 20 }} mb={20}>
           <Anchor
             href="https://supergana.com.ve/resultados.php"
             target="_blank"
@@ -89,12 +63,13 @@ export function Footer() {
             <Image
               component={NextImage}
               src={"/conalot.png"}
-              width={45}
-              height={45}
+              width={60}
+              height={60}
               alt="logo"
             />
           </ActionIcon>
         </Group>
+
         <SimpleGrid cols={1} spacing={0}>
           <Title mb={20} order={4}>
             Siguenos en:
@@ -106,7 +81,7 @@ export function Footer() {
               rel="noopener noreferrer"
             >
               <ActionIcon size="lx" variant="default" radius="xl">
-                <IconBrandWhatsapp size={30} stroke={1.5} />
+                <IconBrandFacebook size={30} stroke={1.5} />
               </ActionIcon>
             </Anchor>
             <Anchor
@@ -131,10 +106,18 @@ export function Footer() {
         </SimpleGrid>
       </div>
 
-      <Group justify="center" className={classes.links}>
-        {items}
+      <Group mt="md" justify="center" className={classes.links}>
+        <Anchor
+          c="dimmed"
+          lh={1}
+          onClick={() => setShowTerms(true)}
+          size="sm"
+          style={{ cursor: "pointer" }}
+        >
+          Términos y condiciones
+        </Anchor>
       </Group>
-      <Group mt={30} justify="center">
+      <Group mb="md" mt={30} justify="center">
         <Text size="xs">© 2025 SoftHard Tecnology. All rights reserved.</Text>
       </Group>
       {showTerms && (

@@ -27,7 +27,7 @@ import Loader from "@/components/ui/Loader";
 
 export function HomeRaffle() {
   const [ticketCount, setTicketCount] = useState<number | null>(2);
-  const [methodPage, setMethodPage] = useState<string | null>("Venezuela");
+  const [methodPage, setMethodPage] = useState<string | null>("Mercantil");
   const [consultUser, setConsultUser] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
