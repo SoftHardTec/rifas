@@ -18,6 +18,7 @@ import { useState } from "react";
 import CloudinaryFileSubmit from "./Cloudinarysubmit";
 import supabaseSubmit from "./SupabaseSubmit";
 import HandleError from "@/utils/HandleError";
+import Confirmation from "@/utils/Confirmation";
 
 export interface UserDataRef {
   submit: () => void;
@@ -45,6 +46,10 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
     text: string;
   }>({ opened: false, title: "", text: "" });
 
+  const [confirmationInfo, setConfirmationInfo] = useState({
+    opened: false,
+  });
+
   const selectPhoneCode = countries.map((PhoneCode) => ({
     label: `${PhoneCode.flagEmoji} ${PhoneCode.phoneCode}`,
     value: PhoneCode.phoneCode,
@@ -64,14 +69,13 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       throw new Error("La cantidad de boletos no puede ser cero.");
     }
 
-    if (methodPage === "venezuela" || methodPage === "mercantil") {
+    if (methodPage === "Venezuela" || methodPage === "Mercantil") {
       const mount = ticketCount * 180;
       return `${mount.toFixed(2)} bss`;
     } else {
       if (ticketCount < 6) {
-        console.log("erropr");
         throw new Error(
-          "La cantidad mínima de boletos para este método de pago es 6.",
+          `La cantidad mínima para ${methodPage} es de 6 boletos.`,
         );
       }
       return `${ticketCount}$`;
@@ -111,13 +115,9 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
 
   const handleSubmit = form.onSubmit(async (values) => {
     try {
-      // 1. Validar todo lo que pueda lanzar un error ANTES de cualquier acción.
       const calculatedAmount = amount();
 
-      // 2. Si las validaciones pasan, ahora sí iniciamos el estado de carga.
       onSubmittingChange(true);
-
-      // La validación del archivo ahora es automática gracias a `form.onSubmit`.
       const imageUrl = await CloudinaryFileSubmit({ file: values.file });
       if (imageUrl) {
         const responseSupabase = await supabaseSubmit({
@@ -130,12 +130,14 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
 
         if (responseSupabase.ok) {
           const result = await responseSupabase.json();
-          alert("¡Formulario enviado con éxito!");
+          setConfirmationInfo({
+            opened: true,
+          });
           onTicketPurchase(result.data); // Pasamos los datos de la compra al padre
           form.reset();
         } else {
           const errorData = await responseSupabase.json();
-          throw new Error(errorData.error || "Error al guardar los datos.");
+          throw new Error(errorData.error || ".");
         }
       }
     } catch (error) {
@@ -145,7 +147,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       console.error("Error en el proceso de envío:", errorMessage);
       setErrorInfo({
         opened: true,
-        title: "Error en el envío",
+        title: "ha ocurrido un error",
         text: errorMessage,
       });
     } finally {
@@ -164,6 +166,12 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
         onClose={() => setErrorInfo({ ...errorInfo, opened: false })}
         title={errorInfo.title}
         text={errorInfo.text}
+      />
+      <Confirmation
+        opened={confirmationInfo.opened}
+        onClose={() =>
+          setConfirmationInfo({ ...confirmationInfo, opened: false })
+        }
       />
 
       <Card radius="md" withBorder mt="md">
@@ -233,7 +241,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
                 style={{ flex: 1 }}
               />
             </Group>
-            {(methodPage === "venezuela" || methodPage === "mercantil") && (
+            {(methodPage === "Venezuela" || methodPage === "Mercantil") && (
               <Select
                 withAsterisk
                 label="Banco"

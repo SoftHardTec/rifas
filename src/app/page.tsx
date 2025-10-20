@@ -6,8 +6,10 @@ import {
   AppShellHeader,
   AppShellMain,
   Group,
-  Flex,
+  AppShellFooter,
 } from "@mantine/core";
+import { Footer } from "@/components/ui/Footer";
+import Contacto from "@/components/raffle/ButtonContact";
 
 export default function Home() {
   return (
@@ -20,8 +22,8 @@ export default function Home() {
       </AppShellHeader>
       <AppShellMain>
         <HomeRaffle />
-        <div id="contacto"></div>
       </AppShellMain>
+      <Footer />
     </AppShell>
   );
 }

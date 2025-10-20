@@ -17,7 +17,7 @@ export default function ContactButton() {
           position: "fixed",
           right: "2rem",
           bottom: "2rem",
-          zIndex: 1000,
+          zIndex: 199,
           boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
         }}
       >

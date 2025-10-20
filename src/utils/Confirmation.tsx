@@ -1,19 +1,12 @@
 import { Modal, Title, Text, Group, Container } from "@mantine/core";
-import { IconExclamationCircle } from "@tabler/icons-react";
+import { IconCircleCheck } from "@tabler/icons-react";
 import { useEffect } from "react";
 
-type HandleErrorProps = {
+type ComfirmationProps = {
   opened: boolean;
   onClose: () => void;
-  title: string;
-  text?: string;
 };
-export default function HandleError({
-  opened,
-  onClose,
-  title,
-  text,
-}: HandleErrorProps) {
+export default function Confirmation({ opened, onClose }: ComfirmationProps) {
   useEffect(() => {
     if (!opened) {
       return;
@@ -38,14 +31,11 @@ export default function HandleError({
     >
       <Container px="md" py="xl">
         <Group justify="center">
-          <IconExclamationCircle size={80} color="red" />
+          <IconCircleCheck size={80} color="green" />
           <Title c="white" order={2}>
-            {title}
+            Su Compra fue Exitosa!
           </Title>
         </Group>
-        <Text size="lg" fw={800} mt="xl" mb="xl" ta="center">
-          {text}
-        </Text>
       </Container>
     </Modal>
   );

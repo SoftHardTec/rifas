@@ -47,11 +47,8 @@ export default function RootLayout({
         <title>Gana con la Pampara</title>
       </head>
       <body className="antialiased">
-        <MantineProvider theme={theme}>
-          {children}
-          <Footer />
-        </MantineProvider>
         <SpeedInsights />
+        <MantineProvider theme={theme}>{children}</MantineProvider>
       </body>
     </html>
   );

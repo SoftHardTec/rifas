@@ -5,7 +5,6 @@ interface fileData{
 export default async function CloudinaryFileSubmit({
   file,
 }: fileData): Promise<string | undefined> {
-    console.log("file:", file);
   if (!file) {
     throw new Error("Por favor, selecciona un comprobante.");
   }
