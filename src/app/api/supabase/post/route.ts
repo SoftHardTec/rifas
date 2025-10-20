@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Supabase insert error:", error);
     return NextResponse.json(
-      { error: "Ocurrio un error al guardar en Supabase", details: String(error) },
+      { error: "Error al guardar en Supabase", details: String(error) },
       { status: 500 }
     );
   }
