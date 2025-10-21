@@ -3,13 +3,13 @@ import {
   createTheme,
   DEFAULT_THEME,
   MantineProvider,
+  ColorSchemeScript,
   mergeMantineTheme,
 } from "@mantine/core";
 import localFont from "next/font/local";
 
 import "./globals.css";
 import "@mantine/carousel/styles.css";
-import { Footer } from "@/components/ui/Footer";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = localFont({
@@ -44,11 +44,14 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
+        <ColorSchemeScript defaultColorScheme="auto" />
         <title>Gana con la Pampara</title>
       </head>
       <body className="antialiased">
         <SpeedInsights />
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider theme={theme} defaultColorScheme="auto">
+          {children}
+        </MantineProvider>
       </body>
     </html>
   );
