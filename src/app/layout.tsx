@@ -33,6 +33,39 @@ const theme = mergeMantineTheme(
   createTheme({
     fontFamily: geistSans.style.fontFamily,
     fontFamilyMonospace: geistMono.style.fontFamily,
+    // Hacemos el texto principal un poco menos negro
+    black: "#25262b",
+    // Hacemos el fondo de "papel" (cards, etc.) un gris muy claro en vez de blanco puro
+    white: "#fffefeff",
+    primaryColor: "blue",
+    colors: {
+      // Sobrescribimos los colores del tema oscuro para hacerlo más profundo
+      dark: [
+        "#C1C2C5",
+        "#A6A7AB",
+        "#909296",
+        "#5c5f66",
+        "#373A40",
+        "#2C2E33",
+        "#1F2023",
+        "#141517",
+        "#101113",
+        "#0B0C0D",
+      ],
+      // Suavizamos la paleta de grises para el tema claro
+      gray: [
+        "#f8f9fa", // Ligeramente más oscuro que el fondo de "papel"
+        "#e4e7ebf1", // Este será el nuevo fondo del body
+        "#e9ecef",
+        "#dee2e6",
+        "#ced4da",
+        "#adb5bd",
+        "#868e96",
+        "#495057",
+        "#343a40",
+        "#212529",
+      ],
+    },
   }),
 );
 
