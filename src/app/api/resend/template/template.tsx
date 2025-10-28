@@ -1,3 +1,5 @@
+import { Card, Title, Text } from "@mantine/core";
+
 interface EmailTemplateProps {
   name: string;
   tickets: string;
@@ -10,10 +12,18 @@ export default function template({
   ticketCount,
 }: EmailTemplateProps) {
   return (
-    <div className="bg-['#e4e7ebf1']  text-centerwhite p-4 rounded-lg">
-      <h1>Welcome, {name}!</h1>
-      <p>{tickets}</p>
-      <p>{ticketCount}</p>
-    </div>
+    <Card>
+      <Text></Text>
+      <Text></Text>
+    </Card>
   );
 }
+
+/*
+
+
+Aceptor
+Escriba un nro de whatsapp
+Capture Boncorio
+Seleccionar archivo Sin orchi...cionados
+*/
