@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { ColorSchemesSwitcher } from "@/components/ui/color-schemes-switcher";
 import { HomeRaffle } from "@/components/raffle/Home";
