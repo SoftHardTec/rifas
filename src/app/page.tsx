@@ -7,7 +7,7 @@ import { Footer } from "@/components/ui/Footer";
 import { TermsAndConditionsModal } from "@/utils/termsAndConditions";
 
 export default function Home() {
-  const [termsModalOpened, setTermsModalOpened] = useState(true);
+  const [termsModalOpened, setTermsModalOpened] = useState(false);
 
   useEffect(() => {
     const hasVisited = localStorage.getItem("hasVisitedBefore");
