@@ -3,7 +3,6 @@ import {
   createTheme,
   DEFAULT_THEME,
   MantineProvider,
-  ColorSchemeScript,
   mergeMantineTheme,
 } from "@mantine/core";
 import localFont from "next/font/local";
@@ -39,7 +38,6 @@ const theme = mergeMantineTheme(
     white: "#fffefeff",
     primaryColor: "blue",
     colors: {
-      // Sobrescribimos los colores del tema oscuro para hacerlo más profundo
       dark: [
         "#C1C2C5",
         "#A6A7AB",
@@ -51,19 +49,6 @@ const theme = mergeMantineTheme(
         "#141517",
         "#101113",
         "#0B0C0D",
-      ],
-      // Suavizamos la paleta de grises para el tema claro
-      gray: [
-        "#f8f9fa", // Ligeramente más oscuro que el fondo de "papel"
-        "#e4e7ebf1", // Este será el nuevo fondo del body
-        "#e9ecef",
-        "#dee2e6",
-        "#ced4da",
-        "#adb5bd",
-        "#868e96",
-        "#495057",
-        "#343a40",
-        "#212529",
       ],
     },
   }),
@@ -77,12 +62,11 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
-        <ColorSchemeScript defaultColorScheme="auto" />
         <title>Gana con la Pampara</title>
       </head>
       <body className="antialiased">
         <SpeedInsights />
-        <MantineProvider theme={theme} defaultColorScheme="auto">
+        <MantineProvider theme={theme} defaultColorScheme="dark">
           {children}
         </MantineProvider>
       </body>
