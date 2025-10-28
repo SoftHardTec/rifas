@@ -17,8 +17,10 @@ import {
   Image,
   Title,
   SimpleGrid,
+  Button,
 } from "@mantine/core";
 import classes from "./FooterSocial.module.css";
+import { POST } from "@/app/api/cloudinary/upload/route";
 
 export function Footer() {
   const [showTerms, setShowTerms] = useState(false);
@@ -119,6 +121,17 @@ export function Footer() {
       </Group>
       <Group mb="md" mt={30} justify="center">
         <Text size="xs">© 2025 SoftHard Tecnology. All rights reserved.</Text>
+        <Button
+          onClick={async () => {
+            const result = await fetch("/api/resend/post", {
+              method: "POST",
+            });
+            const data = await result.json();
+            console.log(data);
+          }}
+        >
+          resend
+        </Button>
       </Group>
       {showTerms && (
         <TermsAndConditionsModal

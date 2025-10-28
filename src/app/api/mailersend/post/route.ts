@@ -130,3 +130,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Ocurrió un error inesperado.", details: String(error) }, { status: 500 });
   }
 }
+
+/* 
+codigo de ejecucion local
+/curl -X POST \
+  -H "Authorization: Bearer YOUR_CRON_SECRET" \
+  http://localhost:3000/api/mailersend/post
+*/

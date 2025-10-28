@@ -15,6 +15,7 @@
     "@mantine/core": "^8.3.2",
     "@mantine/form": "^8.3.2",
     "@mantine/hooks": "^8.3.2",
+    "@react-email/render": "^1.4.0",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.58.0",
@@ -31,11 +32,12 @@
     "next-cloudinary": "^6.16.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "resend": "^6.2.2",
     "streamifier": "^0.1.1",
     "tailwind-preset-mantine": "^3.0.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.14",
+    "@tailwindcss/postcss": "^4.1.16",
     "@types/formidable": "^3.4.5",
     "@types/node": "^24.6.2",
     "@types/react": "^19.2.0",
@@ -53,7 +55,7 @@
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.6.2",
-    "tailwindcss": "^4.1.14",
+    "tailwindcss": "^4.1.16",
     "typescript": "^5.9.3"
   }
 }
