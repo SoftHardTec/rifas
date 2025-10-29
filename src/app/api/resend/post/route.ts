@@ -33,11 +33,11 @@ interface TicketData {
 // --- Fin de Definiciones de Tipos ---
 
 export async function POST(request: NextRequest) {
-  // 1. --- Protección del Endpoint ---
-  // const authHeader = request.headers.get('authorization');
-  // if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-  //   return new Response('Unauthorized', { status: 401 });
-  // }
+  
+  const authHeader = request.headers.get('authorization');
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response('Unauthorized', { status: 401 });
+  }
 
   try {
     const supabase = await createClient();
