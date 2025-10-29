@@ -31,7 +31,6 @@ export default function Confirmation({ opened, onClose }: ComfirmationProps) {
     >
       <Container px="md" py="xl">
         <Group justify="center">
-          <IconCircleCheck size={80} color="green" />
           <Title c="white" order={2}>
             Su Compra fue Exitosa!
           </Title>

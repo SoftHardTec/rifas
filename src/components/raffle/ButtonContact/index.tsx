@@ -4,13 +4,13 @@ import { IconBrandWhatsapp } from "@tabler/icons-react";
 export default function ContactButton() {
   return (
     <Anchor
-      href="https://wa.me/573136662634"
+      href="https://wa.me/584243059113?text=Hola,%20tengo%20un%20problema!%20"
       target="_blank"
       rel="noopener noreferrer"
     >
       <ActionIcon
         size="xl"
-        color="teal"
+        color="green"
         variant="filled"
         radius="xl"
         style={{

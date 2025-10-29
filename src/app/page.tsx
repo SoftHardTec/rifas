@@ -26,11 +26,7 @@ export default function Home() {
       />
       <AppShell header={{ height: 60 }} padding="md">
         <div id="main"></div>
-        <AppShellHeader>
-          <Group className="h-full px-md justify-end" gap="lg" mr="md">
-            <ColorSchemesSwitcher />
-          </Group>
-        </AppShellHeader>
+        <AppShellHeader></AppShellHeader>
         <AppShellMain>
           <HomeRaffle />
         </AppShellMain>

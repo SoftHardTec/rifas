@@ -16,7 +16,6 @@ import InfoRaffle from "../InfoRaffle";
 import UserData from "../UserData";
 import PayData from "../PayData";
 import TicketChecker from "../TicketChecker";
-import PurchaseData from "../PurchaseData";
 import ButtonContact from "../ButtonContact";
 import Tickets from "../Tickets";
 import BarProgressTickets from "../BarProgressTickets";
@@ -32,13 +31,11 @@ export function HomeRaffle() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [isCheckingTickets, setIsCheckingTickets] = useState(false);
-  const [purchaseResult, setPurchaseResult] = useState<any | null>(null);
   const userDataRef = useRef<UserDataRef>(null);
 
   // Esta función se llamará cuando la compra termine (con éxito o error)
   const handleTicketPurchase = (data: any) => {
     setRefreshKey((prev) => prev + 1);
-    setPurchaseResult(data);
   };
 
   // El Loader se mostrará si cualquiera de las dos acciones está en curso
@@ -87,9 +84,6 @@ export function HomeRaffle() {
             </Grid.Col>
           </Grid>
         </SimpleGrid>
-
-        {/* Mostramos los datos de la compra si existen */}
-        {purchaseResult && <PurchaseData data={purchaseResult} />}
 
         <Group justify="center" mt="lg">
           <Button

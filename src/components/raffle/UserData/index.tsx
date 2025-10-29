@@ -18,7 +18,7 @@ import { useState } from "react";
 import CloudinaryFileSubmit from "./Cloudinarysubmit";
 import supabaseSubmit from "./SupabaseSubmit";
 import HandleError from "@/utils/HandleError";
-import Confirmation from "@/utils/Confirmation";
+import ModalPurchase from "@/components/raffle/ModalPurchase";
 
 export interface UserDataRef {
   submit: () => void;
@@ -167,9 +167,9 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
         title={errorInfo.title}
         text={errorInfo.text}
       />
-      <Confirmation
+      <ModalPurchase
         opened={confirmationInfo.opened}
-        onClose={() =>
+        close={() =>
           setConfirmationInfo({ ...confirmationInfo, opened: false })
         }
       />

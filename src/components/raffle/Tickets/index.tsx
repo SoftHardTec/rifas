@@ -69,7 +69,7 @@ export default function Tickets({ userId, onSubmittingChange }: TicketsProps) {
 
   if (searched && users.length === 0) {
     return (
-      <Card h={300} mt={20}>
+      <Card h={200} mt="xl" radius="lg">
         <Flex
           justify="center"
           align="center"
@@ -77,12 +77,9 @@ export default function Tickets({ userId, onSubmittingChange }: TicketsProps) {
           direction="column"
           gap="md"
         >
-          <Title order={2} ta="center" c="dimmed">
-            No se encontraron Tickets.
+          <Title order={4} ta="center" c="dimmed">
+            No se encontraron tickets vinculados a esta cedula.
           </Title>
-          <Text ta="center" c="dimmed">
-            Que esperas para ganar con la Pampara! Compra tus boletos ya.
-          </Text>
         </Flex>
       </Card>
     );
@@ -92,7 +89,7 @@ export default function Tickets({ userId, onSubmittingChange }: TicketsProps) {
     return (
       <Stack mt={20}>
         {users.map((user) => (
-          <Card key={user.id_card} radius="md" withBorder mt="md">
+          <Card key={user.id_card} radius="lg" withBorder mt="md">
             <Stack gap="xs">
               <Text>
                 <Text span fw={700}>
@@ -104,15 +101,22 @@ export default function Tickets({ userId, onSubmittingChange }: TicketsProps) {
                 <Text span fw={700}>
                   Estado del Pago:
                 </Text>{" "}
-                {user.pay_data && user.pay_data.length > 0 ? (
-                  <Badge
-                    color={user.pay_data[0].validated ? "green" : "orange"}
-                  >
-                    {user.pay_data[0].validated ? "Confirmado" : "Pendiente"}
-                  </Badge>
-                ) : (
-                  "No hay datos de pago"
-                )}
+                {(() => {
+                  if (user.pay_data && user.pay_data.length > 0) {
+                    const allValidated = user.pay_data.every(
+                      (p) => p.validated,
+                    );
+                    return (
+                      <Badge
+                        radius="sm"
+                        color={allValidated ? "green" : "orange"}
+                      >
+                        {allValidated ? "Confirmado" : "Pendiente"}
+                      </Badge>
+                    );
+                  }
+                  return "No hay datos de pago";
+                })()}
               </Text>
               <Text fw={700}>Boletos Asignados:</Text>
               {user.tickets && user.tickets.length > 0 ? (
@@ -122,7 +126,7 @@ export default function Tickets({ userId, onSubmittingChange }: TicketsProps) {
                       key={ticket.tickets}
                       variant="light"
                       size="lg"
-                      radius="sm"
+                      radius="md"
                     >
                       {ticket.tickets.toString().padStart(4, "0")}
                     </Badge>

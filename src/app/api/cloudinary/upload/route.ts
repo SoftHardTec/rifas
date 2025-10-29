@@ -66,6 +66,6 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error("Error uploading to Cloudinary:", error);
-    return NextResponse.json({ error: "Error en el servidor al subir la imagen." }, { status: 500 });
+    return NextResponse.json({ error: "Ah ocurrido un error, vuelva a intentarlo" }, { status: 500 });
   }
 }

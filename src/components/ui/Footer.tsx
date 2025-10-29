@@ -38,7 +38,7 @@ export function Footer() {
         >
           <Image
             component={NextImage}
-            src={"/logo.png"}
+            src={"/logo.jpg"}
             width={100}
             height={40}
             alt="logo"
@@ -96,7 +96,7 @@ export function Footer() {
               </ActionIcon>
             </Anchor>
             <Anchor
-              href="https://instagram.com/"
+              href="https://www.instagram.com/juegacnnosotros/?utm_source=ig_web_button_share_sheet"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -121,17 +121,6 @@ export function Footer() {
       </Group>
       <Group mb="md" mt={30} justify="center">
         <Text size="xs">© 2025 SoftHard Tecnology. All rights reserved.</Text>
-        <Button
-          onClick={async () => {
-            const result = await fetch("/api/resend/post", {
-              method: "POST",
-            });
-            const data = await result.json();
-            console.log(data);
-          }}
-        >
-          resend
-        </Button>
       </Group>
       {showTerms && (
         <TermsAndConditionsModal
