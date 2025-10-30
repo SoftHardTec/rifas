@@ -50,17 +50,17 @@ export function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <ActionIcon size="4rem" variant="transparent" radius="md">
+            <ActionIcon color="black" size="4rem" variant="filled" radius="xl">
               <Image
                 component={NextImage}
                 src={"/super-gana.png"}
-                width={60}
-                height={60}
+                width={100}
+                height={100}
                 alt="logo"
               />
             </ActionIcon>
           </Anchor>
-          <ActionIcon size="4rem" variant="transparent" radius="md">
+          <ActionIcon color="black" size="4rem" variant="filled" radius="xl">
             <Image
               component={NextImage}
               src={"/conalot.png"}
@@ -74,12 +74,17 @@ export function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <ActionIcon size="xl" variant="transparent" radius="md">
+            <ActionIcon
+              bottom={-5}
+              size="3.7rem"
+              variant="transparent"
+              radius="md"
+            >
               <Image
                 component={NextImage}
                 src={"/tachira.png"}
-                width={30}
-                height={30}
+                width={100}
+                height={100}
                 alt="logo"
               />
             </ActionIcon>

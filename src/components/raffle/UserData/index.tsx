@@ -70,7 +70,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
     }
 
     if (methodPage === "Mercantil") {
-      const mount = ticketCount * 180;
+      const mount = ticketCount * 140;
       return `${mount.toFixed(2)} bss`;
     } else {
       if (ticketCount < 6) {

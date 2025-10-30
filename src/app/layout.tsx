@@ -23,7 +23,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "GanacnNosotros",
+  title: "JuegacnNosotros",
   description: "Cambia tu vida con Nosotros",
 };
 
@@ -62,11 +62,11 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
-        <title>GanacnNosotros</title>
+        <title>JuegacnNosotros</title>
       </head>
       <body className="antialiased">
         <SpeedInsights />
-        <MantineProvider theme={theme} defaultColorScheme="dark">
+        <MantineProvider theme={theme} defaultColorScheme="light">
           {children}
         </MantineProvider>
       </body>

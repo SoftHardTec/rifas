@@ -55,7 +55,7 @@ export function TermsAndConditionsModal({
         </Text>
       </Group>
       <Group justify="center" mt="md">
-        <Button mb="md" mt="md" onClick={onClose}>
+        <Button color="rgb(230, 0, 126)" mb="md" mt="md" onClick={onClose}>
           Cerrar
         </Button>
       </Group>

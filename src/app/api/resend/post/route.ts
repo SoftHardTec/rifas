@@ -14,10 +14,12 @@ interface UserData {
   id_user: number;
   name: string;
   email: string;
+  id_card: string;
 }
 
 interface PayData {
   validated: boolean;
+  amount: string; // Ajustado para reflejar que la BD devuelve un string
   // CORRECCIÓN: La relación, aunque sea a uno, puede ser devuelta como un array por Supabase.
   // Lo ajustamos para que espere un array de UserData.
   user_data: UserData[] | null;
@@ -31,6 +33,29 @@ interface TicketData {
 }
 
 // --- Fin de Definiciones de Tipos ---
+
+/**
+ * Analiza una cadena de monto para extraer el valor numérico y la moneda.
+ * @param amountStr - La cadena del monto, ej: "180 bss" o "6$".
+ * @returns Un objeto con el valor numérico y la moneda ('bss' o '$').
+ */
+function parseAmountAndCurrency(amountStr: string | null | undefined): { value: number; currency: string } {
+  if (!amountStr) {
+    return { value: 0, currency: 'N/A' };
+  }
+  // Regex para capturar el número (incluyendo decimales) y el identificador de moneda ('$' o 'bss').
+  const match = amountStr.trim().match(/([\d.,]+)\s*(\$|bss)/i);
+
+  if (match) {
+    // Reemplaza la coma por un punto para un parseo decimal consistente.
+    const value = parseFloat(match[1].replace(',', '.'));
+    const currency = match[2].toLowerCase() === '$' ? '$' : 'bss';
+    return { value: isNaN(value) ? 0 : value, currency };
+  }
+
+  // Fallback si no se encuentra un identificador de moneda claro.
+  return { value: parseFloat(amountStr.replace(',', '.')) || 0, currency: 'N/A' };
+}
 
 // Handler para peticiones GET (usado por Vercel Cron Jobs)
 export async function GET(request: NextRequest) {
@@ -58,7 +83,8 @@ export async function POST(request: NextRequest) {
         email_send,
         pay_data!inner (
           validated,
-          user_data ( id_user, name, email )
+          amount,
+          user_data ( id_user, name, email, id_card )
         )
       `)
       .eq('email_send', false)
@@ -82,29 +108,35 @@ export async function POST(request: NextRequest) {
       failed: [] as { id_user: number; error: string }[],
     };
 
-    // 3. --- Agrupar boletos por usuario ---
-    // Como la consulta devuelve boletos individuales, los agrupamos por usuario
-    // para enviar un solo correo por usuario con todos sus boletos pendientes.
-    const usersToEmail: { [key: number]: { id_user: number; name: string; email: string; tickets: TicketData[] } } = {};
+    // 3. --- Agrupar boletos por USUARIO Y MONEDA ---
+    // Se agrupan los boletos por una clave compuesta (usuario + moneda) para enviar
+    // correos separados si un usuario tiene pagos en diferentes monedas.
+    const usersToEmail: { [key: string]: { id_user: number; name: string; email: string; id_card: string; tickets: TicketData[]; currency: string; } } = {};
 
     for (const ticket of ticketsData as TicketData[]) {
-      // Accedemos al primer elemento del array `pay_data` para obtener los datos del pago y del usuario.
       const payData = Array.isArray(ticket.pay_data) ? ticket.pay_data[0] : ticket.pay_data;
-      // CORRECCIÓN: Como user_data ahora es un array, también accedemos a su primer elemento.
       const userArray = payData?.user_data;
       const user = Array.isArray(userArray) ? userArray[0] : userArray;
 
-      if (!user) continue; // Si no hay datos de usuario, saltamos al siguiente boleto.
+      if (!user || !payData) continue;
 
-      if (!usersToEmail[user.id_user]) {
-        usersToEmail[user.id_user] = {
+      // Extraemos la moneda del campo 'amount'.
+      const { currency } = parseAmountAndCurrency(payData.amount);
+
+      // Creamos una clave única para cada combinación de usuario y moneda.
+      const groupKey = `${user.id_user}-${currency}`;
+
+      if (!usersToEmail[groupKey]) {
+        usersToEmail[groupKey] = {
           id_user: user.id_user,
           name: user.name,
           email: user.email,
+          id_card: user.id_card,
           tickets: [],
+          currency: currency, // Guardamos la moneda para este grupo.
         };
       }
-      usersToEmail[user.id_user].tickets.push(ticket);
+      usersToEmail[groupKey].tickets.push(ticket);
     }
 
     // 4. --- Preparar y enviar todos los correos en paralelo ---
@@ -119,15 +151,27 @@ export async function POST(request: NextRequest) {
       const tickets = user.tickets.map((t) => String(t.tickets).padStart(4, '0'));
       const nameToLowerCase = user.name.charAt(0).toUpperCase() + user.name.slice(1);
 
+      // --- LÓGICA DE SUMA POR MONEDA ---
+      // Sumamos los montos solo para los boletos de este grupo (misma moneda).
+      const totalAmount = user.tickets.reduce((sum, ticket) => {
+        const payData = Array.isArray(ticket.pay_data) ? ticket.pay_data[0] : ticket.pay_data;
+        // Parseamos el valor numérico del monto y lo sumamos.
+        const { value } = parseAmountAndCurrency(payData?.amount);
+        return sum + value;
+      }, 0);
+
       // Envía el correo usando Resend y la plantilla de React
       const { data: sentEmail, error: sendError } = await resend.emails.send({
-        from: 'JuegacnNosotros <noreply@softhard.site>', // Reemplaza con tu email verificado en Resend
+        from: 'JuegacnNosotros <noreply@juegacnnosotros.com>', 
         to: user.email,
         subject: `Tus boletos para la rifa`,
         react: TicketEmail({
           name: nameToLowerCase || 'Participante',
           tickets: tickets.join(', '),
           ticketCount: tickets.length,
+          cardId: user.id_card,
+          amount: totalAmount, // Pasamos el monto como número.
+          currency: user.currency, // Ahora 'user.currency' existe y es correcto para el grupo.
         }),
       });
 
@@ -179,10 +223,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: 'Ocurrió un error inesperado en el servidor.', error: e.message }, { status: 500 });
   }
 }
-
-/*
-    curl -X POST \
-    -H "Authorization: Bearer TU_CRON_SECRET" \
-    http://localhost:3000/api/resend/post
-
-  */
