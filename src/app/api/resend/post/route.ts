@@ -32,6 +32,11 @@ interface TicketData {
 
 // --- Fin de Definiciones de Tipos ---
 
+// Handler para peticiones GET (usado por Vercel Cron Jobs)
+export async function GET(request: NextRequest) {
+  return POST(request);
+}
+
 export async function POST(request: NextRequest) {
   
   const authHeader = request.headers.get('authorization');
