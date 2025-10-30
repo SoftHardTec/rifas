@@ -20,7 +20,7 @@ interface EmailTemplateProps {
   currency: string;
 }
 
-export default function template({
+export default function Template({
   name,
   tickets,
   ticketCount,

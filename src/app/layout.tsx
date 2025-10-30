@@ -32,25 +32,6 @@ const theme = mergeMantineTheme(
   createTheme({
     fontFamily: geistSans.style.fontFamily,
     fontFamilyMonospace: geistMono.style.fontFamily,
-    // Hacemos el texto principal un poco menos negro
-    black: "#25262b",
-    // Hacemos el fondo de "papel" (cards, etc.) un gris muy claro en vez de blanco puro
-    white: "#fffefeff",
-    primaryColor: "blue",
-    colors: {
-      dark: [
-        "#C1C2C5",
-        "#A6A7AB",
-        "#909296",
-        "#5c5f66",
-        "#373A40",
-        "#2C2E33",
-        "#1F2023",
-        "#141517",
-        "#101113",
-        "#0B0C0D",
-      ],
-    },
   }),
 );
 
@@ -64,7 +45,7 @@ export default function RootLayout({
       <head>
         <title>JuegacnNosotros</title>
       </head>
-      <body className="antialiased">
+      <body className="antialiased bg-[url('/bg.jpg')] object-cover ">
         <SpeedInsights />
         <MantineProvider theme={theme} defaultColorScheme="light">
           {children}

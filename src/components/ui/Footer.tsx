@@ -28,12 +28,11 @@ export function Footer() {
     <div className={classes.footer}>
       <div className={classes.inner}>
         <ActionIcon
-          size="lx"
+          size="10rem"
           variant="transparent"
           radius="md"
           ml={{ base: 0, sm: 10 }}
-          mt="xs"
-          mb="xs"
+          my="xs"
         >
           <Image
             component={NextImage}
@@ -44,7 +43,7 @@ export function Footer() {
           />
         </ActionIcon>
 
-        <Group justify="center" mt={{ base: 30, sm: 20 }} mb={20}>
+        <Group justify="center" mt={{ base: 0, sm: 20 }} mb={20}>
           <Anchor
             href="https://supergana.com.ve/resultados.php"
             target="_blank"
