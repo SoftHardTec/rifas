@@ -2,13 +2,7 @@
 
 import { useState } from "react";
 import { Container, Title, Flex, ActionIcon, Image } from "@mantine/core";
-import {
-  Venezuela,
-  Zinli,
-  Zelle,
-  Binance,
-  Mercantil,
-} from "../../../utils/MethodPage";
+import { Zinli, Binance, Mercantil } from "../../../utils/MethodPage";
 import NextImage from "next/image";
 
 const banks = [
@@ -19,7 +13,6 @@ const banks = [
     component: Mercantil,
   },
   { key: "Zinli", label: "Zinli", img: "/Zinli.png", component: Zinli },
-  { key: "Zelle", label: "Zelle", img: "/Zelle.png", component: Zelle },
   {
     key: "Binance",
     label: "Binance",

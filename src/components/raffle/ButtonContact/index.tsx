@@ -4,7 +4,7 @@ import { IconBrandWhatsapp } from "@tabler/icons-react";
 export default function ContactButton() {
   return (
     <Anchor
-      href="https://wa.me/584243059113?text=Hola,%20tengo%20un%20problema!%20"
+      href="https://wa.me/584243059113?text=Hola,%20necesito%20ayuda!"
       target="_blank"
       rel="noopener noreferrer"
     >

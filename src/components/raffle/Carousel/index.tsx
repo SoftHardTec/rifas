@@ -1,5 +1,7 @@
 import { Carousel } from "@mantine/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import NextImage from "next/image";
+import { Image } from "@mantine/core";
 
 export default function ImageCarousel() {
   // Creamos la instancia del plugin. No es necesario usar useRef si solo se pasa al carrusel.
@@ -10,9 +12,9 @@ export default function ImageCarousel() {
   });
   return (
     <Carousel
-      withIndicators
-      height="100%"
+      height={400}
       plugins={[autoplay]}
+      variant="transparent"
       styles={{
         indicator: {
           width: "auto",
@@ -24,9 +26,15 @@ export default function ImageCarousel() {
         },
       }}
     >
-      <Carousel.Slide>1</Carousel.Slide>
-      <Carousel.Slide>2</Carousel.Slide>
-      <Carousel.Slide>3</Carousel.Slide>
+      <Carousel.Slide>
+        <Image
+          component={NextImage}
+          src={"/flyer.jpg"}
+          alt="Rifa principal"
+          fill
+          style={{ objectFit: "contain" }}
+        />
+      </Carousel.Slide>
     </Carousel>
   );
 }

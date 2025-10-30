@@ -76,24 +76,6 @@ function MethodStack({ title, fields }: MethodData) {
     </Stack>
   );
 }
-export function Venezuela({ ticketCount }: MethodProps) {
-  return (
-    <MethodStack
-      title="Pago Movil Venezuela"
-      fields={[
-        { label: "Cuenta:", value: "0102" },
-        { label: "Cedula:", value: "27.153.835" },
-        { label: "Telefono:", value: "0414-1234567" },
-        {
-          label: "Monto",
-          value: ticketCount
-            ? `Bs. ${ticketCount * 180}.00`
-            : "Seleccione una cantidad de boletos",
-        },
-      ]}
-    />
-  );
-}
 
 export function Mercantil({ ticketCount }: MethodProps) {
   return (
@@ -101,12 +83,12 @@ export function Mercantil({ ticketCount }: MethodProps) {
       title="Pago Movil Mercantil"
       fields={[
         { label: "Cuenta:", value: "0105" },
-        { label: "Cedula:", value: "27.153.835" },
-        { label: "Telefono:", value: "0414-1234567" },
+        { label: "Cedula:", value: "24.368.245" },
+        { label: "Telefono:", value: "0424-3059113" },
         {
           label: "Monto",
           value: ticketCount
-            ? `Bs. ${ticketCount * 180}.00`
+            ? `Bs. ${ticketCount * 140}.00`
             : "Seleccione una cantidad de boletos",
         },
       ]}
@@ -119,27 +101,8 @@ export function Zinli({ ticketCount }: MethodProps) {
     <MethodStack
       title="Zinli (Min: 6 boletos)"
       fields={[
-        { label: "Correo", value: "correo@gmail.com" },
-        { label: "Titular", value: "Luis Miguel Peña R." },
-        {
-          label: "Monto",
-          value:
-            ticketCount && ticketCount > 5
-              ? `$${ticketCount}`
-              : "Seleccione al menos 6 boletos",
-        },
-      ]}
-    />
-  );
-}
-
-export function Zelle({ ticketCount }: MethodProps) {
-  return (
-    <MethodStack
-      title="Zelle (Min: 6 boletos)"
-      fields={[
-        { label: "Correo", value: "correo@gmail.com" },
-        { label: "Titular", value: "Luis Miguel Peña R." },
+        { label: "Correo", value: "dv0510.27@gmail.com" },
+        { label: "Titular", value: "Damelis Aguilar" },
         {
           label: "Monto",
           value:
@@ -155,10 +118,10 @@ export function Zelle({ ticketCount }: MethodProps) {
 export function Binance({ ticketCount }: MethodProps) {
   return (
     <MethodStack
-      title="Binance (Min: 6 boletos)"
+      title="Binance (Min 6 boletos)"
       fields={[
-        { label: "Correo", value: "correo@gmail.com" },
-        { label: "Titular", value: "Luis Miguel Peña R." },
+        { label: "Correo", value: "dv0510.27@gmail.com" },
+        { label: "Titular", value: "DamelisAg" },
         {
           label: "Monto",
           value:
@@ -173,12 +136,6 @@ export function Binance({ ticketCount }: MethodProps) {
 
 export const methodPage = [
   {
-    key: "venezuela",
-    label: "BDV",
-    component: Venezuela,
-    copyValue: "0102 Banco Venezuela\n27.153.835\n0414-1234567",
-  },
-  {
     key: "mercantil",
     label: "Mercantil",
     component: Mercantil,
@@ -188,12 +145,6 @@ export const methodPage = [
     key: "zinli",
     label: "Zinli",
     component: Zinli,
-    copyValue: "correo@gmail.com",
-  },
-  {
-    key: "zelle",
-    label: "Zelle",
-    component: Zelle,
     copyValue: "correo@gmail.com",
   },
   {

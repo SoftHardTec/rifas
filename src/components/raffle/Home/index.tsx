@@ -8,6 +8,7 @@ import {
   Skeleton,
   Group,
   Button,
+  Stack,
 } from "@mantine/core";
 import ImageCarousel from "../Carousel";
 import TicketSelector from "../TicketSelector";
@@ -48,23 +49,15 @@ export function HomeRaffle() {
 
       <Container my="md" size="xl">
         <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="lg">
-          <Card radius="md" withBorder>
-            <ImageCarousel />
-          </Card>
-          <Grid gutter="sm">
-            <Grid.Col>
-              <Skeleton radius="md" animate={false} visible={false}>
-                <InfoRaffle />
-                <BarProgressTickets key={refreshKey} />
-                <Conditions />
-              </Skeleton>
-            </Grid.Col>
-            <Grid.Col>
-              <Skeleton mt={10} radius="md" animate={false} visible={false}>
-                <TicketSelector onSelect={setTicketCount} />
-              </Skeleton>
-            </Grid.Col>
-          </Grid>
+          <Skeleton radius="md" animate={false} visible={false}>
+            <InfoRaffle />
+          </Skeleton>
+          <Stack justify="center">
+            <Skeleton radius="md" animate={false} visible={false}>
+              <BarProgressTickets key={refreshKey} />
+              <TicketSelector onSelect={setTicketCount} />
+            </Skeleton>
+          </Stack>
         </SimpleGrid>
         <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm" mt="md">
           <Card radius="md" withBorder mt="md">
@@ -87,6 +80,7 @@ export function HomeRaffle() {
 
         <Group justify="center" mt="lg">
           <Button
+            color="rgb(230, 0, 126)"
             type="button"
             size="lg"
             loading={isFormSubmitting} // <-- Usa el estado correcto

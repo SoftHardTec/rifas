@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ColorSchemesSwitcher } from "@/components/ui/color-schemes-switcher";
 import { HomeRaffle } from "@/components/raffle/Home";
 import { AppShell, AppShellHeader, AppShellMain, Group } from "@mantine/core";
 import { Footer } from "@/components/ui/Footer";
 import { TermsAndConditionsModal } from "@/utils/termsAndConditions";
+import Header from "@/components/ui/Header";
 
 export default function Home() {
   const [termsModalOpened, setTermsModalOpened] = useState(false);
@@ -24,9 +24,10 @@ export default function Home() {
         opened={termsModalOpened}
         onClose={() => setTermsModalOpened(false)}
       />
-      <AppShell header={{ height: 60 }} padding="md">
-        <div id="main"></div>
-        <AppShellHeader></AppShellHeader>
+      <AppShell header={{ height: 70 }} padding="md">
+        <AppShellHeader mb="lg">
+          <Header />
+        </AppShellHeader>
         <AppShellMain>
           <HomeRaffle />
         </AppShellMain>

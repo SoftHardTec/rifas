@@ -49,7 +49,7 @@ export default function BarProgressTickets() {
           h={25}
           animated
           striped
-          color="teal"
+          color="rgba(230, 0, 194)"
         />
         <Text ta="center" fz="md" fw={700}>
           {progressPercentageInt}% de boletos vendidos

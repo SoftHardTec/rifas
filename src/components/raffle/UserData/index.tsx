@@ -87,7 +87,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
     initialValues: {
       email: "",
       name: "",
-      PhoneCode: "",
+      PhoneCode: countries[0].phoneCode,
       NumberPhone: "",
       id: "",
       NumberId: "",
@@ -212,7 +212,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
             <TextInput
               withAsterisk
               label="Nombre completo"
-              placeholder="Pedro Perez"
+              placeholder="nombre y apellido"
               key={form.key("name")}
               {...form.getInputProps("name")}
             />
@@ -261,7 +261,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
               placeholder="Ultimo 6 Digitos"
               key={form.key("reference")}
               {...form.getInputProps("reference")}
-              minLength={4}
+              minLength={6}
               maxLength={8}
               allowDecimal={false}
               allowNegative={false}

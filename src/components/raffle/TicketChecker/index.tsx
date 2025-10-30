@@ -54,7 +54,13 @@ export default function TicketChecker({
               Ingresa tu numero de cedula
             </Text>
             <Group justify="center" mb={20}>
-              <Button type="submit" mt="xl" size="md" loading={isLoading}>
+              <Button
+                color="rgb(230, 0, 126)"
+                type="submit"
+                mt="xl"
+                size="md"
+                loading={isLoading}
+              >
                 <IconSearch size={20} />
                 Verificar
               </Button>

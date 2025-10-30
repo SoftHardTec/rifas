@@ -20,7 +20,6 @@ import {
   Button,
 } from "@mantine/core";
 import classes from "./FooterSocial.module.css";
-import { POST } from "@/app/api/cloudinary/upload/route";
 
 export function Footer() {
   const [showTerms, setShowTerms] = useState(false);
@@ -38,7 +37,7 @@ export function Footer() {
         >
           <Image
             component={NextImage}
-            src={"/logo.jpg"}
+            src={"/logo.png"}
             width={100}
             height={40}
             alt="logo"
@@ -51,17 +50,17 @@ export function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <ActionIcon size="lx" variant="transparent" radius="md">
+            <ActionIcon size="4rem" variant="transparent" radius="md">
               <Image
                 component={NextImage}
                 src={"/super-gana.png"}
-                width={45}
-                height={45}
+                width={60}
+                height={60}
                 alt="logo"
               />
             </ActionIcon>
           </Anchor>
-          <ActionIcon size="lx" variant="transparent" radius="md">
+          <ActionIcon size="4rem" variant="transparent" radius="md">
             <Image
               component={NextImage}
               src={"/conalot.png"}
@@ -70,6 +69,21 @@ export function Footer() {
               alt="logo"
             />
           </ActionIcon>
+          <Anchor
+            href="https://supergana.com.ve/resultados.php"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ActionIcon size="xl" variant="transparent" radius="md">
+              <Image
+                component={NextImage}
+                src={"/tachira.png"}
+                width={30}
+                height={30}
+                alt="logo"
+              />
+            </ActionIcon>
+          </Anchor>
         </Group>
 
         <SimpleGrid cols={1} spacing={0}>
@@ -78,7 +92,7 @@ export function Footer() {
           </Title>
           <Group gap="xs" justify="flex-end" wrap="nowrap">
             <Anchor
-              href="https://wa.link/e27g0b"
+              href="https://www.facebook.com/share/17EvpYRxPH/"
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -18,13 +18,12 @@ export async function POST(req: NextRequest) {
         name,
         email,
         id_card,
-        phone,
-        pay_data(method_pay, voucher, reference, bank, amount,validated),
+        pay_data(validated),
         tickets(tickets)
       `)
       .eq('id_card', idCard);
       if (data && data.length > 0) {
-        console.log(data[0].pay_data);
+        console.log(data[0]);
       } else {
         console.log("No tickets found for the given ID card.");
       }

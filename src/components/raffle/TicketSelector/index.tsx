@@ -1,6 +1,14 @@
 "use client";
 
-import { Alert, Button, Group, NumberInput, rem } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Grid,
+  Group,
+  NumberInput,
+  rem,
+  SimpleGrid,
+} from "@mantine/core";
 import { useEffect } from "react";
 import { useCounter } from "@mantine/hooks";
 import {
@@ -18,6 +26,7 @@ export default function TicketSelector({ onSelect }: TicketSelectorProps) {
   );
   const MIN_TICKETS = 2;
   const MAX_TICKETS = 100;
+  const ticketAmounts = [2, 5, 10, 20, 30, 50];
 
   const [count, handlers] = useCounter(MIN_TICKETS, {
     min: MIN_TICKETS,
@@ -32,6 +41,23 @@ export default function TicketSelector({ onSelect }: TicketSelectorProps) {
 
   return (
     <>
+      <Group justify="center" gap={0}>
+        <SimpleGrid cols={3} mt="md" mb="xl" spacing={10}>
+          {ticketAmounts.map((amount) => (
+            <Button
+              key={amount}
+              variant="default"
+              size="md"
+              radius={5}
+              w={75}
+              onClick={() => handlers.set(amount)}
+            >
+              {amount}
+            </Button>
+          ))}
+        </SimpleGrid>
+      </Group>
+
       <Group preventGrowOverflow justify="center" gap="xs">
         <Button color="red" onClick={() => handlers.decrement()}>
           <IconArrowBigDown
@@ -40,6 +66,7 @@ export default function TicketSelector({ onSelect }: TicketSelectorProps) {
           />
         </Button>
         <NumberInput
+          variant="default"
           rightSection={iconTicket}
           placeholder="Tickets"
           value={count}

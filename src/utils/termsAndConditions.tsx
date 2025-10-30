@@ -19,7 +19,7 @@ export function TermsAndConditionsModal({
       overlayProps={{ backgroundOpacity: 0.5, blur: 2 }}
       transitionProps={{ transition: "fade", duration: 200 }}
     >
-      <Group justify="center" mt="md">
+      <Group justify="inherit" mt="md">
         <Title order={4}>Terminos y Condiciones</Title>
         <Text size="sm">
           1.- Los números disponibles para la compra en cada una de nuestros

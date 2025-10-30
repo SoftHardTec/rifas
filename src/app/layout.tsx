@@ -23,8 +23,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Gana con la Pampara",
-  description: "Next App Mantine Tailwind Template",
+  title: "GanacnNosotros",
+  description: "Cambia tu vida con Nosotros",
 };
 
 const theme = mergeMantineTheme(
@@ -62,7 +62,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
-        <title>Gana con la Pampara</title>
+        <title>GanacnNosotros</title>
       </head>
       <body className="antialiased">
         <SpeedInsights />
