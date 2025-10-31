@@ -6,10 +6,6 @@ interface EmailTemplateProps {
   tickets: string;
   ticketCount: number;
   cardId: string;
-  // El amount y currency no se estaban usando en el template original,
-  // pero los dejo por si los necesitas en el futuro.
-  amount: number;
-  currency: string;
 }
 
 export default function TicketEmail({
@@ -17,17 +13,12 @@ export default function TicketEmail({
   tickets,
   ticketCount,
   cardId,
-  amount,
-  currency,
 }: EmailTemplateProps) {
   const ticketNumbersArray = tickets ? tickets.split(", ") : [];
   const previewText = `¡Felicidades ${name}, ya estás participando en la rifa!`;
   const baseUrl = process.env.VERCEL_URL
     ? `https://juegacnnosotros.com`
     : "http://localhost:3000";
-
-  // Calcula el precio por boleto, manejando el caso de que no haya boletos.
-  const pricePerTicket = ticketCount > 0 ? amount / ticketCount : 0;
 
   // Formatea los valores como moneda (asumiendo COP si no se especifica)
   return (
@@ -36,7 +27,7 @@ export default function TicketEmail({
         {/* El preview es un texto corto que aparece en la bandeja de entrada después del asunto */}
         <div style={previewStyles}>{previewText}</div>
       </head>
-      <body className="bg-white" style={main}>
+      <body style={main}>
         <table
           align="center"
           width="100%"
@@ -141,45 +132,6 @@ export default function TicketEmail({
                           </table>
                         </div>
 
-                        {/* Resumen de la Compra */}
-                        <table
-                          width="100%"
-                          style={summaryTable}
-                          cellPadding="0"
-                          cellSpacing="0"
-                        >
-                          <tbody>
-                            <tr>
-                              <td style={summaryLabel}>Cantidad de Boletos</td>
-                              <td style={summaryValue}>{ticketCount}</td>
-                            </tr>
-                            <tr>
-                              <td style={summaryLabel}>Monto por Boleto</td>
-                              <td style={summaryValue}>
-                                {currency} {pricePerTicket}
-                              </td>
-                            </tr>
-                            <tr style={summaryTotalRow}>
-                              <td
-                                style={{
-                                  ...summaryLabel,
-                                  ...summaryTotalLabel,
-                                }}
-                              >
-                                Monto Total
-                              </td>
-                              <td
-                                style={{
-                                  ...summaryValue,
-                                  ...summaryTotalValue,
-                                }}
-                              >
-                                {currency} {amount}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-
                         {/* Botón Verificador */}
                         <div style={{ textAlign: "center", margin: "30px 0" }}>
                           <a
@@ -193,7 +145,7 @@ export default function TicketEmail({
 
                         {/* Pie de página */}
                         <p style={footer}>
-                          Sorteo realizado por <strong>JuegaConNosotros</strong>
+                          Sorteo realizado por <strong>JuegaCnNosotros</strong>
                           .
                           <br />© 2025cnNosotros.
                         </p>
@@ -277,41 +229,6 @@ const paragraph = {
   fontSize: "16px",
   lineHeight: "24px",
   gap: "5px",
-};
-
-const summaryTable = {
-  border: "1px solid #eaeaea",
-  borderRadius: "8px",
-  padding: "20px",
-  margin: "20px 0",
-  width: "100%",
-};
-
-const summaryLabel = {
-  ...paragraph,
-  padding: "8px 0",
-  color: "#525f7f",
-};
-
-const summaryValue = {
-  ...paragraph,
-  textAlign: "right" as const,
-  fontWeight: "bold",
-  color: "#1a1a1a",
-};
-
-const summaryTotalRow = {
-  borderTop: "1px solid #eaeaea",
-};
-
-const summaryTotalLabel = {
-  paddingTop: "16px",
-  fontWeight: "bold",
-};
-
-const summaryTotalValue = {
-  paddingTop: "16px",
-  fontSize: "18px",
 };
 
 const infoSection = {

@@ -20,7 +20,6 @@ interface UserData {
 interface PayData {
   id_pay: number; // Añadido para agrupar por transacción
   validated: boolean;
-  amount: string; // Ajustado para reflejar que la BD devuelve un string
   // CORRECCIÓN: La relación, aunque sea a uno, puede ser devuelta como un array por Supabase.
   // Lo ajustamos para que espere un array de UserData.
   user_data: UserData[] | null;
@@ -34,38 +33,6 @@ interface TicketData {
 }
 
 // --- Fin de Definiciones de Tipos ---
-
-/**
- * Analiza una cadena de monto para extraer el valor numérico y la moneda.
- * @param amountStr - La cadena del monto, ej: "180 bss" o "6$".
- * @returns Un objeto con el valor numérico y la moneda ('bss' o '$').
- */
-function parseAmountAndCurrency(amountStr: string | null | undefined): { value: number; currency: string } {
-  if (!amountStr) {
-    return { value: 0, currency: 'N/A' };
-  }
-  
-  const cleanedStr = amountStr.trim();
-  
-  // 1. Determinar la moneda
-  let currency = 'N/A';
-  if (cleanedStr.toLowerCase().includes('bss')) {
-    currency = 'bss';
-  } else if (cleanedStr.includes('$')) {
-    currency = '$';
-  }
-
-  // 2. Extraer y sumar todos los números de la cadena
-  // Regex para encontrar todos los números, incluyendo decimales con punto o coma.
-  const numberMatches = cleanedStr.match(/[\d.,]+/g);
-  
-  const totalValue = (numberMatches || []).reduce((sum, numStr) => {
-    const value = parseFloat(numStr.replace(',', '.'));
-    return sum + (isNaN(value) ? 0 : value);
-  }, 0);
-
-  return { value: totalValue, currency };
-}
 
 // Handler para peticiones GET (usado por Vercel Cron Jobs)
 export async function GET(request: NextRequest) {
@@ -94,7 +61,6 @@ export async function POST(request: NextRequest) {
         pay_data!inner (
           id_pay,
           validated,
-          amount,
           user_data ( id_user, name, email, id_card )
         )
       `)
@@ -120,21 +86,17 @@ export async function POST(request: NextRequest) {
 
     // 3. --- Agrupar boletos por USUARIO Y MONEDA ---
     // Se agrupan los boletos por una clave compuesta (usuario + moneda) para enviar
-    // correos separados si un usuario tiene pagos en diferentes monedas.
-    const usersToEmail: { [key: string]: { id_user: number; name: string; email: string; id_card: string; tickets: TicketData[]; currency: string; } } = {};
+    // correos separados.
+    const usersToEmail: { [key: string]: { id_user: number; name: string; email: string; id_card: string; tickets: TicketData[]; } } = {};
 
     for (const ticket of ticketsData as TicketData[]) {
       const payData = Array.isArray(ticket.pay_data) ? ticket.pay_data[0] : ticket.pay_data;
       const userArray = payData?.user_data;
       const user = Array.isArray(userArray) ? userArray[0] : userArray;
 
-      if (!user || !payData) continue;
+      if (!user) continue;
 
-      // Extraemos la moneda del campo 'amount'.
-      const { currency } = parseAmountAndCurrency(payData.amount);
-
-      // Creamos una clave única para cada combinación de usuario y moneda.
-      const groupKey = `${user.id_user}-${currency}`;
+      const groupKey = String(user.id_user);
 
       if (!usersToEmail[groupKey]) {
         usersToEmail[groupKey] = {
@@ -143,7 +105,6 @@ export async function POST(request: NextRequest) {
           email: user.email,
           id_card: user.id_card,
           tickets: [],
-          currency: currency, // Guardamos la moneda para este grupo.
         };
       }
       usersToEmail[groupKey].tickets.push(ticket);
@@ -161,19 +122,6 @@ export async function POST(request: NextRequest) {
       const tickets = user.tickets.map((t) => String(t.tickets).padStart(4, '0'));
       const nameToLowerCase = user.name.charAt(0).toUpperCase() + user.name.slice(1);
 
-      // --- LÓGICA DE SUMA POR TRANSACCIÓN ---
-      // Agrupamos los montos por ID de pago para no sumarlos múltiples veces.
-      const uniquePayments = new Map<number, number>();
-      user.tickets.forEach(ticket => {
-        const payData = Array.isArray(ticket.pay_data) ? ticket.pay_data[0] : ticket.pay_data;
-        if (payData) {
-          const { value } = parseAmountAndCurrency(payData.amount);
-          uniquePayments.set(payData.id_pay, value);
-        }
-      }, 0);
-      // Sumamos los montos de las transacciones únicas.
-      const totalAmount = Array.from(uniquePayments.values()).reduce((sum, value) => sum + value, 0);
-
       // Envía el correo usando Resend y la plantilla de React
       const { data: sentEmail, error: sendError } = await resend.emails.send({
         from: 'JuegacnNosotros <noreply@juegacnnosotros.com>', 
@@ -184,8 +132,6 @@ export async function POST(request: NextRequest) {
           tickets: tickets.join(', '),
           ticketCount: tickets.length,
           cardId: user.id_card,
-          amount: totalAmount, // Pasamos el monto como número.
-          currency: user.currency, // Ahora 'user.currency' existe y es correcto para el grupo.
         }),
       });
 
