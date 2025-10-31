@@ -19,6 +19,12 @@ export default function TicketEmail({
     ? `https://juegacnnosotros.com`
     : "http://localhost:3000";
 
+  // Agrupar boletos en filas de 5
+  const ticketRows = [];
+  for (let i = 0; i < ticketNumbersArray.length; i += 5) {
+    ticketRows.push(ticketNumbersArray.slice(i, i + 5));
+  }
+
   // Formatea los valores como moneda (asumiendo COP si no se especifica)
   return (
     <html lang="es">
@@ -110,18 +116,20 @@ export default function TicketEmail({
                             role="presentation"
                           >
                             <tbody>
-                              <tr>
-                                {ticketNumbersArray.map((ticketNumber) => (
-                                  <td
-                                    key={ticketNumber}
-                                    style={{ padding: "4px" }}
-                                  >
-                                    <div style={ticketBadge}>
-                                      {ticketNumber}
-                                    </div>
-                                  </td>
-                                ))}
-                              </tr>
+                              {ticketRows.map((row, rowIndex) => (
+                                <tr key={rowIndex}>
+                                  {row.map((ticketNumber) => (
+                                    <td
+                                      key={ticketNumber}
+                                      style={{ padding: "4px" }}
+                                    >
+                                      <div style={ticketBadge}>
+                                        {ticketNumber}
+                                      </div>
+                                    </td>
+                                  ))}
+                                </tr>
+                              ))}
                             </tbody>
                           </table>
                         </div>
