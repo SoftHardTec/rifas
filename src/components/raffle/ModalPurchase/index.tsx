@@ -46,6 +46,7 @@ export default function ModalPurchase({ opened, close }: ModalPurchaseProps) {
             radius="lg"
             variant="filled"
             onClick={close}
+            color="rgb(230, 0, 126)"
           >
             Regresar al Inicio
           </Button>

@@ -54,8 +54,10 @@ export function HomeRaffle() {
           </Skeleton>
           <Stack justify="center">
             <Skeleton radius="md" animate={false} visible={false}>
-              <BarProgressTickets key={refreshKey} />
-              <TicketSelector onSelect={setTicketCount} />
+              <Card radius="md" shadow="md" padding="lg" withBorder>
+                <BarProgressTickets key={refreshKey} />
+                <TicketSelector onSelect={setTicketCount} />
+              </Card>
             </Skeleton>
           </Stack>
         </SimpleGrid>

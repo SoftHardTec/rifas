@@ -25,7 +25,7 @@ export function Footer() {
   const [showTerms, setShowTerms] = useState(false);
 
   return (
-    <div className={classes.footer}>
+    <div className={classes.footer} style={{ backgroundColor: "white" }}>
       <div className={classes.inner}>
         <ActionIcon
           size="10rem"
@@ -49,7 +49,13 @@ export function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <ActionIcon color="black" size="4rem" variant="filled" radius="xl">
+            <ActionIcon
+              mt={7}
+              color="white"
+              size="4rem"
+              variant="subtle"
+              radius="xl"
+            >
               <Image
                 component={NextImage}
                 src={"/super-gana.png"}
@@ -59,31 +65,31 @@ export function Footer() {
               />
             </ActionIcon>
           </Anchor>
-          <ActionIcon color="black" size="4rem" variant="filled" radius="xl">
+          <ActionIcon color="black" size="3.7rem" variant="filled" radius="xl">
             <Image
               component={NextImage}
               src={"/conalot.png"}
-              width={60}
-              height={60}
+              width={70}
+              height={70}
               alt="logo"
             />
           </ActionIcon>
           <Anchor
-            href="https://supergana.com.ve/resultados.php"
+            href="https://tripletachira.com/"
             target="_blank"
             rel="noopener noreferrer"
           >
             <ActionIcon
               bottom={-5}
-              size="3.7rem"
+              size="4rem"
               variant="transparent"
-              radius="md"
+              radius="xl"
             >
               <Image
                 component={NextImage}
                 src={"/tachira.png"}
-                width={100}
-                height={100}
+                width={50}
+                height={50}
                 alt="logo"
               />
             </ActionIcon>

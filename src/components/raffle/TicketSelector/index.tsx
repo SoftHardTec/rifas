@@ -26,7 +26,7 @@ export default function TicketSelector({ onSelect }: TicketSelectorProps) {
   );
   const MIN_TICKETS = 2;
   const MAX_TICKETS = 100;
-  const ticketAmounts = [2, 5, 10, 20, 30, 50];
+  const ticketAmounts = [2, 6, 10, 20, 30, 50];
 
   const [count, handlers] = useCounter(MIN_TICKETS, {
     min: MIN_TICKETS,

@@ -29,13 +29,21 @@ export default function TicketEmail({
   const pricePerTicket = ticketCount > 0 ? amount / ticketCount : 0;
 
   // Formatea los valores como moneda (asumiendo COP si no se especifica)
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: currency || "COP",
+      minimumFractionDigits: 0,
+    }).format(value);
+  };
+
   return (
     <html lang="es">
       <head>
         {/* El preview es un texto corto que aparece en la bandeja de entrada después del asunto */}
         <div style={previewStyles}>{previewText}</div>
       </head>
-      <body className="bg-white" style={main}>
+      <body style={main}>
         <table
           align="center"
           width="100%"
@@ -94,6 +102,45 @@ export default function TicketEmail({
                           </p>
                         </div>
 
+                        {/* Resumen de la Compra */}
+                        <table
+                          width="100%"
+                          style={summaryTable}
+                          cellPadding="0"
+                          cellSpacing="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td style={summaryLabel}>Cantidad de Boletos</td>
+                              <td style={summaryValue}>{ticketCount}</td>
+                            </tr>
+                            <tr>
+                              <td style={summaryLabel}>Monto por Boleto</td>
+                              <td style={summaryValue}>
+                                {formatCurrency(pricePerTicket)}
+                              </td>
+                            </tr>
+                            <tr style={summaryTotalRow}>
+                              <td
+                                style={{
+                                  ...summaryLabel,
+                                  ...summaryTotalLabel,
+                                }}
+                              >
+                                Monto Total
+                              </td>
+                              <td
+                                style={{
+                                  ...summaryValue,
+                                  ...summaryTotalValue,
+                                }}
+                              >
+                                {formatCurrency(amount)}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
                         {/* Sección de Boletos */}
                         <div style={ticketsSection}>
                           <h2 style={subheading}>Tus Boletos Comprados</h2>
@@ -120,56 +167,6 @@ export default function TicketEmail({
                           </table>
                         </div>
 
-                        {/* Resumen de la Compra */}
-                        <table
-                          width="100%"
-                          style={summaryTable}
-                          cellPadding="0"
-                          cellSpacing="0"
-                        >
-                          <tbody>
-                            <tr>
-                              <td style={summaryLabel}>Cantidad de Boletos</td>
-                              <td style={summaryValue}>{ticketCount}</td>
-                            </tr>
-                            <tr>
-                              <td style={summaryLabel}>Monto por Boleto</td>
-                              <td style={summaryValue}>
-                                {currency} {pricePerTicket}
-                              </td>
-                            </tr>
-                            <tr style={summaryTotalRow}>
-                              <td
-                                style={{
-                                  ...summaryLabel,
-                                  ...summaryTotalLabel,
-                                }}
-                              >
-                                Monto Total
-                              </td>
-                              <td
-                                style={{
-                                  ...summaryValue,
-                                  ...summaryTotalValue,
-                                }}
-                              >
-                                {currency} {amount}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-
-                        {/* Botón Verificador */}
-                        <div style={{ textAlign: "center", margin: "30px 0" }}>
-                          <a
-                            href={baseUrl}
-                            style={buttonStyles}
-                            target="_blank"
-                          >
-                            Verificar mis Boletos
-                          </a>
-                        </div>
-
                         {/* Sección de Alerta */}
                         <div style={alertSection}>
                           <p style={alertText}>
@@ -181,6 +178,8 @@ export default function TicketEmail({
                         {/* Pie de página */}
                         <p style={footer}>
                           Sorteo realizado por JuegacnNosotros.
+                          <br />© 2025 SoftHard Tecnology. Todos los derechos
+                          reservados.
                         </p>
                       </td>
                     </tr>
@@ -207,18 +206,6 @@ const previewStyles = {
   maxWidth: "0px",
   opacity: 0,
   overflow: "hidden",
-};
-
-const buttonStyles = {
-  display: "inline-block",
-  padding: "12px 24px",
-  backgroundColor: "rgb(230, 0, 126)",
-  color: "#ffffff",
-  textDecoration: "none",
-  borderRadius: "8px",
-  fontWeight: "bold",
-  fontSize: "16px",
-  fontFamily: "sans-serif",
 };
 
 const main = {

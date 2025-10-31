@@ -47,7 +47,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased bg-[url('/bg.jpg')] object-cover ">
         <SpeedInsights />
-        <MantineProvider theme={theme} defaultColorScheme="light">
+        <MantineProvider theme={theme} forceColorScheme="light">
           {children}
         </MantineProvider>
       </body>

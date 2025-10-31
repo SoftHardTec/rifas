@@ -48,7 +48,7 @@ export default function BarProgressTickets() {
           w={500}
           h={25}
           animated
-          striped
+          variant="alertText"
           color="rgba(230, 0, 194)"
         />
         <Text ta="center" fz="md" fw={700}>
