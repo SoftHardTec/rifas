@@ -324,9 +324,9 @@ const ticketsSection = {
 
 const ticketBadge = {
   backgroundColor: "#fff0f7",
-  border: "1px solid #A31C65",
+  border: "1px solid #ffadd2",
   borderRadius: "8px",
-  color: "#096dd9",
+  color: "#c41d7f",
   padding: "8px 12px",
   fontSize: "18px",
   fontWeight: "bold",
