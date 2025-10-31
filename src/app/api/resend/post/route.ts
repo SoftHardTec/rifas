@@ -43,18 +43,27 @@ function parseAmountAndCurrency(amountStr: string | null | undefined): { value: 
   if (!amountStr) {
     return { value: 0, currency: 'N/A' };
   }
-  // Regex para capturar el número (incluyendo decimales) y el identificador de moneda ('$' o 'bss').
-  const match = amountStr.trim().match(/([\d.,]+)\s*(\$|bss)/i);
-
-  if (match) {
-    // Reemplaza la coma por un punto para un parseo decimal consistente.
-    const value = parseFloat(match[1].replace(',', '.'));
-    const currency = match[2].toLowerCase() === '$' ? '$' : 'bss';
-    return { value: isNaN(value) ? 0 : value, currency };
+  
+  const cleanedStr = amountStr.trim();
+  
+  // 1. Determinar la moneda
+  let currency = 'N/A';
+  if (cleanedStr.toLowerCase().includes('bss')) {
+    currency = 'bss';
+  } else if (cleanedStr.includes('$')) {
+    currency = '$';
   }
 
-  // Fallback si no se encuentra un identificador de moneda claro.
-  return { value: parseFloat(amountStr.replace(',', '.')) || 0, currency: 'N/A' };
+  // 2. Extraer y sumar todos los números de la cadena
+  // Regex para encontrar todos los números, incluyendo decimales con punto o coma.
+  const numberMatches = cleanedStr.match(/[\d.,]+/g);
+  
+  const totalValue = (numberMatches || []).reduce((sum, numStr) => {
+    const value = parseFloat(numStr.replace(',', '.'));
+    return sum + (isNaN(value) ? 0 : value);
+  }, 0);
+
+  return { value: totalValue, currency };
 }
 
 // Handler para peticiones GET (usado por Vercel Cron Jobs)

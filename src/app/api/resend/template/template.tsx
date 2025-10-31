@@ -97,8 +97,8 @@ export default function TicketEmail({
                           </p>
                           <br />
                           <p style={paragraph}>
-                            <b>Nombre:</b> {name}
-                            <b>Cédula:</b> {cardId}
+                            <b>Nombre: {name}</b>
+                            <b>Cédula: {cardId} </b>
                           </p>
                         </div>
 
@@ -339,6 +339,7 @@ const alertSection = {
   borderRadius: "8px",
   padding: "16px",
   margin: "24px 0",
+  marginTop: "15px",
 };
 
 const alertIcon = {
