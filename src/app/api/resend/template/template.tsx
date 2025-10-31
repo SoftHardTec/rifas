@@ -94,22 +94,24 @@ export default function TicketEmail({
 
                         {/* Sección de Alerta */}
                         <div style={alertSection}>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#c41d7f"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            style={alertIcon}
-                          >
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                          </svg>
+                          {/* SVG en línea para máxima compatibilidad en correos */}
+                          <div style={alertIcon}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="#c41d7f"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <line x1="12" y1="8" x2="12" y2="12"></line>
+                              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                          </div>
                           <p style={alertText}>
                             Guarda este comprobante. Te contactaremos el día del
                             sorteo si eres uno de los afortunados.
@@ -267,13 +269,12 @@ const alertSection = {
   border: "1px solid #ffadd2", // Borde magenta más oscuro
   borderRadius: "8px",
   padding: "16px",
-  margin: "24px 0",
-  marginTop: "15px",
-  marginBottom: "15px",
+  margin: "35px 0 35px 0",
 };
 
 const alertIcon = {
   marginRight: "12px",
+  minWidth: "20px", // Asegura que el contenedor del SVG tenga espacio
 };
 
 const alertText = {
