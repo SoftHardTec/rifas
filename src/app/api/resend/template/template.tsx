@@ -193,7 +193,9 @@ export default function TicketEmail({
 
                         {/* Pie de página */}
                         <p style={footer}>
-                          Sorteo realizado por JuegacnNosotros.
+                          Sorteo realizado por <strong>JuegaConNosotros</strong>
+                          .
+                          <br />© 2025cnNosotros.
                         </p>
                       </td>
                     </tr>
@@ -321,8 +323,8 @@ const ticketsSection = {
 };
 
 const ticketBadge = {
-  backgroundColor: "#e6f7ff",
-  border: "1px solid #91d5ff",
+  backgroundColor: "#fff0f7",
+  border: "1px solid #A31C65",
   borderRadius: "8px",
   color: "#096dd9",
   padding: "8px 12px",

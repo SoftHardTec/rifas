@@ -18,6 +18,7 @@ interface UserData {
 }
 
 interface PayData {
+  id_pay: number; // Añadido para agrupar por transacción
   validated: boolean;
   amount: string; // Ajustado para reflejar que la BD devuelve un string
   // CORRECCIÓN: La relación, aunque sea a uno, puede ser devuelta como un array por Supabase.
@@ -91,6 +92,7 @@ export async function POST(request: NextRequest) {
         tickets,
         email_send,
         pay_data!inner (
+          id_pay,
           validated,
           amount,
           user_data ( id_user, name, email, id_card )
@@ -106,7 +108,6 @@ export async function POST(request: NextRequest) {
         { status: 500 },
       );
     }
-
     if (!ticketsData || ticketsData.length === 0) { // ticketsData es de tipo TicketData[]
       return NextResponse.json({ message: 'No hay correos pendientes por enviar.' });
 
@@ -160,14 +161,18 @@ export async function POST(request: NextRequest) {
       const tickets = user.tickets.map((t) => String(t.tickets).padStart(4, '0'));
       const nameToLowerCase = user.name.charAt(0).toUpperCase() + user.name.slice(1);
 
-      // --- LÓGICA DE SUMA POR MONEDA ---
-      // Sumamos los montos solo para los boletos de este grupo (misma moneda).
-      const totalAmount = user.tickets.reduce((sum, ticket) => {
+      // --- LÓGICA DE SUMA POR TRANSACCIÓN ---
+      // Agrupamos los montos por ID de pago para no sumarlos múltiples veces.
+      const uniquePayments = new Map<number, number>();
+      user.tickets.forEach(ticket => {
         const payData = Array.isArray(ticket.pay_data) ? ticket.pay_data[0] : ticket.pay_data;
-        // Parseamos el valor numérico del monto y lo sumamos.
-        const { value } = parseAmountAndCurrency(payData?.amount);
-        return sum + value;
+        if (payData) {
+          const { value } = parseAmountAndCurrency(payData.amount);
+          uniquePayments.set(payData.id_pay, value);
+        }
       }, 0);
+      // Sumamos los montos de las transacciones únicas.
+      const totalAmount = Array.from(uniquePayments.values()).reduce((sum, value) => sum + value, 0);
 
       // Envía el correo usando Resend y la plantilla de React
       const { data: sentEmail, error: sendError } = await resend.emails.send({
