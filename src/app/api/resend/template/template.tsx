@@ -1,4 +1,5 @@
 import * as React from "react";
+import { IconAlertCircle } from "@tabler/icons-react";
 
 interface EmailTemplateProps {
   name: string;
@@ -58,7 +59,13 @@ export default function TicketEmail({
                     <tr>
                       <td style={box}>
                         {/* Encabezado con Logo */}
-                        <div style={{ textAlign: "center", padding: "20px 0" }}>
+                        <div
+                          style={{
+                            justifyItems: "center",
+                            textAlign: "center",
+                            padding: "20px 0",
+                          }}
+                        >
                           <img
                             src={`${baseUrl}/logo.png`}
                             width="120"
@@ -86,11 +93,25 @@ export default function TicketEmail({
                           <p style={paragraph}>
                             Tu pago ha sido confirmado y tus boletos han sido
                             asignados. ¡Mucha suerte!
+                            <br />
                           </p>
+                          <br />
                           <p style={paragraph}>
                             <b>Nombre:</b> {name}
-                            <br />
                             <b>Cédula:</b> {cardId}
+                          </p>
+                        </div>
+
+                        {/* Sección de Alerta */}
+                        <div style={alertSection}>
+                          <IconAlertCircle
+                            style={alertIcon}
+                            color="#c41d7f"
+                            size={20}
+                          />
+                          <p style={alertText}>
+                            Guarda este comprobante. Te contactaremos el día del
+                            sorteo si eres uno de los afortunados.
                           </p>
                         </div>
 
@@ -162,20 +183,12 @@ export default function TicketEmail({
                         {/* Botón Verificador */}
                         <div style={{ textAlign: "center", margin: "30px 0" }}>
                           <a
-                            href={baseUrl}
+                            href={`${baseUrl}/#verificador`}
                             style={buttonStyles}
                             target="_blank"
                           >
                             Verificar mis Boletos
                           </a>
-                        </div>
-
-                        {/* Sección de Alerta */}
-                        <div style={alertSection}>
-                          <p style={alertText}>
-                            Guarda este comprobante. Te contactaremos el día del
-                            sorteo si eres uno de los afortunados.
-                          </p>
                         </div>
 
                         {/* Pie de página */}
@@ -256,9 +269,12 @@ const subheading = {
 };
 
 const paragraph = {
+  display: "grid",
+
   color: "#525f7f",
   fontSize: "16px",
   lineHeight: "24px",
+  gap: "5px",
 };
 
 const summaryTable = {
@@ -316,18 +332,25 @@ const ticketBadge = {
 };
 
 const alertSection = {
-  backgroundColor: "#fffbe6",
-  border: "1px solid #ffe58f",
+  display: "flex",
+  alignItems: "center",
+  backgroundColor: "#fff0f7", // Magenta difuminado
+  border: "1px solid #ffadd2", // Borde magenta más oscuro
   borderRadius: "8px",
-  padding: "1px 16px", // Padding vertical de 1px para que el <p> interno controle el espacio
+  padding: "16px",
   margin: "24px 0",
 };
 
+const alertIcon = {
+  marginRight: "12px",
+  minWidth: "20px",
+};
+
 const alertText = {
-  color: "#874d00",
+  color: "#c41d7f", // Texto magenta oscuro
   fontSize: "14px",
   lineHeight: "20px",
-  margin: "16px 0",
+  margin: 0,
 };
 
 const footer = {

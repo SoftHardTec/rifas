@@ -30,7 +30,15 @@ export default function TicketChecker({
 
   return (
     <>
-      <Card h={400} w={400} shadow="xl" padding="lg" radius="md" withBorder>
+      <Card
+        id="verificador"
+        h={400}
+        w={400}
+        shadow="xl"
+        padding="lg"
+        radius="md"
+        withBorder
+      >
         <Group justify="center" align="center" h={"100%"}>
           <Title order={2} fw={900} mb="sm" mt={40}>
             Verifica tus Boletos
