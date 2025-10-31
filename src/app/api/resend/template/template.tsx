@@ -1,4 +1,3 @@
-import { IconBackground } from "@tabler/icons-react";
 import * as React from "react";
 
 interface EmailTemplateProps {
@@ -95,13 +94,22 @@ export default function TicketEmail({
 
                         {/* Sección de Alerta */}
                         <div style={alertSection}>
-                          <img
-                            src={`${baseUrl}/alert.svg`}
-                            alt="ícono de alerta"
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
                             width="20"
                             height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#c41d7f"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             style={alertIcon}
-                          />
+                          >
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                          </svg>
                           <p style={alertText}>
                             Guarda este comprobante. Te contactaremos el día del
                             sorteo si eres uno de los afortunados.
@@ -266,9 +274,6 @@ const alertSection = {
 
 const alertIcon = {
   marginRight: "12px",
-  IconBackground: "#c41d7f",
-  BackgroudColor: "#c41d7f",
-  color: "#c41d7f",
 };
 
 const alertText = {
