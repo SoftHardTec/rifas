@@ -1,5 +1,5 @@
+import { IconBackground } from "@tabler/icons-react";
 import * as React from "react";
-import { IconAlertCircle } from "@tabler/icons-react";
 
 interface EmailTemplateProps {
   name: string;
@@ -95,10 +95,12 @@ export default function TicketEmail({
 
                         {/* Sección de Alerta */}
                         <div style={alertSection}>
-                          <IconAlertCircle
+                          <img
+                            src={`${baseUrl}/alert.svg`}
+                            alt="ícono de alerta"
+                            width="20"
+                            height="20"
                             style={alertIcon}
-                            color="#c41d7f"
-                            size={20}
                           />
                           <p style={alertText}>
                             Guarda este comprobante. Te contactaremos el día del
@@ -259,11 +261,14 @@ const alertSection = {
   padding: "16px",
   margin: "24px 0",
   marginTop: "15px",
+  marginBottom: "15px",
 };
 
 const alertIcon = {
   marginRight: "12px",
-  minWidth: "20px",
+  IconBackground: "#c41d7f",
+  BackgroudColor: "#c41d7f",
+  color: "#c41d7f",
 };
 
 const alertText = {
