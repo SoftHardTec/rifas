@@ -17,12 +17,25 @@ export default function TicketEmail({
   ticketCount,
   cardId,
   amount,
+  currency,
 }: EmailTemplateProps) {
   const ticketNumbersArray = tickets ? tickets.split(", ") : [];
   const previewText = `¡Felicidades ${name}, ya estás participando en la rifa!`;
   const baseUrl = process.env.VERCEL_URL
     ? `https://juegacnnosotros.com`
     : "http://localhost:3000";
+
+  // Calcula el precio por boleto, manejando el caso de que no haya boletos.
+  const pricePerTicket = ticketCount > 0 ? amount / ticketCount : 0;
+
+  // Formatea los valores como moneda (asumiendo COP si no se especifica)
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: currency || "COP",
+      minimumFractionDigits: 0,
+    }).format(value);
+  };
 
   return (
     <html lang="es">
@@ -88,6 +101,45 @@ export default function TicketEmail({
                             <b>Cédula:</b> {cardId}
                           </p>
                         </div>
+
+                        {/* Resumen de la Compra */}
+                        <table
+                          width="100%"
+                          style={summaryTable}
+                          cellPadding="0"
+                          cellSpacing="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td style={summaryLabel}>Cantidad de Boletos</td>
+                              <td style={summaryValue}>{ticketCount}</td>
+                            </tr>
+                            <tr>
+                              <td style={summaryLabel}>Monto por Boleto</td>
+                              <td style={summaryValue}>
+                                {formatCurrency(pricePerTicket)}
+                              </td>
+                            </tr>
+                            <tr style={summaryTotalRow}>
+                              <td
+                                style={{
+                                  ...summaryLabel,
+                                  ...summaryTotalLabel,
+                                }}
+                              >
+                                Monto Total
+                              </td>
+                              <td
+                                style={{
+                                  ...summaryValue,
+                                  ...summaryTotalValue,
+                                }}
+                              >
+                                {formatCurrency(amount)}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
 
                         {/* Sección de Boletos */}
                         <div style={ticketsSection}>
@@ -194,6 +246,41 @@ const paragraph = {
   color: "#525f7f",
   fontSize: "16px",
   lineHeight: "24px",
+};
+
+const summaryTable = {
+  border: "1px solid #eaeaea",
+  borderRadius: "8px",
+  padding: "20px",
+  margin: "20px 0",
+  width: "100%",
+};
+
+const summaryLabel = {
+  ...paragraph,
+  padding: "8px 0",
+  color: "#525f7f",
+};
+
+const summaryValue = {
+  ...paragraph,
+  textAlign: "right" as const,
+  fontWeight: "bold",
+  color: "#1a1a1a",
+};
+
+const summaryTotalRow = {
+  borderTop: "1px solid #eaeaea",
+};
+
+const summaryTotalLabel = {
+  paddingTop: "16px",
+  fontWeight: "bold",
+};
+
+const summaryTotalValue = {
+  paddingTop: "16px",
+  fontSize: "18px",
 };
 
 const infoSection = {
