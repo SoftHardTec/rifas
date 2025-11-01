@@ -89,7 +89,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       name: "",
       PhoneCode: countries[0].phoneCode,
       NumberPhone: "",
-      id: "",
+      id: selectId[0].value,
       NumberId: "",
       bank: "",
       reference: "",
@@ -101,14 +101,16 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       PhoneCode: (value) => (value ? null : "Código requerido"),
       NumberPhone: (value) => (value ? null : "Teléfono requerido"),
       id: (value) => (value ? null : "requerido"),
-      NumberId: (value) => (value ? null : "Cédula requerida"),
+      NumberId: (value) =>
+        String(value).length > 5 ? null : "Cédula requerida",
       bank: (value) =>
         methodPage === "venezuela" || methodPage === "mercantil"
           ? value
             ? null
             : "Banco requerido"
           : null,
-      reference: (value) => (value ? null : "Referencia requerida"),
+      reference: (value) =>
+        String(value).length > 5 ? null : "Referencia requerida",
       file: (value) => (value ? null : "Comprobante requerido"),
     },
   });
@@ -147,7 +149,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       console.error("Error en el proceso de envío:", errorMessage);
       setErrorInfo({
         opened: true,
-        title: "ha ocurrido un error",
+        title: "Ha ocurrido un error",
         text: errorMessage,
       });
     } finally {
@@ -262,7 +264,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
               key={form.key("reference")}
               {...form.getInputProps("reference")}
               minLength={6}
-              maxLength={8}
+              maxLength={10}
               allowDecimal={false}
               allowNegative={false}
               trimLeadingZeroesOnBlur={false}
@@ -275,7 +277,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
               accept="image/png,image/jpeg"
               key={form.key("file")}
               {...form.getInputProps("file")}
-              placeholder="Ingresa el Comprobante de Pago"
+              placeholder="Comprobante de Pago"
             />
           </SimpleGrid>
         </form>

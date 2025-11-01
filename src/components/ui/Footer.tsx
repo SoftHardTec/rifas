@@ -81,15 +81,15 @@ export function Footer() {
           >
             <ActionIcon
               bottom={-5}
-              size="4rem"
+              size="3.8rem"
               variant="transparent"
               radius="xl"
             >
               <Image
                 component={NextImage}
                 src={"/tachira.png"}
-                width={50}
-                height={50}
+                width={100}
+                height={100}
                 alt="logo"
               />
             </ActionIcon>
@@ -106,8 +106,8 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <ActionIcon size="lx" variant="default" radius="xl">
-                <IconBrandFacebook size={30} stroke={1.5} />
+              <ActionIcon size="2.5ren" variant="default" radius="xl">
+                <IconBrandFacebook size={35} stroke={1.5} />
               </ActionIcon>
             </Anchor>
             <Anchor
@@ -115,8 +115,8 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <ActionIcon size="lx" variant="default" radius="xl">
-                <IconBrandTiktok size={30} stroke={1.5} />
+              <ActionIcon size="2.5rem" variant="default" radius="xl">
+                <IconBrandTiktok size={35} stroke={1.5} />
               </ActionIcon>
             </Anchor>
             <Anchor
@@ -124,8 +124,8 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <ActionIcon size="lx" variant="default" radius="xl">
-                <IconBrandInstagram size={30} stroke={1.5} />
+              <ActionIcon size="2.5rem" variant="default" radius="xl">
+                <IconBrandInstagram size={35} stroke={1.5} />
               </ActionIcon>
             </Anchor>
           </Group>

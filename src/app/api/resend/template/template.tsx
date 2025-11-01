@@ -262,11 +262,6 @@ const alertSection = {
   margin: "24px 0 40px",
 };
 
-const alertIcon = {
-  marginRight: "12px",
-  minWidth: "20px", // Asegura que el contenedor del SVG tenga espacio
-};
-
 const alertText = {
   color: "#c41d7f", // Texto magenta oscuro
   fontSize: "14px",

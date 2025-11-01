@@ -71,6 +71,8 @@ export default function TicketSelector({ onSelect }: TicketSelectorProps) {
           placeholder="Tickets"
           value={count}
           onChange={(value) => handlers.set(Number(value))}
+          maxLength={3}
+          step={1}
           min={MIN_TICKETS}
           max={MAX_TICKETS}
           style={{ width: rem(75) }}

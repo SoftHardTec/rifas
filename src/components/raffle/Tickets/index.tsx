@@ -1,31 +1,100 @@
 import { useEffect, useState } from "react";
-import { Card, Text, Badge, Group, Stack, Title, Flex } from "@mantine/core";
+import {
+  Card,
+  Text,
+  Badge,
+  Group,
+  Stack,
+  Title,
+  Flex,
+  Image,
+} from "@mantine/core";
+import NextImage from "next/image";
 
 interface Ticket {
-  tickets: number;
+  tickets: string;
 }
 
 interface PayData {
   validated?: boolean;
-  bank?: string;
-  voucher?: string;
-  reference?: number;
-  method_pay?: string;
 }
 
 interface User {
   name: string;
   email: string;
-  id_card: number;
-  phone: number;
+  id_card: string;
   tickets: Ticket[];
-  pay_data?: PayData[];
+  pay_data: PayData[];
 }
 
 interface TicketsProps {
   userId: string | null;
   onSubmittingChange: (isSubmitting: boolean) => void;
 }
+
+const ValidatedPurchaseCard = ({ user }: { user: User }) => (
+  <Card key={user.id_card} radius="lg" withBorder mt="md">
+    <Stack justify="center" align="center" gap="xs">
+      <Title mt={20} ta="center" order={3}>
+        Felicidades {user.name}
+      </Title>
+      <Title order={3}>¡Ya estas participando!</Title>
+
+      <Image
+        height={2000}
+        width={2000}
+        component={NextImage}
+        src={"/flyer.jpg"}
+        alt="JuegacnNosotros"
+        p={10}
+      />
+      <Text fz={15} ta="center" span fw={600}>
+        Tu(s) pago(s) fueron verificados con exito
+      </Text>
+      <Text ta="center" fw={600}>
+        ¡Mucha Suerte!
+      </Text>
+      <Title order={3} my={20} ta="center">
+        Boletos Asignados:
+      </Title>
+      <Group mb={15} justify="center" gap="xs">
+        {user.tickets.map((ticket) => (
+          <Badge
+            key={ticket.tickets}
+            variant="filled"
+            color="#FFD4EC"
+            size="xl"
+            radius="sm"
+            p="xs"
+            style={{
+              border: "1px solid #c41d7f",
+              height: "35px",
+              width: "65px",
+            }}
+          >
+            <Text fw={700} c="#c41d7f" fz="sm">
+              {String(ticket.tickets).padStart(4, "0")}
+            </Text>
+          </Badge>
+        ))}
+      </Group>
+    </Stack>
+  </Card>
+);
+
+const PendingPurchaseCard = ({ user }: { user: User }) => (
+  <Card key={user.id_card} radius="lg" withBorder mt="md">
+    <Stack align="center" gap="xs">
+      <Title order={3}>
+        Hola {user.name} aun estamos verificando tu(s) pago(s)
+      </Title>
+      <Text fw={600} size="sm" mt="xs">
+        Tus boletos serán asignados y enviados a tu correo{" "}
+        <strong>({user.email})</strong> una vez que el pago sea confirmado.
+      </Text>
+    </Stack>
+  </Card>
+);
 
 export default function Tickets({ userId, onSubmittingChange }: TicketsProps) {
   const [users, setUsers] = useState<User[]>([]);
@@ -65,7 +134,7 @@ export default function Tickets({ userId, onSubmittingChange }: TicketsProps) {
     fetchId();
   }, [userId, onSubmittingChange]);
 
-  if (!userId) return null;
+  if (!userId || !users) return null;
 
   if (searched && users.length === 0) {
     return (
@@ -88,58 +157,16 @@ export default function Tickets({ userId, onSubmittingChange }: TicketsProps) {
   if (users.length > 0) {
     return (
       <Stack mt={20}>
-        {users.map((user) => (
-          <Card key={user.id_card} radius="lg" withBorder mt="md">
-            <Stack gap="xs">
-              <Text>
-                <Text span fw={700}>
-                  Nombre:
-                </Text>{" "}
-                {user.name}
-              </Text>
-              <Text>
-                <Text span fw={700}>
-                  Estado del Pago:
-                </Text>{" "}
-                {(() => {
-                  if (user.pay_data && user.pay_data.length > 0) {
-                    const allValidated = user.pay_data.every(
-                      (p) => p.validated,
-                    );
-                    return (
-                      <Badge
-                        radius="sm"
-                        color={allValidated ? "green" : "orange"}
-                      >
-                        {allValidated ? "Confirmado" : "Pendiente"}
-                      </Badge>
-                    );
-                  }
-                  return "No hay datos de pago";
-                })()}
-              </Text>
-              <Text fw={700}>Boletos Asignados:</Text>
-              {user.tickets && user.tickets.length > 0 ? (
-                <Group gap="xs">
-                  {user.tickets.map((ticket) => (
-                    <Badge
-                      key={ticket.tickets}
-                      variant="light"
-                      size="lg"
-                      radius="md"
-                    >
-                      {ticket.tickets.toString().padStart(4, "0")}
-                    </Badge>
-                  ))}
-                </Group>
-              ) : (
-                <Text size="sm" c="dimmed">
-                  No hay boletos asignados.
-                </Text>
-              )}
-            </Stack>
-          </Card>
-        ))}
+        {users.map((user) => {
+          const isValidated =
+            user.pay_data.length > 0 && user.pay_data.every((p) => p.validated);
+
+          if (isValidated) {
+            return <ValidatedPurchaseCard key={user.id_card} user={user} />;
+          } else {
+            return <PendingPurchaseCard key={user.id_card} user={user} />;
+          }
+        })}
       </Stack>
     );
   }

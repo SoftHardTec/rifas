@@ -1,8 +1,7 @@
 export const optionId = [
   {
     label: "V-",
-    value: "V",
+    value: "Venezolano",
   },
-  { label: "E-", value: "E" },
-  { label: "J-", value: "J" },
+  { label: "E-", value: "Extranjero" },
 ];

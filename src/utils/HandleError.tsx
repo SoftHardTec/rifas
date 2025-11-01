@@ -30,7 +30,7 @@ export default function HandleError({
       opened={opened}
       onClose={onClose}
       centered
-      overlayProps={{ backgroundOpacity: 0.4, blur: 4 }}
+      overlayProps={{ backgroundOpacity: 0.5, blur: 7 }}
       transitionProps={{ transition: "fade", duration: 200 }}
       withCloseButton={false}
       size="35rem"
@@ -38,8 +38,8 @@ export default function HandleError({
     >
       <Container px="md" py="xl">
         <Group justify="center">
-          <IconExclamationCircle size={80} color="red" />
-          <Title c="white" order={2}>
+          <IconExclamationCircle size={80} color="#D11111" />
+          <Title c="black" order={2}>
             {title}
           </Title>
         </Group>
