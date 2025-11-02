@@ -18,21 +18,21 @@ export default function InfoRaffle() {
           <Title order={2}>Detalles del Sorteo</Title>
         </Group>
         <Text ta="left" fw={600}>
-          🎁Premio 2000$ en efectivo🎁.
+          Premio <strong>2000$</strong> en efectivo🎁.
         </Text>
         <Text fw={600}>
-          Fecha se lanzará al alcanzar el 80% de los tickets‼️.
+          La fecha se lanzará al alcanzar el <strong>80%</strong> de los tickets
+          vendidos‼️.
         </Text>
         <Text fw={600}>
-          Los resultados se dará a las 10pm por Loteria SUPER GANA.
+          Los resultados se darán por la lotería <strong>SUPER GANA.</strong>
         </Text>
         <Text fw={600}>
-          La verificación de los tickets la revisas abajo colocando tu n° de
-          cedula con el que te registraste, el cuál podrás ver 24 hrs después de
-          tu compra.{" "}
+          Compra mínima <strong>2 tickets</strong> ‼️.
         </Text>
-        <Text fw={600}>Compra mínima 2 tickets ‼️.</Text>
-        <Text fw={600}>🍀 Muchas Suerte 🍀.</Text>
+        <Text ta="center" fw={600}>
+          🍀<strong>Mucha Suerte</strong>🍀.
+        </Text>
       </Flex>
     </Card>
   );

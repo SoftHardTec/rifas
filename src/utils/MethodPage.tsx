@@ -8,6 +8,7 @@ import {
   Group,
 } from "@mantine/core";
 import { IconCopy, IconCheck } from "@tabler/icons-react";
+import { Component } from "react";
 interface MethodProps {
   ticketCount: number | null;
 }
@@ -83,8 +84,8 @@ export function Mercantil({ ticketCount }: MethodProps) {
       title="Pago Movil Mercantil"
       fields={[
         { label: "Cuenta:", value: "0105" },
-        { label: "Cedula:", value: "24.368.245" },
-        { label: "Telefono:", value: "0424-3059113" },
+        { label: "Cédula:", value: "24.368.245" },
+        { label: "Teléfono:", value: "0424-3059113" },
         {
           label: "Monto",
           value: ticketCount
@@ -99,7 +100,7 @@ export function Mercantil({ ticketCount }: MethodProps) {
 export function Zinli({ ticketCount }: MethodProps) {
   return (
     <MethodStack
-      title="Zinli (Min: 6 boletos)"
+      title="Zinli (Min 6 tickets)"
       fields={[
         { label: "Correo", value: "dv0510.27@gmail.com" },
         { label: "Titular", value: "Damelis Aguilar" },
@@ -108,7 +109,7 @@ export function Zinli({ ticketCount }: MethodProps) {
           value:
             ticketCount && ticketCount > 5
               ? `$${ticketCount}`
-              : "Seleccione al menos 6 boletos",
+              : "Seleccione al menos 6 tickets",
         },
       ]}
     />
@@ -118,7 +119,7 @@ export function Zinli({ ticketCount }: MethodProps) {
 export function Binance({ ticketCount }: MethodProps) {
   return (
     <MethodStack
-      title="Binance (Min 6 boletos)"
+      title="Binance (Min 6 tickets)"
       fields={[
         { label: "Correo", value: "dv0510.27@gmail.com" },
         { label: "Titular", value: "DamelisAg" },
@@ -127,7 +128,25 @@ export function Binance({ ticketCount }: MethodProps) {
           value:
             ticketCount && ticketCount > 5
               ? `$${ticketCount}`
-              : "Seleccione al menos 6 boletos",
+              : "Seleccione al menos 6 tickets",
+        },
+      ]}
+    />
+  );
+}
+export function Zelle({ ticketCount }: MethodProps) {
+  return (
+    <MethodStack
+      title="Zinli (Min 6 tickets)"
+      fields={[
+        { label: "Correo", value: "dv0510.27@gmail.com" },
+        { label: "Titular", value: "Damelis Aguilar" },
+        {
+          label: "Monto",
+          value:
+            ticketCount && ticketCount > 5
+              ? `$${ticketCount}`
+              : "Seleccione al menos 6 tickets",
         },
       ]}
     />
@@ -139,18 +158,24 @@ export const methodPage = [
     key: "mercantil",
     label: "Mercantil",
     component: Mercantil,
-    copyValue: "0105 Banco Mercantil\n27.153.835\n0414-1234567",
+    copyValue: "0105 Banco Mercantil\n24368245\n04243059113",
   },
   {
     key: "zinli",
     label: "Zinli",
     component: Zinli,
-    copyValue: "correo@gmail.com",
+    copyValue: "dv0510.27@gmail.com",
   },
   {
     key: "binance",
     label: "Binance",
     component: Binance,
-    copyValue: "correo@gmail.com",
+    copyValue: "dv0510.27@gmail.com",
+  },
+  {
+    key: "zelle",
+    label: "Zelle",
+    component: Zelle,
+    copyValue: "tucorreo@gmail.com",
   },
 ];

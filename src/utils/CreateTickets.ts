@@ -33,10 +33,13 @@ export async function createUniqueTickets(count: number): Promise<{ tickets: str
     available.push(...availableCandidates);
     intentos++;
   }
+
+  if (available.length < count) {
+    throw new Error("No se pudieron generar los tickets suficientes. Por favor, intenta con una cantidad menor o contacta a soporte.");
+  }
+
   const finalTickets = available.slice(0, count);
   // Mapear a la estructura de objeto esperada, manteniendo el tipo string
   const submitTickets = finalTickets.map((n) => ({ tickets: n }));
-  if (submitTickets.length === 0)
-    throw new Error("No hay más tickets disponibles. Todos los números han sido asignados.");
   return submitTickets;
 }

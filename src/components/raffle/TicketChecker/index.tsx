@@ -32,16 +32,16 @@ export default function TicketChecker({
     <>
       <Card
         id="verificador"
-        h={400}
+        h={280}
         w={400}
         shadow="xl"
         padding="lg"
         radius="md"
         withBorder
       >
-        <Group justify="center" align="center" h={"100%"}>
-          <Title order={2} fw={900} mb="sm" mt={40}>
-            Verifica tus Boletos
+        <Group justify="center" align="center">
+          <Title mb="xs" order={2} fw={900} mt={40}>
+            Verifica tus tickets
           </Title>
 
           <form
@@ -52,15 +52,14 @@ export default function TicketChecker({
           >
             <NumberInput
               minLength={7}
-              maxLength={9}
+              maxLength={12}
               w={250}
               key={form.key("idCard")}
               {...form.getInputProps("idCard")}
+              placeholder="Ingresa tu número de cédula"
               rightSection={<div></div>}
+              styles={{ input: { textAlign: "center" } }}
             />
-            <Text mt="md" size="sm" c="dimmed">
-              Ingresa tu numero de cedula
-            </Text>
             <Group justify="center" mb={20}>
               <Button
                 color="rgb(230, 0, 126)"

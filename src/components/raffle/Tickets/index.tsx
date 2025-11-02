@@ -49,13 +49,13 @@ const ValidatedPurchaseCard = ({ user }: { user: User }) => (
         p={10}
       />
       <Text fz={15} ta="center" span fw={600}>
-        Tu(s) pago(s) fueron verificados con exito
+        Tu(s) pago(s) fuerón verificados con éxito
       </Text>
       <Text ta="center" fw={600}>
         ¡Mucha Suerte!
       </Text>
       <Title order={3} my={20} ta="center">
-        Boletos Asignados:
+        Tickets Asignados
       </Title>
       <Group mb={15} justify="center" gap="xs">
         {user.tickets.map((ticket) => (
@@ -84,11 +84,11 @@ const ValidatedPurchaseCard = ({ user }: { user: User }) => (
 
 const PendingPurchaseCard = ({ user }: { user: User }) => (
   <Card key={user.id_card} radius="lg" withBorder mt="md">
-    <Stack align="center" gap="xs">
-      <Title order={3}>
+    <Stack my={20} align="center" gap="xs">
+      <Title ta="center" order={3}>
         Hola {user.name} aun estamos verificando tu(s) pago(s)
       </Title>
-      <Text fw={600} size="sm" mt="xs">
+      <Text ta="center" fw={600} size="sm" mt="xs">
         Tus boletos serán asignados y enviados a tu correo{" "}
         <strong>({user.email})</strong> una vez que el pago sea confirmado.
       </Text>

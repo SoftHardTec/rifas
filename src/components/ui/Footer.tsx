@@ -97,8 +97,8 @@ export function Footer() {
         </Group>
 
         <SimpleGrid cols={1} spacing={0}>
-          <Title mb={20} order={4}>
-            Siguenos en:
+          <Title ta="center" mb={20} order={4}>
+            SIGUENOS
           </Title>
           <Group gap="xs" justify="flex-end" wrap="nowrap">
             <Anchor
@@ -106,7 +106,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <ActionIcon size="2.5ren" variant="default" radius="xl">
+              <ActionIcon size="2.5rem" variant="default" radius="xl">
                 <IconBrandFacebook size={35} stroke={1.5} />
               </ActionIcon>
             </Anchor>

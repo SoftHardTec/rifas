@@ -214,7 +214,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
             <TextInput
               withAsterisk
               label="Nombre completo"
-              placeholder="nombre y apellido"
+              placeholder="Nombre y Apellido"
               key={form.key("name")}
               {...form.getInputProps("name")}
             />
@@ -226,7 +226,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
                 key={form.key("PhoneCode")}
                 {...form.getInputProps("PhoneCode")}
                 data={selectPhoneCode}
-                w={110}
+                w={100}
                 nothingFoundMessage="No hay resultados..."
               />
               <NumberInput
@@ -260,24 +260,24 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
               withAsterisk
               label="Referencia"
               rightSection={<div />}
-              placeholder="Ultimo 6 Digitos"
+              placeholder="Último 6 dígitos"
               key={form.key("reference")}
               {...form.getInputProps("reference")}
               minLength={6}
-              maxLength={10}
+              maxLength={12}
               allowDecimal={false}
               allowNegative={false}
               trimLeadingZeroesOnBlur={false}
             />
 
             <FileInput
-              label="Comprobante"
+              label="Capture Bancario"
               clearable
               withAsterisk
               accept="image/png,image/jpeg"
               key={form.key("file")}
               {...form.getInputProps("file")}
-              placeholder="Comprobante de Pago"
+              placeholder="Selecciona archivo"
             />
           </SimpleGrid>
         </form>

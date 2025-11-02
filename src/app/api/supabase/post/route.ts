@@ -78,10 +78,13 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ data});
   } catch (error) {
-    console.error("Supabase insert error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Ah ocurrido un error, vuelva a intentarlo";
+    console.error("Supabase POST error:", errorMessage);
     return NextResponse.json(
-      { error: "Ah ocurrido un error, vuelva a intentarlo", details: String(error) },
-      { status: 500 }
+      { error: errorMessage, details: String(error) },
+      // Usamos 400 para errores del cliente como "no hay tickets"
+      // y 500 para errores inesperados del servidor.
+      { status: errorMessage.includes("tickets") ? 400 : 500 }
     );
   }
 }

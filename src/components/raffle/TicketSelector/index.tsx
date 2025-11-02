@@ -3,7 +3,7 @@
 import {
   Alert,
   Button,
-  Grid,
+  Text,
   Group,
   NumberInput,
   rem,
@@ -25,7 +25,7 @@ export default function TicketSelector({ onSelect }: TicketSelectorProps) {
     <IconTicket style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
   );
   const MIN_TICKETS = 2;
-  const MAX_TICKETS = 100;
+  const MAX_TICKETS = 50;
   const ticketAmounts = [2, 6, 10, 20, 30, 50];
 
   const [count, handlers] = useCounter(MIN_TICKETS, {
@@ -58,7 +58,7 @@ export default function TicketSelector({ onSelect }: TicketSelectorProps) {
         </SimpleGrid>
       </Group>
 
-      <Group preventGrowOverflow justify="center" gap="xs">
+      <Group mb={20} preventGrowOverflow justify="center" gap="xs">
         <Button color="red" onClick={() => handlers.decrement()}>
           <IconArrowBigDown
             style={{ width: rem(20), height: rem(20) }}
@@ -71,11 +71,11 @@ export default function TicketSelector({ onSelect }: TicketSelectorProps) {
           placeholder="Tickets"
           value={count}
           onChange={(value) => handlers.set(Number(value))}
-          maxLength={3}
+          maxLength={2}
           step={1}
           min={MIN_TICKETS}
           max={MAX_TICKETS}
-          style={{ width: rem(75) }}
+          style={{ width: rem(75), input: { textAlign: "center" } }}
         />
         <Button color="green" onClick={() => handlers.increment()}>
           <IconArrowBigUpFilled
@@ -84,15 +84,6 @@ export default function TicketSelector({ onSelect }: TicketSelectorProps) {
           />
         </Button>
       </Group>
-
-      <Alert
-        variant="light"
-        color="orange"
-        mt="md"
-        className="text-center w-1/3 mx-auto p-1"
-      >
-        Minimo {MIN_TICKETS} ticket
-      </Alert>
     </>
   );
 }

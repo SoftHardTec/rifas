@@ -39,7 +39,7 @@ export default function BarProgressTickets() {
 
   return (
     <>
-      <Group justify="center" mt="md" mb="md">
+      <Group justify="center" mb="md">
         <Progress
           value={progressPercentage}
           size="xl"
@@ -52,7 +52,7 @@ export default function BarProgressTickets() {
           color="rgba(230, 0, 194)"
         />
         <Text ta="center" fz="md" fw={700}>
-          {progressPercentageInt}% de boletos vendidos
+          QUEDAN {progressPercentageInt}%
         </Text>
       </Group>
     </>

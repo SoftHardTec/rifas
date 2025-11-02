@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Container, Title, Flex, ActionIcon, Image } from "@mantine/core";
-import { Zinli, Binance, Mercantil } from "../../../utils/MethodPage";
+import { Zinli, Binance, Mercantil, Zelle } from "../../../utils/MethodPage";
 import NextImage from "next/image";
 
 const banks = [
@@ -18,6 +18,12 @@ const banks = [
     label: "Binance",
     img: "/Binance.png",
     component: Binance,
+  },
+  {
+    key: "Zelle",
+    label: "Zelle",
+    img: "/Zelle.png",
+    component: Zelle,
   },
 ];
 
@@ -36,9 +42,9 @@ export default function DataPage({
     <>
       <Container>
         <Title order={3} mt="md" mb="xs" style={{ textAlign: "center" }}>
-          Metodos de pago
+          Métodos de pago
         </Title>
-        <Flex justify="center" mt="lg" gap="lg" mb="lg">
+        <Flex justify="center" mt="lg" gap="md" mb="lg">
           {banks.map((bank) => (
             <ActionIcon
               key={bank.key}
