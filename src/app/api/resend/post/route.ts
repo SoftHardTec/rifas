@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
       const { data: sentEmail, error: sendError } = await resend.emails.send({
         from: 'JuegacnNosotros <noreply@juegacnnosotros.com>', 
         to: user.email,
-        subject: `Tus boletos para la rifa`,
+        subject: `Tu Compra ha sido Aprobada ${nameToLowerCase} `,
         react: TicketEmail({
           name: nameToLowerCase || 'Participante',
           tickets: tickets.join(', '),
