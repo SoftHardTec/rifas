@@ -80,11 +80,12 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Ah ocurrido un error, vuelva a intentarlo";
     console.error("Supabase POST error:", errorMessage);
+    console.error("Supabase POST error details:", error);
     return NextResponse.json(
       { error: errorMessage, details: String(error) },
       // Usamos 400 para errores del cliente como "no hay tickets"
       // y 500 para errores inesperados del servidor.
-      { status: errorMessage.includes("tickets") ? 400 : 500 }
+      { status: errorMessage.includes("tickets") || errorMessage.includes("agotados") ? 400 : 500 }
     );
   }
 }
@@ -113,7 +114,6 @@ AS $$
 DECLARE
     v_user_id int;
     v_pay_id int;
-    v_ticket_number int;
 BEGIN
     -- 1. Buscar o crear el usuario y obtener su ID.
     -- Se usa ON CONFLICT para manejar de forma atómica el caso de que el usuario ya exista.
@@ -144,5 +144,6 @@ BEGIN
     RETURN v_user_id;
 END;
 $$;
+
 
 */

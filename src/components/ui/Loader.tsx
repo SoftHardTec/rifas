@@ -12,7 +12,7 @@ export default function Loader({ visible }: LoaderProps) {
       zIndex={1000}
       overlayProps={{ radius: "sm", blur: 2, color: "black", opacity: 0.6 }}
       loaderProps={{
-        color: "pink",
+        color: "rgb(230, 0, 126)",
         type: "bars",
         size: "lg",
       }}

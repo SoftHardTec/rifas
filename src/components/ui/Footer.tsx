@@ -27,21 +27,23 @@ export function Footer() {
   return (
     <div className={classes.footer} style={{ backgroundColor: "white" }}>
       <div className={classes.inner}>
-        <ActionIcon
-          size="10rem"
-          variant="transparent"
-          radius="md"
-          ml={{ base: 0, sm: 10 }}
-          my="xs"
-        >
-          <Image
-            component={NextImage}
-            src={"/logo.png"}
-            width={100}
-            height={40}
-            alt="logo"
-          />
-        </ActionIcon>
+        <Anchor href="./" rel="noopener noreferrer">
+          <ActionIcon
+            size="10rem"
+            variant="transparent"
+            radius="md"
+            ml={{ base: 0, sm: 10 }}
+            my="xs"
+          >
+            <Image
+              component={NextImage}
+              src={"/logo.png"}
+              width={100}
+              height={40}
+              alt="logo"
+            />
+          </ActionIcon>
+        </Anchor>
 
         <Group justify="center" mt={{ base: 0, sm: 20 }} mb={20}>
           <Anchor
@@ -98,7 +100,7 @@ export function Footer() {
 
         <SimpleGrid cols={1} spacing={0}>
           <Title ta="center" mb={20} order={4}>
-            SIGUENOS
+            SÍGUENOS
           </Title>
           <Group gap="xs" justify="flex-end" wrap="nowrap">
             <Anchor
@@ -111,7 +113,7 @@ export function Footer() {
               </ActionIcon>
             </Anchor>
             <Anchor
-              href="https://tiktok.com/"
+              href="https://www.tiktok.com/@juegacnnosotross?_r=1&_t=ZM-9147jicUIw8"
               target="_blank"
               rel="noopener noreferrer"
             >

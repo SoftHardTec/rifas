@@ -1,7 +1,8 @@
 "use client";
 
-import { Group, Progress, Text } from "@mantine/core";
+import { Alert, Group, Progress, Stack, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
+
 export default function BarProgressTickets() {
   const [soldTickets, setSoldTickets] = useState(0);
   const totalTickets = 10000; // O el número total de boletos de tu rifa
@@ -31,14 +32,24 @@ export default function BarProgressTickets() {
       }
     }
 
+    // Ejecutar inmediatamente
     fetchSoldTickets();
-  }, []); // El array vacío asegura que se ejecute solo una vez.
+
+    // Actualizar cada 5 segundos
+    const interval = setInterval(fetchSoldTickets, 5000);
+
+    // Limpiar el intervalo al desmontar el componente
+    return () => clearInterval(interval);
+  }, []);
 
   const progressPercentage = (soldTickets / totalTickets) * 100;
-  const progressPercentageInt = parseInt(progressPercentage.toFixed(0), 10);
+  const progressPercentageInt = parseFloat(progressPercentage.toFixed(2));
+  const remainingPercentage = 100 - progressPercentageInt;
+  const availableTickets = totalTickets - soldTickets;
+  const showAvailableTickets = remainingPercentage <= 0.10;
 
   return (
-    <>
+    <Stack gap="xs" align="center">
       <Group justify="center" mb="md">
         <Progress
           value={progressPercentage}
@@ -52,9 +63,9 @@ export default function BarProgressTickets() {
           color="rgba(230, 0, 194)"
         />
         <Text ta="center" fz="md" fw={700}>
-          QUEDAN {progressPercentageInt}%
+          QUEDAN {progressPercentageInt}% {showAvailableTickets && `/${availableTickets}TICKETS ` } 
         </Text>
       </Group>
-    </>
+    </Stack>
   );
 }

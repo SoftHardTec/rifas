@@ -75,7 +75,13 @@ export default function TicketSelector({ onSelect }: TicketSelectorProps) {
           step={1}
           min={MIN_TICKETS}
           max={MAX_TICKETS}
-          style={{ width: rem(75), input: { textAlign: "center" } }}
+          styles={{
+            input: {
+              textAlign: "center",
+              paddingRight: `var(--ni-right-section-width, ${rem(20)})`,
+            },
+          }}
+          w={rem(75)}
         />
         <Button color="green" onClick={() => handlers.increment()}>
           <IconArrowBigUpFilled

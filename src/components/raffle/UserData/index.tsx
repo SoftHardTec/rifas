@@ -102,7 +102,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       NumberPhone: (value) => (value ? null : "Teléfono requerido"),
       id: (value) => (value ? null : "requerido"),
       NumberId: (value) =>
-        String(value).length > 5 ? null : "Cédula requerida",
+        String(value).length > 6 ? null : "Cédula requerida",
       bank: (value) =>
         methodPage === "venezuela" || methodPage === "mercantil"
           ? value
@@ -131,15 +131,18 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
         });
 
         if (responseSupabase.ok) {
-          const result = await responseSupabase.json();
           setConfirmationInfo({
             opened: true,
           });
-          onTicketPurchase(result.data); // Pasamos los datos de la compra al padre
+          onTicketPurchase({}); // Ya no pasamos datos, solo notificamos el éxito
           form.reset();
         } else {
           const errorData = await responseSupabase.json();
-          throw new Error(errorData.error || ".");
+          // Lanzamos el error que viene de la API para que sea capturado por el bloque catch.
+          // Si no hay un mensaje de error específico, usamos uno genérico.
+          const apiErrorMessage =
+            errorData.error || "No se pudo completar la solicitud.";
+          throw new Error(apiErrorMessage);
         }
       }
     } catch (error) {
@@ -202,7 +205,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
                 label=" "
                 placeholder="Cédula"
                 minLength={7}
-                maxLength={8}
+                maxLength={12}
                 key={form.key("NumberId")}
                 {...form.getInputProps("NumberId")}
                 allowDecimal={false}
