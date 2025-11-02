@@ -8,7 +8,6 @@ import {
   Group,
 } from "@mantine/core";
 import { IconCopy, IconCheck } from "@tabler/icons-react";
-import { Component } from "react";
 interface MethodProps {
   ticketCount: number | null;
 }
@@ -137,7 +136,7 @@ export function Binance({ ticketCount }: MethodProps) {
 export function Zelle({ ticketCount }: MethodProps) {
   return (
     <MethodStack
-      title="Zinli (Min 6 tickets)"
+      title="Zelle (Min 6 tickets)"
       fields={[
         { label: "Correo", value: "dv0510.27@gmail.com" },
         { label: "Titular", value: "Damelis Aguilar" },

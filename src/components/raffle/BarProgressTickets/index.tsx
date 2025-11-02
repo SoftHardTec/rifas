@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Group, Progress, Stack, Text } from "@mantine/core";
+import { Group, Progress, Flex, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 
 export default function BarProgressTickets() {
@@ -46,26 +46,32 @@ export default function BarProgressTickets() {
   const progressPercentageInt = parseFloat(progressPercentage.toFixed(2));
   const remainingPercentage = 100 - progressPercentageInt;
   const availableTickets = totalTickets - soldTickets;
-  const showAvailableTickets = remainingPercentage <= 0.10;
+  const showAvailableTickets = remainingPercentage <= 0.1;
 
   return (
-    <Stack gap="xs" align="center">
-      <Group justify="center" mb="md">
-        <Progress
-          value={progressPercentage}
-          size="xl"
-          radius="xl"
-          mt="md"
-          w={500}
-          h={25}
-          animated
-          variant="alertText"
-          color="rgba(230, 0, 194)"
-        />
-        <Text ta="center" fz="md" fw={700}>
-          QUEDAN {progressPercentageInt}% {showAvailableTickets && `/${availableTickets}TICKETS ` } 
-        </Text>
-      </Group>
-    </Stack>
+    <Flex
+      direction="column"
+      gap="xs"
+      align="center"
+      w="100%"
+      maw="20rem"
+      mx="auto"
+    >
+      <Progress
+        value={progressPercentage}
+        size="xl"
+        radius="xl"
+        mt="md"
+        w="100%"
+        h={25}
+        animated
+        variant="alertText"
+        color="rgba(230, 0, 194)"
+      />
+      <Text ta="center" fz="md" fw={700}>
+        QUEDAN {progressPercentageInt}%{" "}
+        {showAvailableTickets && `/ ${availableTickets} TICKETS `}
+      </Text>
+    </Flex>
   );
 }
