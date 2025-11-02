@@ -57,7 +57,7 @@ export function TermsAndConditionsModal({
       </Group>
       <Group justify="center" mt="md">
         <Button color="rgb(230, 0, 126)" mb="md" mt="md" onClick={onClose}>
-          Cerrar
+          Aceptar
         </Button>
       </Group>
     </Modal>
