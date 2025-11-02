@@ -43,10 +43,9 @@ export default function BarProgressTickets() {
   }, []);
 
   const progressPercentage = (soldTickets / totalTickets) * 100;
-  const progressPercentageInt = parseFloat(progressPercentage.toFixed(2));
-  const remainingPercentage = 100 - progressPercentageInt;
+  const remainingPercentage = 100 - progressPercentage;
+  const remainingPercentageInt = parseFloat(remainingPercentage.toFixed(2));
   const availableTickets = totalTickets - soldTickets;
-  const showAvailableTickets = remainingPercentage <= 0.1;
 
   return (
     <Flex
@@ -69,8 +68,9 @@ export default function BarProgressTickets() {
         color="rgba(230, 0, 194)"
       />
       <Text ta="center" fz="md" fw={700}>
-        QUEDAN {progressPercentageInt}%{" "}
-        {showAvailableTickets && `/ ${availableTickets} TICKETS `}
+        {availableTickets <= 20
+          ? `QUEDAN ${availableTickets} TICKETS`
+          : `QUEDAN ${remainingPercentageInt}% `}
       </Text>
     </Flex>
   );
