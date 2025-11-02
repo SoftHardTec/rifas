@@ -87,7 +87,7 @@ export default function TicketEmail({
                         <div style={infoSection}>
                           <p style={paragraph}>Hola {name},</p>
                           <p style={paragraph}>
-                            Tu pago ha sido confirmado y tus boletos han sido
+                            Tu pago ha sido confirmado y tus tickets han sido
                             asignados. ¡Mucha suerte!
                             <br />
                           </p>
@@ -108,7 +108,7 @@ export default function TicketEmail({
 
                         {/* Sección de Boletos */}
                         <div style={ticketsSection}>
-                          <h2 style={subheading}>Tus Boletos Comprados</h2>
+                          <h2 style={subheading}>Tus Tickets Comprados</h2>
                           <table
                             align="center"
                             cellPadding="0"
@@ -141,7 +141,7 @@ export default function TicketEmail({
                             style={buttonStyles}
                             target="_blank"
                           >
-                            Verificar mis Boletos
+                            Verificar mis Tickets
                           </a>
                         </div>
 
