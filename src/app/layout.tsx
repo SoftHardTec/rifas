@@ -10,6 +10,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "@mantine/carousel/styles.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -47,6 +48,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased bg-[url('/bg.jpg')] object-cover ">
         <SpeedInsights />
+        <Analytics />
         <MantineProvider theme={theme} forceColorScheme="light">
           {children}
         </MantineProvider>
