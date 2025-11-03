@@ -138,8 +138,8 @@ export function Zelle({ ticketCount }: MethodProps) {
     <MethodStack
       title="Zelle (Min 6 tickets)"
       fields={[
-        { label: "Correo", value: "dv0510.27@gmail.com" },
-        { label: "Titular", value: "Damelis Aguilar" },
+        { label: "Correo", value: "oliverosyorgelys@gmail.com" },
+        { label: "Titular", value: "Yorgelys Oliveros" },
         {
           label: "Monto",
           value:
@@ -175,6 +175,6 @@ export const methodPage = [
     key: "zelle",
     label: "Zelle",
     component: Zelle,
-    copyValue: "tucorreo@gmail.com",
+    copyValue: "oliverosyorgelys@gmail.com",
   },
 ];
