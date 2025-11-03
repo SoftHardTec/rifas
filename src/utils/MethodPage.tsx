@@ -6,6 +6,7 @@ import {
   Tooltip,
   ActionIcon,
   Group,
+  Flex,
 } from "@mantine/core";
 import { IconCopy, IconCheck } from "@tabler/icons-react";
 interface MethodProps {
@@ -25,7 +26,7 @@ function MethodStack({ title, fields }: MethodData) {
     return compName && cleanTitle.includes(compName.replace("banco", ""));
   });
   return (
-    <Stack m="lg" ml="2rem" gap="md">
+    <Stack m="lg" ml="lg" gap="md">
       <Group>
         <Title order={4} fz={{ base: "h5", sm: "h4" }}>
           {title}
@@ -50,14 +51,11 @@ function MethodStack({ title, fields }: MethodData) {
         </CopyButton>
       </Group>
       {fields.map((field, idx) => (
-        <div
-          key={idx}
-          style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-        >
-          <Title order={5} fz={{ base: "sm", sm: "md" }}>
+        <Flex key={idx} align="center" gap="0.5rem" wrap="wrap">
+          <Title order={5} fz={{ base: "md", sm: "lg" }}>
             {field.label}
           </Title>
-          <Text fz={{ base: "sm", sm: "md" }}>{field.value}</Text>
+          <Text fz={{ base: "1rem", sm: "lg" }}>{field.value}</Text>
           <CopyButton value={String(field.value)}>
             {({ copied, copy }) => (
               <Tooltip
@@ -68,14 +66,14 @@ function MethodStack({ title, fields }: MethodData) {
                 <ActionIcon
                   color={copied ? "teal" : "gray"}
                   onClick={copy}
-                  variant="light"
+                  variant="transparent"
                 >
                   {copied ? <IconCheck size={18} /> : <IconCopy size={18} />}
                 </ActionIcon>
               </Tooltip>
             )}
           </CopyButton>
-        </div>
+        </Flex>
       ))}
     </Stack>
   );
