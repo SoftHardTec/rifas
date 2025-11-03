@@ -25,7 +25,7 @@ export default async function supabaseSubmit ({
   amount,
 }: SupabaseSubmitParams): Promise<Response> {
   const bank =
-    methodPage === "venezuela" || methodPage === "mercantil"
+ methodPage === "Mercantil"
       ? values.bank
       : "Moneda extranjera";
 
