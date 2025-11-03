@@ -83,8 +83,8 @@ export function Mercantil({ ticketCount }: MethodProps) {
       title="Pago Movil Mercantil"
       fields={[
         { label: "Cuenta:", value: "0105" },
-        { label: "Cédula:", value: "24.368.245" },
-        { label: "Teléfono:", value: "0424-3059113" },
+        { label: "Cédula:", value: "22.338.937" },
+        { label: "Teléfono:", value: "04149454986" },
         {
           label: "Monto",
           value: ticketCount
@@ -157,7 +157,7 @@ export const methodPage = [
     key: "mercantil",
     label: "Mercantil",
     component: Mercantil,
-    copyValue: "0105 Banco Mercantil\n24368245\n04243059113",
+    copyValue: "0105 Banco Mercantil\n22338937\n04149454986",
   },
   {
     key: "zinli",
