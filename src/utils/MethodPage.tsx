@@ -26,7 +26,7 @@ function MethodStack({ title, fields }: MethodData) {
     return compName && cleanTitle.includes(compName.replace("banco", ""));
   });
   return (
-    <Stack m="lg" ml="lg" gap="md">
+    <Stack m="lg" ml="xs" gap="md">
       <Group>
         <Title order={4} fz={{ base: "h5", sm: "h4" }}>
           {title}
@@ -52,10 +52,10 @@ function MethodStack({ title, fields }: MethodData) {
       </Group>
       {fields.map((field, idx) => (
         <Flex key={idx} align="center" gap="0.5rem" wrap="wrap">
-          <Title order={5} fz={{ base: "sm", sm: "lg" }}>
+          <Title order={5} fz={{ base: "md", sm: "lg" }}>
             {field.label}
           </Title>
-          <Text fz={{ base: "sm", sm: "lg" }}>{field.value}</Text>
+          <Text fz={{ base: "md", sm: "lg" }}>{field.value}</Text>
           <CopyButton value={String(field.value)}>
             {({ copied, copy }) => (
               <Tooltip
