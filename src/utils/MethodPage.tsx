@@ -27,7 +27,9 @@ function MethodStack({ title, fields }: MethodData) {
   return (
     <Stack m="lg" ml="2rem" gap="md">
       <Group>
-        <Title order={4}>{title}</Title>
+        <Title order={4} fz={{ base: "h5", sm: "h4" }}>
+          {title}
+        </Title>
         <CopyButton value={banco?.copyValue || ""} timeout={2000}>
           {({ copied, copy }) => (
             <Tooltip
@@ -52,8 +54,10 @@ function MethodStack({ title, fields }: MethodData) {
           key={idx}
           style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
         >
-          <Title order={5}>{field.label}</Title>
-          <Text>{field.value}</Text>
+          <Title order={5} fz={{ base: "sm", sm: "md" }}>
+            {field.label}
+          </Title>
+          <Text fz={{ base: "sm", sm: "md" }}>{field.value}</Text>
           <CopyButton value={String(field.value)}>
             {({ copied, copy }) => (
               <Tooltip
