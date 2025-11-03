@@ -52,10 +52,10 @@ function MethodStack({ title, fields }: MethodData) {
       </Group>
       {fields.map((field, idx) => (
         <Flex key={idx} align="center" gap="0.5rem" wrap="wrap">
-          <Title order={5} fz={{ base: "md", sm: "lg" }}>
+          <Title order={5} fz={{ base: "sm", sm: "lg" }}>
             {field.label}
           </Title>
-          <Text fz={{ base: "md", sm: "lg" }}>{field.value}</Text>
+          <Text fz={{ base: "sm", sm: "lg" }}>{field.value}</Text>
           <CopyButton value={String(field.value)}>
             {({ copied, copy }) => (
               <Tooltip
