@@ -55,7 +55,7 @@ function MethodStack({ title, fields }: MethodData) {
           <Title order={5} fz={{ base: "md", sm: "lg" }}>
             {field.label}
           </Title>
-          <Text fz={{ base: "1rem", sm: "lg" }}>{field.value}</Text>
+          <Text fz={{ base: "sm", sm: "lg" }}>{field.value}</Text>
           <CopyButton value={String(field.value)}>
             {({ copied, copy }) => (
               <Tooltip
