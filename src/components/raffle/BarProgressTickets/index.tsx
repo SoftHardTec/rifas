@@ -1,45 +1,59 @@
 "use client";
 
-import { Group, Progress, Flex, Text } from "@mantine/core";
+import { Progress, Flex, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+);
+
+// Define el tipo para el payload de la suscripción
+type TicketPayload = {
+  new: {
+    id: number;
+    // Agrega otros campos de ticket si es necesario
+  };
+};
 
 export default function BarProgressTickets() {
   const [soldTickets, setSoldTickets] = useState(0);
-  const totalTickets = 10000; // O el número total de boletos de tu rifa
+  const totalTickets = 10000;
 
   useEffect(() => {
     async function fetchSoldTickets() {
       try {
-        const res = await fetch("/api/supabase/getTickets", {
-          method: "GET",
-        });
-
-        if (!res.ok) {
-          throw new Error("La respuesta de la red no fue correcta");
-        }
-
-        const { count, error } = await res.json();
-
+        const { count, error } = await supabase
+          .from("tickets")
+          .select("*", { count: "exact", head: true });
         if (error) {
           throw error;
         }
-
         if (typeof count === "number") {
           setSoldTickets(count);
         }
       } catch (error) {
-        console.error("Error fetching tickets:", error);
+        console.error("Error al obtener los boletos:", error);
       }
     }
 
-    // Ejecutar inmediatamente
     fetchSoldTickets();
 
-    // Actualizar cada 5 segundos
-    // const interval = setInterval(fetchSoldTickets, 15000);
+    const channel = supabase
+      .channel("tickets")
+      .on<TicketPayload>(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "tickets" },
+        () => {
+          setSoldTickets((current) => current + 1);
+        },
+      )
+      .subscribe();
 
-    // // Limpiar el intervalo al desmontar el componente
-    // return () => clearInterval(interval);
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const progressPercentage = (soldTickets / totalTickets) * 100;
