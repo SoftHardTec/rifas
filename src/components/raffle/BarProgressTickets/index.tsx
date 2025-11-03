@@ -36,10 +36,10 @@ export default function BarProgressTickets() {
     fetchSoldTickets();
 
     // Actualizar cada 5 segundos
-    const interval = setInterval(fetchSoldTickets, 5000);
+    // const interval = setInterval(fetchSoldTickets, 15000);
 
-    // Limpiar el intervalo al desmontar el componente
-    return () => clearInterval(interval);
+    // // Limpiar el intervalo al desmontar el componente
+    // return () => clearInterval(interval);
   }, []);
 
   const progressPercentage = (soldTickets / totalTickets) * 100;
