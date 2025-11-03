@@ -104,11 +104,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       NumberId: (value) =>
         String(value).length > 6 ? null : "Cédula requerida",
       bank: (value) =>
-        methodPage === "venezuela" || methodPage === "mercantil"
-          ? value
-            ? null
-            : "Banco requerido"
-          : null,
+        methodPage === "Mercantil" ? (value ? null : "Banco requerido") : null,
       reference: (value) =>
         String(value).length > 5 ? null : "Referencia requerida",
       file: (value) => (value ? null : "Comprobante requerido"),
