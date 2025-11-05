@@ -43,8 +43,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
   const [errorInfo, setErrorInfo] = useState<{
     opened: boolean;
     title: string;
-    text: string;
-  }>({ opened: false, title: "", text: "" });
+  }>({ opened: false, title: "" });
 
   const [confirmationInfo, setConfirmationInfo] = useState({
     opened: false,
@@ -148,8 +147,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       console.error("Error en el proceso de envío:", errorMessage);
       setErrorInfo({
         opened: true,
-        title: "Ha ocurrido un error",
-        text: errorMessage,
+        title: errorMessage,
       });
     } finally {
       onSubmittingChange(false);
@@ -166,7 +164,6 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
         opened={errorInfo.opened}
         onClose={() => setErrorInfo({ ...errorInfo, opened: false })}
         title={errorInfo.title}
-        text={errorInfo.text}
       />
       <ModalPurchase
         opened={confirmationInfo.opened}

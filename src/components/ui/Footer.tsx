@@ -17,7 +17,7 @@ import {
   Image,
   Title,
   SimpleGrid,
-  Button,
+  Flex,
 } from "@mantine/core";
 import classes from "./FooterSocial.module.css";
 
@@ -134,7 +134,7 @@ export function Footer() {
         </SimpleGrid>
       </div>
 
-      <Group mt="md" justify="center" className={classes.links}>
+      <Flex mt="md" justify="center" className={classes.links}>
         <Anchor
           c="dimmed"
           lh={1}
@@ -144,10 +144,13 @@ export function Footer() {
         >
           Términos y condiciones
         </Anchor>
-      </Group>
-      <Group mb="md" mt={30} justify="center">
-        <Text size="xs">© 2025 SoftHard Tecnology. All rights reserved.</Text>
-      </Group>
+      </Flex>
+      <Flex mx={30} mb="md" mt={30}>
+        <Text ta="center" size="xs">
+          © 2025 Juega cn Nosotros. All rights reserved | Realizado por
+          SoftHard Tecnology.
+        </Text>
+      </Flex>
       {showTerms && (
         <TermsAndConditionsModal
           opened={showTerms}

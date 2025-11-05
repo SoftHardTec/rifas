@@ -6,13 +6,11 @@ type HandleErrorProps = {
   opened: boolean;
   onClose: () => void;
   title: string;
-  text?: string;
 };
 export default function HandleError({
   opened,
   onClose,
   title,
-  text,
 }: HandleErrorProps) {
   useEffect(() => {
     if (!opened) {
@@ -43,9 +41,6 @@ export default function HandleError({
             {title}
           </Title>
         </Group>
-        <Text size="lg" fw={800} mt="xl" mb="xl" ta="center">
-          {text}
-        </Text>
       </Container>
     </Modal>
   );

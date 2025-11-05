@@ -24,7 +24,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "JuegacnNosotros",
+  title: "Juega cn Nosotros",
   description: "Cambia tu vida con Nosotros",
 };
 
@@ -43,9 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <head>
-        <title>JuegacnNosotros</title>
-      </head>
+      <head></head>
       <body className="antialiased bg-[url('/bg.jpg')] object-cover ">
         <SpeedInsights />
         <Analytics />

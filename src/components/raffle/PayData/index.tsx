@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Container, Title, Flex, ActionIcon, Image } from "@mantine/core";
-import { Zinli, Binance, Mercantil, Zelle } from "../../../utils/MethodPage";
+import { Binance, Mercantil, Zelle } from "../../../utils/MethodPage";
 import NextImage from "next/image";
 
 const banks = [
@@ -12,7 +12,6 @@ const banks = [
     img: "/Mercantil.png",
     component: Mercantil,
   },
-  { key: "Zinli", label: "Zinli", img: "/Zinli.png", component: Zinli },
   {
     key: "Binance",
     label: "Binance",
@@ -56,8 +55,12 @@ export default function DataPage({
               size="2.5rem"
               radius="xl"
               aria-label={bank.label}
-              w={60}
-              h={60}
+              w="4rem"
+              h="4rem"
+              style={{
+                opacity: selectedBank === bank.key ? 1 : 0.6,
+                transition: "opacity 1s ease",
+              }}
             >
               <Image
                 component={NextImage}
