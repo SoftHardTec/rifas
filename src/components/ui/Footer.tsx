@@ -145,7 +145,7 @@ export function Footer() {
           Términos y condiciones
         </Anchor>
       </Flex>
-      <Flex mx={30} mb="md" mt={30}>
+      <Flex align="center" justify="center" mx={30} mb="md" mt={30}>
         <Text ta="center" size="xs">
           © 2025 Juega cn Nosotros. All rights reserved | Realizado por
           SoftHard Tecnology.

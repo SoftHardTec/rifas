@@ -18,8 +18,10 @@ export function TermsAndConditionsModal({
       centered
       overlayProps={{ backgroundOpacity: 0.5, blur: 2 }}
       transitionProps={{ transition: "fade", duration: 200 }}
+      withCloseButton={false}
+      closeOnClickOutside={false}
     >
-      <Title ta="center" order={4}>
+      <Title mt={25} ta="center" order={4}>
         Términos y Condiciones
       </Title>
       <Group justify="inherit" mt="md">
@@ -55,7 +57,14 @@ export function TermsAndConditionsModal({
           <strong> Esto es OBLIGATORIO.</strong>
         </Text>
       </Group>
-      <Group justify="center" mt="md">
+      <Group gap={40} justify="center" mt="md">
+        <Button
+          variant="outline"
+          color="#C72200"
+          onClick={() => (opened = true)}
+        >
+          Rechazar
+        </Button>
         <Button color="rgb(230, 0, 126)" mb="md" mt="md" onClick={onClose}>
           Aceptar
         </Button>
