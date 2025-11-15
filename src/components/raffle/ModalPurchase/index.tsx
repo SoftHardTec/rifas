@@ -26,8 +26,9 @@ export default function ModalPurchase({ opened, close }: ModalPurchaseProps) {
               Compra Exitosa!
             </Title>
             <Text ta="center" size="sm" mt="md">
-              Recibirás un correo electrónico con el comprobante de tus boletos,
-              el cual deberás guardar en caso de que seas el afortunado.
+              En unos minutos luego de verificar tu pago, recibirás un correo
+              electrónico con el comprobante de tus Tickets, el cual deberás
+              guardar en caso de que seas el afortunado.
             </Text>
           </Flex>
         </Container>
