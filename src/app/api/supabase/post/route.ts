@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
     const methodPayEntry = formData.get("method_pay");
     const amountEntry = formData.get("amount");
     const ticketCountEntry = formData.get("ticketCount");
+    const sellerEntry = formData.get("vendedor");
     
     const name = typeof nameEntry === "string" ? nameEntry : undefined;
     const email = typeof emailEntry === "string" ? emailEntry : undefined;
@@ -35,6 +36,8 @@ export async function POST(req: NextRequest) {
     const method_pay = typeof methodPayEntry === "string" ? methodPayEntry : undefined;
     const amount = typeof amountEntry === "string" ? amountEntry : undefined;
     const ticketCount = typeof ticketCountEntry === "string" ? parseInt(ticketCountEntry, 10) : undefined;
+    const seller = typeof sellerEntry === "string" && sellerEntry ? sellerEntry : null;
+    
 
     // 2. Generar boletos únicos (esto sigue siendo una llamada separada y está bien)
     const tickets = await createUniqueTickets(ticketCount || 0);
@@ -54,7 +57,8 @@ export async function POST(req: NextRequest) {
       p_method_pay: method_pay,
       p_amount: amount,
       p_ticket_count: ticketCount,
-      p_tickets: ticketNumbers
+      p_tickets: ticketNumbers,
+      p_seller: seller
     });
     
     if (rpcError) {
@@ -107,6 +111,7 @@ CREATE OR REPLACE FUNCTION public.create_purchase_and_tickets(
     p_amount text,
     p_ticket_count integer,
     p_tickets text[]
+    p_seller
 )
 RETURNS integer -- Devuelve el ID del usuario procesado
 LANGUAGE plpgsql
@@ -115,32 +120,40 @@ DECLARE
     v_user_id int;
     v_pay_id int;
 BEGIN
-    -- 1. Buscar o crear el usuario y obtener su ID.
-    -- Se usa ON CONFLICT para manejar de forma atómica el caso de que el usuario ya exista.
-    INSERT INTO public.user_data (name, email, id_nations, id_card, phone_code, phone)
-    VALUES (p_name, p_email, p_id, p_card_id, p_phone_code, p_phone)
-    ON CONFLICT (id_card) DO UPDATE
-    SET name = EXCLUDED.name, email = EXCLUDED.email -- Opcional: actualiza datos si ya existe
-    RETURNING id_user INTO v_user_id;
+    -- 1. Buscar el usuario existente por su cédula.
+    SELECT id_user INTO v_user_id FROM public.user_data WHERE id_card = p_card_id;
 
-    -- 2. Insertar los datos del pago asociados al usuario.
-    INSERT INTO public.pay_data (method_pay, voucher, reference, bank, amount, user_id)
-    VALUES (p_method_pay, p_file_url, p_reference, p_bank, p_amount, v_user_id)
+    -- 2. Si el usuario no existe (v_user_id es NULL), insertarlo.
+    IF v_user_id IS NULL THEN
+        INSERT INTO public.user_data (name, email, id_nations, id_card, phone_code, phone)
+        VALUES (p_name, p_email, p_id, p_card_id, p_phone_code, p_phone)
+        ON CONFLICT (id_card) DO NOTHING -- Si hay una condición de carrera, no hace nada.
+        RETURNING id_user INTO v_user_id;
+        
+        -- Si después del intento de inserción sigue siendo NULL (porque otra transacción lo insertó justo ahora)
+        -- lo volvemos a buscar para asegurar que tenemos el ID.
+        IF v_user_id IS NULL THEN
+             SELECT id_user INTO v_user_id FROM public.user_data WHERE id_card = p_card_id;
+        END IF;
+    END IF;
+
+    -- 3. Insertar los datos del pago asociados al usuario.
+    INSERT INTO public.pay_data (method_pay, voucher, reference, bank, amount, user_id, seller)
+    VALUES (p_method_pay, p_file_url, p_reference, p_bank, p_amount, v_user_id, p_seller, p_ticket_count)
     RETURNING id_pay INTO v_pay_id;
 
-    -- 3. Insertar todos los boletos en una sola operación usando UNNEST.
-    -- Esto es más eficiente que un bucle FOREACH.
+    -- 4. Insertar todos los boletos en una sola operación usando UNNEST.
     IF array_length(p_tickets, 1) > 0 THEN
         INSERT INTO public.tickets (tickets, user_id, pay_id)
         SELECT ticket, v_user_id, v_pay_id
         FROM unnest(p_tickets) AS t(ticket);
     END IF;
 
-    -- 4. Insertar el resumen de la compra.
+    -- 5. Insertar el resumen de la compra.
     INSERT INTO public.user_tickets (user_tickets, user_id, pay_id)
     VALUES (p_ticket_count, v_user_id, v_pay_id);
 
-    -- 5. Devolver el ID del usuario que realizó la compra.
+    -- 6. Devolver el ID del usuario que realizó la compra.
     RETURN v_user_id;
 END;
 $$;

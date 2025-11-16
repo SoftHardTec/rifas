@@ -19,6 +19,7 @@ import CloudinaryFileSubmit from "./Cloudinarysubmit";
 import supabaseSubmit from "./SupabaseSubmit";
 import HandleError from "@/utils/HandleError";
 import ModalPurchase from "@/components/raffle/ModalPurchase";
+import { useParams } from "next/navigation";
 
 export interface UserDataRef {
   submit: () => void;
@@ -80,6 +81,16 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       return `${ticketCount}$`;
     }
   }
+
+  const params = useParams();
+  const sellerParam = params.Vendedor;
+  const seller =
+    !sellerParam ||
+    typeof sellerParam !== "string" ||
+    sellerParam === "Vendedor"
+      ? null
+      : sellerParam.replace(/%20/g, " ");
+
   // Configuración del formulario
   const form = useForm({
     mode: "uncontrolled",
@@ -123,6 +134,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
           methodPage,
           ticketCount,
           amount: calculatedAmount,
+          seller: seller,
         });
 
         if (responseSupabase.ok) {

@@ -15,6 +15,7 @@ interface SupabaseSubmitParams {
   methodPage: string | null;
   ticketCount: number | null;
   amount: string;
+  seller: string | null;
 }
 
 export default async function supabaseSubmit ({
@@ -23,6 +24,7 @@ export default async function supabaseSubmit ({
   methodPage,
   ticketCount,
   amount,
+  seller,
 }: SupabaseSubmitParams): Promise<Response> {
   const bank =
  methodPage === "Mercantil"
@@ -43,6 +45,8 @@ export default async function supabaseSubmit ({
   formdata.append("method_pay", methodPage || "");
   formdata.append("ticketCount", ticketCount ? ticketCount.toString() : "0");
   formdata.append("amount", amount);
+  formdata.append("vendedor", seller || "");
+
 
   return fetch("api/supabase/post", {
     method: "POST",
