@@ -9,15 +9,16 @@ import {
   Group,
   FileInput,
 } from "@mantine/core";
-import { forwardRef, useImperativeHandle } from "react";
-import { countries } from "@/utils/PhoneCode";
+import { forwardRef, useImperativeHandle, useMemo } from "react";
+import { countries as countryData } from "@/utils/PhoneCode";
 import { optionId } from "@/utils/OptionId";
-import { banks } from "@/utils/bankData";
+import { banks as bankList } from "@/utils/bankData";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
 import CloudinaryFileSubmit from "./Cloudinarysubmit";
 import supabaseSubmit from "./SupabaseSubmit";
 import HandleError from "@/utils/HandleError";
+import { methodPage as methodData } from "@/utils/MethodPage";
 import ModalPurchase from "@/components/raffle/ModalPurchase";
 import { useParams } from "next/navigation";
 
@@ -41,16 +42,11 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
   }: UserDataProps,
   ref,
 ) {
-  const [errorInfo, setErrorInfo] = useState<{
-    opened: boolean;
-    title: string;
-  }>({ opened: false, title: "" });
-
   const [confirmationInfo, setConfirmationInfo] = useState({
     opened: false,
   });
 
-  const selectPhoneCode = countries.map((PhoneCode) => ({
+  const selectPhoneCode = countryData.map((PhoneCode) => ({
     label: `${PhoneCode.flagEmoji} ${PhoneCode.phoneCode}`,
     value: PhoneCode.phoneCode,
   }));
@@ -58,29 +54,17 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
     label: id.label,
     value: id.value,
   }));
-  const selectBankData = banks.map((bank) => {
+  const selectBankData = bankList.map((bank) => {
     return {
       label: `${bank.CODE} - ${bank.NAME}`,
       value: `${bank.CODE} - ${bank.NAME}`,
     };
   });
-  function amount() {
-    if (!ticketCount || ticketCount === 0) {
-      throw new Error("La cantidad de boletos no puede ser cero.");
-    }
 
-    if (methodPage === "Mercantil") {
-      const mount = ticketCount * 140;
-      return `${mount.toFixed(2)} bss`;
-    } else {
-      if (ticketCount < 6) {
-        throw new Error(
-          `La cantidad mínima para ${methodPage} es de 6 boletos.`,
-        );
-      }
-      return `${ticketCount}$`;
-    }
-  }
+  const currentMethod = useMemo(
+    () => methodData.find((m) => m.key === methodPage),
+    [methodPage],
+  );
 
   const params = useParams();
   const sellerParam = params.Vendedor;
@@ -91,13 +75,22 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       ? null
       : sellerParam.replace(/%20/g, " ");
 
+  // Estado para manejar errores de envío del formulario
+  const [submitError, setSubmitError] = useState<{
+    opened: boolean;
+    title: string;
+  }>({
+    opened: false,
+    title: "",
+  });
+
   // Configuración del formulario
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
       email: "",
       name: "",
-      PhoneCode: countries[0].phoneCode,
+      PhoneCode: countryData[0].phoneCode,
       NumberPhone: "",
       id: selectId[0].value,
       NumberId: "",
@@ -123,7 +116,17 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
 
   const handleSubmit = form.onSubmit(async (values) => {
     try {
-      const calculatedAmount = amount();
+      // Volvemos a llamar a amount() para obtener el valor final a enviar
+      if (!currentMethod || !ticketCount) {
+        throw new Error("Seleccione un método de pago y cantidad de boletos.");
+      }
+      if (ticketCount < currentMethod.minTickets) {
+        throw new Error(
+          `La cantidad mínima para ${currentMethod.label} es de ${currentMethod.minTickets} boletos.`,
+        );
+      }
+
+      const calculatedAmount = currentMethod.formatAmount(ticketCount);
 
       onSubmittingChange(true);
       const imageUrl = await CloudinaryFileSubmit({ file: values.file });
@@ -141,7 +144,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
           setConfirmationInfo({
             opened: true,
           });
-          onTicketPurchase({}); // Ya no pasamos datos, solo notificamos el éxito
+          onTicketPurchase;
           form.reset();
         } else {
           const errorData = await responseSupabase.json();
@@ -157,7 +160,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       const errorMessage =
         error instanceof Error ? error.message : "Ocurrió un error inesperado.";
       console.error("Error en el proceso de envío:", errorMessage);
-      setErrorInfo({
+      setSubmitError({
         opened: true,
         title: errorMessage,
       });
@@ -172,11 +175,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
 
   return (
     <>
-      <HandleError
-        opened={errorInfo.opened}
-        onClose={() => setErrorInfo({ ...errorInfo, opened: false })}
-        title={errorInfo.title}
-      />
+      <HandleError opened={submitError.opened} title={submitError.title} />
       <ModalPurchase
         opened={confirmationInfo.opened}
         close={() =>

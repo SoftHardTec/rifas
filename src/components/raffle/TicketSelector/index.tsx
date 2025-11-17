@@ -9,15 +9,15 @@ import {
   rem,
   SimpleGrid,
 } from "@mantine/core";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCounter } from "@mantine/hooks";
 import {
   IconTicket,
   IconArrowBigUpFilled,
   IconArrowBigDown,
 } from "@tabler/icons-react";
+import { methodPage as methodData } from "@/utils/MethodPage";
 import HandleError from "@/utils/HandleError";
-import { useState } from "react";
 
 interface TicketSelectorProps {
   onSelect?: (tickets: number) => void;
@@ -27,16 +27,16 @@ export default function TicketSelector({
   onSelect,
   methodPage,
 }: TicketSelectorProps) {
-  const iconTicket = (
-    <IconTicket style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
-  );
   const [errorInfo, setErrorInfo] = useState<{
     opened: boolean;
     title: string;
   }>({ opened: false, title: "" });
 
+  const iconTicket = (
+    <IconTicket style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+  );
+
   const MIN_TICKETS = 2;
-  const MIN_TICKETS_DOLLAR = 6;
   const MAX_TICKETS = 50;
   const ticketAmounts = [2, 6, 10, 20, 30, 50];
 
@@ -45,27 +45,27 @@ export default function TicketSelector({
     max: MAX_TICKETS,
   });
 
+  // Efecto para notificar al componente padre cuando el contador cambia.
   useEffect(() => {
     if (onSelect) {
       onSelect(count);
     }
+  }, [count, onSelect]);
 
-    if (methodPage !== "Mercantil" && count < MIN_TICKETS_DOLLAR) {
+  // Efecto para manejar la validación de minTickets y mostrar errores.
+  useEffect(() => {
+    const currentMethod = methodData.find((m) => m.key === methodPage);
+    if (currentMethod && count < currentMethod.minTickets) {
       setErrorInfo({
         opened: true,
-        title: `La cantidad mínima para ${methodPage} es de ${MIN_TICKETS_DOLLAR} tickets.`,
+        title: `La cantidad mínima para ${currentMethod.label} es de ${currentMethod.minTickets} tickets.`,
       });
-      handlers.set(MIN_TICKETS_DOLLAR);
+      handlers.set(currentMethod.minTickets);
     }
-  }, [count, onSelect, methodPage]);
-
+  }, [count, methodPage, handlers]);
   return (
     <>
-      <HandleError
-        opened={errorInfo.opened}
-        onClose={() => setErrorInfo({ ...errorInfo, opened: false })}
-        title={errorInfo.title}
-      />
+      <HandleError opened={errorInfo.opened} title={errorInfo.title} />
       <Group justify="center" gap={0}>
         <SimpleGrid cols={3} mt="md" mb="xl" spacing={10}>
           {ticketAmounts.map((amount) => (

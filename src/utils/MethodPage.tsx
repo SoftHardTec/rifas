@@ -1,3 +1,4 @@
+"use client";
 import {
   Stack,
   Text,
@@ -9,29 +10,35 @@ import {
   Flex,
 } from "@mantine/core";
 import { IconCopy, IconCheck } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+
 interface MethodProps {
   ticketCount: number | null;
+  key: string; // Añadimos la key a las props
 }
 
 interface MethodData {
   title: string;
-  fields: { label: string; value: string | number }[];
+  fields: { label: string; value: string | number | undefined }[];
 }
 
-function MethodStack({ title, fields }: MethodData) {
-  // Buscar el banco por el título (ignorando paréntesis y minúsculas)
-  const banco = methodPage.find((b) => {
-    const cleanTitle = title.trim().toLowerCase();
-    const compName = b.component?.name?.toLowerCase();
-    return compName && cleanTitle.includes(compName.replace("banco", ""));
-  });
+interface basemethodComponet {
+  methodKey: string;
+  ticketCount: number | null;
+}
+
+function MethodStack({
+  title,
+  fields,
+  copyValue,
+}: MethodData & { copyValue?: string }) {
   return (
     <Stack m="lg" ml="xs" gap="md">
       <Group>
         <Title order={4} fz={{ base: "h5", sm: "h4" }}>
           {title}
         </Title>
-        <CopyButton value={banco?.copyValue || ""} timeout={2000}>
+        <CopyButton value={copyValue || ""} timeout={2000}>
           {({ copied, copy }) => (
             <Tooltip
               label={copied ? "Copied" : "Copy"}
@@ -79,104 +86,169 @@ function MethodStack({ title, fields }: MethodData) {
   );
 }
 
-export function Mercantil({ ticketCount }: MethodProps) {
+function BaseMethodComponent({ methodKey, ticketCount }: basemethodComponet) {
+  const method = methodPage.find((m) => m.key === methodKey);
+  const [amount, setAmount] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (method && ticketCount) {
+      if (ticketCount < method.minTickets) {
+        setAmount(`Seleccione al menos ${method.minTickets} tickets`);
+      } else {
+        setAmount(method.formatAmount(ticketCount));
+      }
+    } else {
+      setAmount("Seleccione una cantidad de tickets");
+    }
+  }, [ticketCount, method]);
+
+  if (!method) return null;
+
+  const fields: { label: string; value: string | number | undefined }[] =
+    method.details.map((detail) => ({ ...detail })); // Create a mutable copy
+  fields.push({ label: "Monto", value: amount ?? undefined });
+
+  const CopyValue =
+    method.copyValue && amount
+      ? `${method.copyValue}\n${amount}`
+      : method.copyValue;
+
   return (
-    <MethodStack
-      title="Pago Movil Mercantil"
-      fields={[
-        { label: "Cuenta:", value: "0105" },
-        { label: "Cédula:", value: "22.338.937" },
-        { label: "Teléfono:", value: "04149454986" },
-        {
-          label: "Monto",
-          value: ticketCount
-            ? `Bs. ${ticketCount * 140}.00`
-            : "Seleccione una cantidad de boletos",
-        },
-      ]}
+    <MethodStack title={method.title} fields={fields} copyValue={CopyValue} />
+  );
+}
+
+export function Mercantil({ ticketCount, key }: MethodProps) {
+  return (
+    <BaseMethodComponent
+      key={key}
+      methodKey="Mercantil"
+      ticketCount={ticketCount}
+    />
+  );
+}
+export function Yape({ ticketCount, key }: MethodProps) {
+  return (
+    <BaseMethodComponent key={key} methodKey="Yape" ticketCount={ticketCount} />
+  );
+}
+
+export function Zinli({ ticketCount, key }: MethodProps) {
+  return (
+    <BaseMethodComponent
+      key={key}
+      methodKey="Zinli"
+      ticketCount={ticketCount}
     />
   );
 }
 
-export function Zinli({ ticketCount }: MethodProps) {
+export function Binance({ ticketCount, key }: MethodProps) {
   return (
-    <MethodStack
-      title="Zinli (Min 6 tickets)"
-      fields={[
-        { label: "Correo", value: "dv0510.27@gmail.com" },
-        { label: "Titular", value: "Damelis Aguilar" },
-        {
-          label: "Monto",
-          value:
-            ticketCount && ticketCount > 5
-              ? `$${ticketCount}`
-              : "Seleccione al menos 6 tickets",
-        },
-      ]}
+    <BaseMethodComponent
+      key={key}
+      methodKey="Binance"
+      ticketCount={ticketCount}
     />
   );
 }
-
-export function Binance({ ticketCount }: MethodProps) {
+export function Nequi({ ticketCount, key }: MethodProps) {
   return (
-    <MethodStack
-      title="Binance (Min 6 tickets)"
-      fields={[
-        { label: "Correo", value: "dv0510.27@gmail.com" },
-        { label: "Titular", value: "DamelisAg" },
-        {
-          label: "Monto",
-          value:
-            ticketCount && ticketCount > 5
-              ? `$${ticketCount}`
-              : "Seleccione al menos 6 tickets",
-        },
-      ]}
+    <BaseMethodComponent
+      key={key}
+      methodKey="Nequi"
+      ticketCount={ticketCount}
     />
   );
 }
-export function Zelle({ ticketCount }: MethodProps) {
+export function Zelle({ ticketCount, key }: MethodProps) {
   return (
-    <MethodStack
-      title="Zelle (Min 6 tickets)"
-      fields={[
-        { label: "Correo", value: "oliverosyorgelys@gmail.com" },
-        { label: "Titular", value: "Yorgelys Oliveros" },
-        {
-          label: "Monto",
-          value:
-            ticketCount && ticketCount > 5
-              ? `$${ticketCount}`
-              : "Seleccione al menos 6 tickets",
-        },
-      ]}
+    <BaseMethodComponent
+      key={key}
+      methodKey="Zelle"
+      ticketCount={ticketCount}
     />
   );
 }
 
 export const methodPage = [
   {
-    key: "mercantil",
+    key: "Mercantil",
     label: "Mercantil",
-    component: Mercantil,
+    title: "Pago Movil Mercantil",
+    pricePerTicket: 140,
+    minTickets: 2,
+    formatAmount: (count: number) => `Bs. ${(count * 140).toFixed(2)}`,
+    details: [
+      { label: "Cuenta:", value: "0105" },
+      { label: "Cédula:", value: "22.338.937" },
+      { label: "Teléfono:", value: "04149454986" },
+    ],
     copyValue: "0105 Banco Mercantil\n22338937\n04149454986",
   },
   {
-    key: "zinli",
+    key: "Yape",
+    label: "Yape",
+    title: "Yape",
+    pricePerTicket: 5,
+    minTickets: 2,
+    formatAmount: (count: number) => `S/${count * 5}`,
+    details: [
+      { label: "Telefono", value: "917756288" },
+      { label: "Titular", value: "Evimar Medina" },
+    ],
+    copyValue: `917756288`,
+  },
+  {
+    key: "Zinli",
     label: "Zinli",
-    component: Zinli,
+    title: "Zinli (Min 6 tickets)",
+    pricePerTicket: 1,
+    minTickets: 6,
+    formatAmount: (count: number) => `$${count}`,
+    details: [
+      { label: "Correo", value: "dv0510.27@gmail.com" },
+      { label: "Titular", value: "Damelis Aguilar" },
+    ],
     copyValue: "dv0510.27@gmail.com",
   },
   {
-    key: "binance",
+    key: "Binance",
     label: "Binance",
-    component: Binance,
+    title: "Binance (Min 6 tickets)",
+    pricePerTicket: 1,
+    minTickets: 6,
+    formatAmount: (count: number) => `$${count}`,
+    details: [
+      { label: "Correo", value: "dv0510.27@gmail.com" },
+      { label: "Titular", value: "DamelisAg" },
+    ],
     copyValue: "dv0510.27@gmail.com",
   },
   {
-    key: "zelle",
+    key: "Nequi",
+    label: "Nequi",
+    title: "Nequi",
+    pricePerTicket: 4000,
+    minTickets: 2,
+    formatAmount: (count: number) => `COP ${(count * 4000).toFixed(2)}`,
+    details: [
+      { label: "Telefono", value: "3017275410" },
+      { label: "Titular", value: "Jhon Ruiz" },
+    ],
+    copyValue: "3017275410",
+  },
+  {
+    key: "Zelle",
     label: "Zelle",
-    component: Zelle,
+    title: "Zelle (Min 6 tickets)",
+    pricePerTicket: 1,
+    minTickets: 6,
+    formatAmount: (count: number) => `$${count}`,
+    details: [
+      { label: "Correo", value: "oliverosyorgelys@gmail.com" },
+      { label: "Titular", value: "Yorgelys Oliveros" },
+    ],
     copyValue: "oliverosyorgelys@gmail.com",
   },
 ];

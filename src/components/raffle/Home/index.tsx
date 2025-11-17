@@ -65,7 +65,11 @@ export function HomeRaffle() {
         </SimpleGrid>
         <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm" mt="md">
           <Card radius="md" withBorder mt="md">
-            <PayData ticketCount={ticketCount} setMethodPage={setMethodPage} />
+            <PayData
+              ticketCount={ticketCount}
+              methodPage={methodPage}
+              setMethodPage={setMethodPage}
+            />
           </Card>
           <Grid gutter="md">
             <Grid.Col>

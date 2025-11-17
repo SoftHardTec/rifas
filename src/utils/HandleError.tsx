@@ -1,32 +1,35 @@
-import { Modal, Title, Text, Group, Container } from "@mantine/core";
+import { Modal, Title, Group, Container } from "@mantine/core";
 import { IconExclamationCircle } from "@tabler/icons-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type HandleErrorProps = {
   opened: boolean;
-  onClose: () => void;
   title: string;
 };
-export default function HandleError({
-  opened,
-  onClose,
-  title,
-}: HandleErrorProps) {
+export default function HandleError({ opened, title }: HandleErrorProps) {
+  const [isOpened, setIsOpened] = useState(false);
+
   useEffect(() => {
-    if (!opened) {
+    if (opened) {
+      setIsOpened(true);
+    }
+  }, [opened, title]); // Se activa cuando el padre envía una nueva señal de error.
+
+  useEffect(() => {
+    if (!isOpened) {
       return;
     }
     const timer = setTimeout(() => {
-      onClose();
+      setIsOpened(false); // Se cierra a sí mismo después del tiempo.
     }, 2500);
 
     return () => clearTimeout(timer);
-  }, [opened, onClose]);
+  }, [isOpened]);
 
   return (
     <Modal
-      opened={opened}
-      onClose={onClose}
+      opened={isOpened}
+      onClose={() => setIsOpened(false)} // Permite al usuario cerrar el modal manualmente.
       centered
       overlayProps={{ backgroundOpacity: 0.5, blur: 7 }}
       transitionProps={{ transition: "fade", duration: 200 }}

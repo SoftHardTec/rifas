@@ -1,41 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import { Container, Title, Flex, ActionIcon, Image } from "@mantine/core";
-import { Binance, Mercantil, Zelle } from "../../../utils/MethodPage";
+import {
+  Binance,
+  Mercantil,
+  Zelle,
+  Yape,
+  Nequi,
+} from "../../../utils/MethodPage";
 import NextImage from "next/image";
 
 const banks = [
   {
     key: "Mercantil",
-    label: "Mercantil",
     img: "/Mercantil.png",
-    component: Mercantil,
+  },
+  {
+    key: "Yape",
+    img: "/Yape.png",
   },
   {
     key: "Binance",
-    label: "Binance",
     img: "/Binance.png",
-    component: Binance,
+  },
+  {
+    key: "Nequi",
+    img: "/Nequi.png",
   },
   {
     key: "Zelle",
-    label: "Zelle",
     img: "/Zelle.png",
-    component: Zelle,
   },
 ];
 
 interface DataPageProps {
   ticketCount: number | null;
+  methodPage: string | null;
   setMethodPage: (value: string | null) => void;
 }
 
 export default function DataPage({
   ticketCount,
+  methodPage,
   setMethodPage,
 }: DataPageProps) {
-  const [selectedBank, setSelectedBank] = useState<string>("Mercantil");
+  // Mapeamos las keys a los componentes para un renderizado dinámico
+  const paymentComponents: { [key: string]: React.ComponentType<any> } =
+    useMemo(
+      () => ({
+        Mercantil,
+        Yape,
+        Binance,
+        Nequi,
+        Zelle,
+      }),
+      [],
+    );
+
+  const ActiveComponent = methodPage ? paymentComponents[methodPage] : null;
 
   return (
     <>
@@ -43,29 +66,26 @@ export default function DataPage({
         <Title order={3} mt="md" mb="xs" style={{ textAlign: "center" }}>
           Métodos de pago
         </Title>
-        <Flex justify="center" mt="lg" gap="md" mb="lg">
+        <Flex wrap="wrap" justify="center" mt="lg" gap="md" mb="lg">
           {banks.map((bank) => (
             <ActionIcon
               key={bank.key}
-              onClick={() => {
-                setSelectedBank(bank.key);
-                setMethodPage(bank.key);
-              }}
+              onClick={() => setMethodPage(bank.key)}
               variant="transparent"
               size="2.5rem"
-              radius="xl"
-              aria-label={bank.label}
+              radius="xl" // aria-label se obtiene de la key
+              aria-label={bank.key}
               w="4rem"
               h="4rem"
               style={{
-                opacity: selectedBank === bank.key ? 1 : 0.6,
+                opacity: methodPage === bank.key ? 1 : 0.6,
                 transition: "opacity 1s ease",
               }}
             >
               <Image
                 component={NextImage}
                 src={bank.img}
-                alt={bank.label}
+                alt={bank.key}
                 width={50}
                 height={50}
                 style={{ width: "auto", height: "auto" }}
@@ -74,13 +94,9 @@ export default function DataPage({
           ))}
         </Flex>
       </Container>
-      {(() => {
-        const selected = banks.find((b) => b.key === selectedBank);
-
-        if (!selected) return null;
-        const BankComponent = selected.component;
-        return <BankComponent ticketCount={ticketCount ?? null} />;
-      })()}
+      {ActiveComponent && (
+        <ActiveComponent key={methodPage} ticketCount={ticketCount} />
+      )}
     </>
   );
 }
