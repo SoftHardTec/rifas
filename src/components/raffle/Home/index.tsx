@@ -55,6 +55,7 @@ export function HomeRaffle() {
           <Stack justify="center">
             <Skeleton radius="md" animate={false} visible={false}>
               <Card radius="md" shadow="md" padding="lg" withBorder>
+                <BarProgressTickets />
                 <TicketSelector
                   onSelect={setTicketCount}
                   methodPage={methodPage}
