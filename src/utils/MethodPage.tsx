@@ -13,8 +13,7 @@ import { IconCopy, IconCheck } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 interface MethodProps {
-  ticketCount: number | null;
-  key: string; // Añadimos la key a las props
+  ticketCount: number | null; // El prop 'key' es manejado por React y no debe ser declarado aquí.
 }
 
 interface MethodData {
@@ -118,57 +117,27 @@ function BaseMethodComponent({ methodKey, ticketCount }: basemethodComponet) {
   );
 }
 
-export function Mercantil({ ticketCount, key }: MethodProps) {
+export function Mercantil({ ticketCount }: MethodProps) {
   return (
-    <BaseMethodComponent
-      key={key}
-      methodKey="Mercantil"
-      ticketCount={ticketCount}
-    />
+    <BaseMethodComponent methodKey="Mercantil" ticketCount={ticketCount} />
   );
 }
-export function Yape({ ticketCount, key }: MethodProps) {
-  return (
-    <BaseMethodComponent key={key} methodKey="Yape" ticketCount={ticketCount} />
-  );
+export function Yape({ ticketCount }: MethodProps) {
+  return <BaseMethodComponent methodKey="Yape" ticketCount={ticketCount} />;
 }
 
-export function Zinli({ ticketCount, key }: MethodProps) {
-  return (
-    <BaseMethodComponent
-      key={key}
-      methodKey="Zinli"
-      ticketCount={ticketCount}
-    />
-  );
+export function Zinli({ ticketCount }: MethodProps) {
+  return <BaseMethodComponent methodKey="Zinli" ticketCount={ticketCount} />;
 }
 
-export function Binance({ ticketCount, key }: MethodProps) {
-  return (
-    <BaseMethodComponent
-      key={key}
-      methodKey="Binance"
-      ticketCount={ticketCount}
-    />
-  );
+export function Binance({ ticketCount }: MethodProps) {
+  return <BaseMethodComponent methodKey="Binance" ticketCount={ticketCount} />;
 }
-export function Nequi({ ticketCount, key }: MethodProps) {
-  return (
-    <BaseMethodComponent
-      key={key}
-      methodKey="Nequi"
-      ticketCount={ticketCount}
-    />
-  );
+export function Nequi({ ticketCount }: MethodProps) {
+  return <BaseMethodComponent methodKey="Nequi" ticketCount={ticketCount} />;
 }
-export function Zelle({ ticketCount, key }: MethodProps) {
-  return (
-    <BaseMethodComponent
-      key={key}
-      methodKey="Zelle"
-      ticketCount={ticketCount}
-    />
-  );
+export function Zelle({ ticketCount }: MethodProps) {
+  return <BaseMethodComponent methodKey="Zelle" ticketCount={ticketCount} />;
 }
 
 export const methodPage = [

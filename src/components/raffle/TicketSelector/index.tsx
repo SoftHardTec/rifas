@@ -55,14 +55,20 @@ export default function TicketSelector({
   // Efecto para manejar la validación de minTickets y mostrar errores.
   useEffect(() => {
     const currentMethod = methodData.find((m) => m.key === methodPage);
-    if (currentMethod && count < currentMethod.minTickets) {
-      setErrorInfo({
-        opened: true,
-        title: `La cantidad mínima para ${currentMethod.label} es de ${currentMethod.minTickets} tickets.`,
-      });
-      handlers.set(currentMethod.minTickets);
+
+    if (currentMethod) {
+      if (count < currentMethod.minTickets) {
+        setErrorInfo({
+          opened: true,
+          title: `La cantidad mínima para ${currentMethod.label} es de ${currentMethod.minTickets} tickets.`,
+        });
+        handlers.set(currentMethod.minTickets);
+      } else {
+        handlers.set(currentMethod.minTickets);
+      }
     }
-  }, [count, methodPage, handlers]);
+  }, [methodPage, handlers]); // Se ejecuta solo cuando cambia el método de pago.
+
   return (
     <>
       <HandleError opened={errorInfo.opened} title={errorInfo.title} />
