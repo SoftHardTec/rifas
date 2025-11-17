@@ -192,7 +192,7 @@ export const methodPage = [
     title: "Yape",
     pricePerTicket: 5,
     minTickets: 2,
-    formatAmount: (count: number) => `S/${count * 5}`,
+    formatAmount: (count: number) => `S/ ${count * 5}`,
     details: [
       { label: "Telefono", value: "917756288" },
       { label: "Titular", value: "Evimar Medina" },
