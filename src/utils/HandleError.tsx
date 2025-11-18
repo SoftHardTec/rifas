@@ -29,7 +29,7 @@ export default function HandleError({ opened, title }: HandleErrorProps) {
   return (
     <Modal
       opened={isOpened}
-      onClose={() => setIsOpened(false)} // Permite al usuario cerrar el modal manualmente.
+      onClose={() => setIsOpened} // Permite al usuario cerrar el modal manualmente.
       centered
       overlayProps={{ backgroundOpacity: 0.5, blur: 7 }}
       transitionProps={{ transition: "fade", duration: 200 }}

@@ -8,6 +8,7 @@ import {
   NumberInput,
   rem,
   SimpleGrid,
+  InputError,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useCounter } from "@mantine/hooks";
@@ -18,11 +19,14 @@ import {
 } from "@tabler/icons-react";
 import { methodPage as methodData } from "@/utils/MethodPage";
 import HandleError from "@/utils/HandleError";
+import { Interface } from "readline";
+import { handler } from "next/dist/build/templates/app-page";
 
 interface TicketSelectorProps {
   onSelect?: (tickets: number) => void;
   methodPage?: string | null;
 }
+
 export default function TicketSelector({
   onSelect,
   methodPage,
@@ -52,22 +56,24 @@ export default function TicketSelector({
     }
   }, [count, onSelect]);
 
-  // Efecto para manejar la validación de minTickets y mostrar errores.
+  // Efecto unificado para validar, ajustar el contador y manejar el estado de error.
   useEffect(() => {
     const currentMethod = methodData.find((m) => m.key === methodPage);
-
     if (currentMethod) {
-      if (count < currentMethod.minTickets) {
-        setErrorInfo({
-          opened: true,
-          title: `La cantidad mínima para ${currentMethod.label} es de ${currentMethod.minTickets} tickets.`,
-        });
-        handlers.set(currentMethod.minTickets);
-      } else {
-        handlers.set(currentMethod.minTickets);
-      }
+      handlers.set(currentMethod.minTickets);
     }
-  }, [methodPage, handlers]); // Se ejecuta solo cuando cambia el método de pago.
+  }, [methodPage]);
+
+  useEffect(() => {
+    const currentMethod = methodData.find((m) => m.key === methodPage);
+    if (currentMethod && count < currentMethod.minTickets) {
+      setErrorInfo({
+        opened: true,
+        title: `La cantidad mínima para ${currentMethod.label} es de ${currentMethod.minTickets} tickets.`,
+      });
+      handlers.set(currentMethod.minTickets);
+    }
+  }, [count, methodPage, handlers]);
 
   return (
     <>
