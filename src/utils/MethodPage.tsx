@@ -153,7 +153,7 @@ export const methodPage = [
 
       switch (count) {
         case 5:
-          priceTickets = 600;
+          priceTickets = 620;
           break;
         case 10:
           priceTickets = 1150;
