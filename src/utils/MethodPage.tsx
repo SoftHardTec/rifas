@@ -1,4 +1,4 @@
-"use client";
+"USDe client";
 import {
   Stack,
   Text,
@@ -146,8 +146,32 @@ export const methodPage = [
     label: "Mercantil",
     title: "Pago Movil Mercantil",
     pricePerTicket: 140,
+    priceOffer: 110,
     minTickets: 2,
-    formatAmount: (count: number) => `Bs. ${(count * 140).toFixed(2)}`,
+    formatAmount(count: number) {
+      let priceTickets = 0;
+
+      switch (count) {
+        case 5:
+          priceTickets = 600;
+          break;
+        case 10:
+          priceTickets = 1150;
+          break;
+        case 20:
+          priceTickets = 2160;
+          break;
+        default:
+          priceTickets = count * this.pricePerTicket;
+      }
+      return (
+        "Bs. " +
+        priceTickets.toLocaleString("es-ES", {
+          minimumFractionDigits: 2,
+          useGrouping: true,
+        })
+      );
+    },
     details: [
       { label: "Cuenta:", value: "0105" },
       { label: "Cédula:", value: "22.338.937" },
@@ -161,7 +185,15 @@ export const methodPage = [
     title: "Yape",
     pricePerTicket: 5,
     minTickets: 2,
-    formatAmount: (count: number) => `S/ ${count * 5}`,
+    formatAmount(count: number) {
+      return (
+        "S/ " +
+        (count * this.pricePerTicket).toLocaleString("es-ES", {
+          minimumFractionDigits: 2,
+          useGrouping: true,
+        })
+      );
+    },
     details: [
       { label: "Telefono", value: "917756288" },
       { label: "Titular", value: "Evimar Medina" },
@@ -174,7 +206,14 @@ export const methodPage = [
     title: "Zinli (Min 6 tickets)",
     pricePerTicket: 1,
     minTickets: 6,
-    formatAmount: (count: number) => `$${count}`,
+    formatAmount(count: number) {
+      return (
+        "$" +
+        (count * this.pricePerTicket).toLocaleString("es-ES", {
+          minimumFractionDigits: 2,
+        })
+      );
+    },
     details: [
       { label: "Correo", value: "dv0510.27@gmail.com" },
       { label: "Titular", value: "Damelis Aguilar" },
@@ -187,7 +226,14 @@ export const methodPage = [
     title: "Binance (Min 6 tickets)",
     pricePerTicket: 1,
     minTickets: 6,
-    formatAmount: (count: number) => `$${count}`,
+    formatAmount(count: number) {
+      return (
+        "$" +
+        (count * this.pricePerTicket).toLocaleString("es-ES", {
+          minimumFractionDigits: 2,
+        })
+      );
+    },
     details: [
       { label: "Correo", value: "dv0510.27@gmail.com" },
       { label: "Titular", value: "DamelisAg" },
@@ -200,7 +246,15 @@ export const methodPage = [
     title: "Nequi",
     pricePerTicket: 4000,
     minTickets: 2,
-    formatAmount: (count: number) => `COP ${(count * 4000).toFixed(2)}`,
+    formatAmount(count: number) {
+      return (
+        "COP " +
+        (count * this.pricePerTicket).toLocaleString("es-ES", {
+          minimumFractionDigits: 2,
+          useGrouping: true,
+        })
+      );
+    },
     details: [
       { label: "Telefono", value: "3017275410" },
       { label: "Titular", value: "Jhon Ruiz" },
@@ -213,7 +267,14 @@ export const methodPage = [
     title: "Zelle (Min 6 tickets)",
     pricePerTicket: 1,
     minTickets: 6,
-    formatAmount: (count: number) => `$${count}`,
+    formatAmount(count: number) {
+      return (
+        "$" +
+        (count * this.pricePerTicket).toLocaleString("es-ES", {
+          minimumFractionDigits: 2,
+        })
+      );
+    },
     details: [
       { label: "Correo", value: "oliverosyorgelys@gmail.com" },
       { label: "Titular", value: "Yorgelys Oliveros" },

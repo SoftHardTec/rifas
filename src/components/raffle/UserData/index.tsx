@@ -29,17 +29,11 @@ export interface UserDataRef {
 interface UserDataProps {
   methodPage: string | null;
   ticketCount: number | null;
-  onTicketPurchase: (purchaseData: any) => void;
   onSubmittingChange: (isSubmitting: boolean) => void;
 }
 
 const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
-  {
-    methodPage,
-    ticketCount,
-    onTicketPurchase,
-    onSubmittingChange,
-  }: UserDataProps,
+  { methodPage, ticketCount, onSubmittingChange }: UserDataProps,
   ref,
 ) {
   const [confirmationInfo, setConfirmationInfo] = useState({
@@ -144,7 +138,6 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
           setConfirmationInfo({
             opened: true,
           });
-          onTicketPurchase;
           form.reset();
         } else {
           const errorData = await responseSupabase.json();

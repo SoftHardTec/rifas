@@ -10,9 +10,7 @@ import {
   Button,
   Stack,
 } from "@mantine/core";
-import ImageCarousel from "../Carousel";
 import TicketSelector from "../TicketSelector";
-import Conditions from "../Conditions";
 import InfoRaffle from "../InfoRaffle";
 import UserData from "../UserData";
 import PayData from "../PayData";
@@ -24,22 +22,16 @@ import { useState } from "react";
 import { useRef } from "react";
 import type { UserDataRef } from "../UserData";
 import Loader from "@/components/ui/Loader";
+import RankingBuyer from "../rankingPurchase";
 
 export function HomeRaffle() {
   const [ticketCount, setTicketCount] = useState<number | null>(2);
   const [methodPage, setMethodPage] = useState<string | null>("Mercantil");
   const [consultUser, setConsultUser] = useState<string | null>(null);
-  const [refreshKey, setRefreshKey] = useState(0);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [isCheckingTickets, setIsCheckingTickets] = useState(false);
   const userDataRef = useRef<UserDataRef>(null);
 
-  // Esta función se llamará cuando la compra termine (con éxito o error)
-  const handleTicketPurchase = (data: any) => {
-    setRefreshKey((prev) => prev + 1);
-  };
-
-  // El Loader se mostrará si cualquiera de las dos acciones está en curso
   const showLoader = isFormSubmitting || isCheckingTickets;
 
   return (
@@ -79,7 +71,6 @@ export function HomeRaffle() {
                   ref={userDataRef}
                   ticketCount={ticketCount}
                   methodPage={methodPage}
-                  onTicketPurchase={handleTicketPurchase}
                   onSubmittingChange={setIsFormSubmitting}
                 />
               </Skeleton>
@@ -100,16 +91,19 @@ export function HomeRaffle() {
             Confirmar
           </Button>
         </Group>
-        <Group justify="center" mt={80}>
-          <TicketChecker
-            isLoading={isCheckingTickets}
-            onSubmit={setConsultUser}
+        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xl" mt="xl">
+          <Group justify="center" mt={60}>
+            <TicketChecker
+              isLoading={isCheckingTickets}
+              onSubmit={setConsultUser}
+            />
+          </Group>
+          <Tickets
+            onSubmittingChange={setIsCheckingTickets}
+            userId={consultUser}
           />
-        </Group>
-        <Tickets
-          onSubmittingChange={setIsCheckingTickets}
-          userId={consultUser}
-        />
+          <RankingBuyer />
+        </SimpleGrid>
         <ButtonContact />
       </Container>
     </>
