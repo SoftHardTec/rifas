@@ -91,18 +91,16 @@ export function HomeRaffle() {
             Confirmar
           </Button>
         </Group>
-        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xl" mt="xl">
-          <Group justify="center" mt={60}>
-            <TicketChecker
-              isLoading={isCheckingTickets}
-              onSubmit={setConsultUser}
-            />
-          </Group>
-          <Tickets
-            onSubmittingChange={setIsCheckingTickets}
-            userId={consultUser}
+        <Group justify="center" align="center" mt={60}>
+          <TicketChecker
+            isLoading={isCheckingTickets}
+            onSubmit={setConsultUser}
           />
-        </SimpleGrid>
+        </Group>
+        <Tickets
+          onSubmittingChange={setIsCheckingTickets}
+          userId={consultUser}
+        />
         <ButtonContact />
       </Container>
     </>
