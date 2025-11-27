@@ -102,7 +102,6 @@ export function HomeRaffle() {
             onSubmittingChange={setIsCheckingTickets}
             userId={consultUser}
           />
-          <RankingBuyer />
         </SimpleGrid>
         <ButtonContact />
       </Container>
