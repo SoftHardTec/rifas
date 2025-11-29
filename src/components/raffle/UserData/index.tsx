@@ -101,7 +101,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       NumberId: (value) =>
         String(value).length > 6 ? null : "Cédula requerida",
       bank: (value) =>
-        methodPage === "Mercantil" ? (value ? null : "Banco requerido") : null,
+        methodPage === "Venezuela" ? (value ? null : "Banco requerido") : null,
       reference: (value) =>
         String(value).length > 5 ? null : "Referencia requerida",
       file: (value) => (value ? null : "Comprobante requerido"),
@@ -243,7 +243,7 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
                 style={{ flex: 1 }}
               />
             </Group>
-            {methodPage === "Mercantil" && (
+            {methodPage === "Venezuela" && (
               <Select
                 withAsterisk
                 label="Banco"
