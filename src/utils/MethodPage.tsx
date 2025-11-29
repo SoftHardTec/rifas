@@ -117,9 +117,9 @@ function BaseMethodComponent({ methodKey, ticketCount }: basemethodComponet) {
   );
 }
 
-export function Mercantil({ ticketCount }: MethodProps) {
+export function Venezuela({ ticketCount }: MethodProps) {
   return (
-    <BaseMethodComponent methodKey="Mercantil" ticketCount={ticketCount} />
+    <BaseMethodComponent methodKey="Venezuela" ticketCount={ticketCount} />
   );
 }
 export function Yape({ ticketCount }: MethodProps) {
@@ -142,9 +142,9 @@ export function Zelle({ ticketCount }: MethodProps) {
 
 export const methodPage = [
   {
-    key: "Mercantil",
-    label: "Mercantil",
-    title: "Pago Movil Mercantil",
+    key: "Venezuela",
+    label: "Venezuela",
+    title: "Pago Movil Venezuela",
     pricePerTicket: 140,
     priceOffer: 110,
     minTickets: 2,
@@ -173,11 +173,11 @@ export const methodPage = [
       );
     },
     details: [
-      { label: "Cuenta:", value: "0105" },
+      { label: "Cuenta:", value: "0102" },
       { label: "Cédula:", value: "22.338.937" },
       { label: "Teléfono:", value: "04149454986" },
     ],
-    copyValue: "0105 Banco Mercantil\n22338937\n04149454986",
+    copyValue: "0102 Banco Venezuela\n22338937\n04149454986",
   },
   {
     key: "Yape",
