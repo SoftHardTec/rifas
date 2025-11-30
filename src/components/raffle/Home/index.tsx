@@ -26,7 +26,7 @@ import RankingBuyer from "../rankingPurchase";
 
 export function HomeRaffle() {
   const [ticketCount, setTicketCount] = useState<number | null>(2);
-  const [methodPage, setMethodPage] = useState<string | null>("Mercantil");
+  const [methodPage, setMethodPage] = useState<string | null>("Venezuela");
   const [consultUser, setConsultUser] = useState<string | null>(null);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [isCheckingTickets, setIsCheckingTickets] = useState(false);
