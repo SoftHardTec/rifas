@@ -1,11 +1,11 @@
 import { NextResponse, NextRequest } from "next/server";
 import { createClient } from '@/app/api/supabase/server';
-import Tickets from "@/components/raffle/Tickets";
+
 
 
 export async function POST(req: NextRequest) {
-  const supabase = await createClient()
   try {
+    const supabase = await createClient()
     const formData = await req.formData();
     const idCardEntry = formData.get("idCard");
     const idCard = typeof idCardEntry === "string" ? parseInt(idCardEntry, 10) : undefined;
