@@ -147,9 +147,9 @@ export function Zelle({ ticketCount }: MethodProps) {
 
 export const methodPage = [
   {
-    key: "Mercantil",
-    label: "Mercantil",
-    title: "Pago Movil Mercantil",
+    key: "Venezuela",
+    label: "Venezuela",
+    title: "Pago Movil Venezuela",
     pricePerTicket: 140,
     minTickets: 2,
     formatAmount(count: number) {
@@ -177,11 +177,11 @@ export const methodPage = [
       );
     },
     details: [
-      { label: "Cuenta:", value: "0105" },
+      { label: "Cuenta:", value: "0102" },
       { label: "Cédula:", value: "22.338.937" },
       { label: "Teléfono:", value: "04149454986" },
     ],
-    copyValue: "0105 Banco Mercantil\n22338937\n04149454986",
+    copyValue: "0102 Banco Venezuela\n22338937\n04149454986",
   },
   {
     key: "Yape",

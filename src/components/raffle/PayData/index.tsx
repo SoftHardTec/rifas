@@ -7,14 +7,14 @@ import {
   Zelle,
   Yape,
   Nequi,
-  Mercantil,
+  Venezuela,
 } from "../../../utils/MethodPage";
 import NextImage from "next/image";
 
 const banks = [
   {
-    key: "Mercantil",
-    img: "/Mercantil.png",
+    key: "Venezuela",
+    img: "/BDV.png",
   },
   {
     key: "Yape",
@@ -49,7 +49,7 @@ export default function DataPage({
   const paymentComponents: { [key: string]: React.ComponentType<any> } =
     useMemo(
       () => ({
-        Mercantil,
+        Venezuela,
         Yape,
         Binance,
         Nequi,
