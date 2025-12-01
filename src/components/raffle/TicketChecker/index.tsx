@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Title, NumberInput, Text, Button, Group } from "@mantine/core";
+import { Card, Title, NumberInput, Button, Group } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 
@@ -19,7 +19,7 @@ export default function TicketChecker({
       idCard: " ",
     },
     validate: {
-      idCard: (value) =>
+      idCard: (value: string) =>
         !value
           ? "El campo no puede estar vacío"
           : value.length < 5

@@ -4,17 +4,17 @@ import { useMemo } from "react";
 import { Container, Title, Flex, ActionIcon, Image } from "@mantine/core";
 import {
   Binance,
-  Venezuela,
   Zelle,
   Yape,
   Nequi,
+  Mercantil,
 } from "../../../utils/MethodPage";
 import NextImage from "next/image";
 
 const banks = [
   {
-    key: "Venezuela",
-    img: "/BDV.png",
+    key: "Mercantil",
+    img: "/Mercantil.png",
   },
   {
     key: "Yape",
@@ -49,7 +49,7 @@ export default function DataPage({
   const paymentComponents: { [key: string]: React.ComponentType<any> } =
     useMemo(
       () => ({
-        Venezuela,
+        Mercantil,
         Yape,
         Binance,
         Nequi,

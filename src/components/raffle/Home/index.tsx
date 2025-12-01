@@ -22,11 +22,14 @@ import { useState } from "react";
 import { useRef } from "react";
 import type { UserDataRef } from "../UserData";
 import Loader from "@/components/ui/Loader";
+import { methodPage as methodData } from "@/utils/MethodPage";
 import RankingBuyer from "../rankingPurchase";
 
 export function HomeRaffle() {
   const [ticketCount, setTicketCount] = useState<number | null>(2);
-  const [methodPage, setMethodPage] = useState<string | null>("Venezuela");
+  const [methodPage, setMethodPage] = useState<string | null>(
+    methodData[0].key,
+  );
   const [consultUser, setConsultUser] = useState<string | null>(null);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [isCheckingTickets, setIsCheckingTickets] = useState(false);

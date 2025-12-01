@@ -95,8 +95,6 @@ export async function POST(req: NextRequest) {
 }
 
 /*
-Fuction Supabase Database 
-
 CREATE OR REPLACE FUNCTION public.create_purchase_and_tickets(
     p_name text,
     p_email text,
@@ -110,8 +108,8 @@ CREATE OR REPLACE FUNCTION public.create_purchase_and_tickets(
     p_method_pay text,
     p_amount text,
     p_ticket_count integer,
-    p_tickets text[]
-    p_seller
+    p_tickets text[],
+    p_seller text
 )
 RETURNS integer -- Devuelve el ID del usuario procesado
 LANGUAGE plpgsql
@@ -138,7 +136,7 @@ BEGIN
     END IF;
 
     -- 3. Insertar los datos del pago asociados al usuario.
-    INSERT INTO public.pay_data (method_pay, voucher, reference, bank, amount, user_id, seller)
+    INSERT INTO public.pay_data (method_pay, voucher, reference, bank, amount, user_id, seller, ticket_count)
     VALUES (p_method_pay, p_file_url, p_reference, p_bank, p_amount, v_user_id, p_seller, p_ticket_count)
     RETURNING id_pay INTO v_pay_id;
 

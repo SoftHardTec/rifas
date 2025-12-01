@@ -93,18 +93,19 @@ const UserData = forwardRef<UserDataRef, UserDataProps>(function UserData(
       file: null,
     },
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Email inválido"),
-      name: (value) => (value ? null : "Nombre requerido"),
-      PhoneCode: (value) => (value ? null : "Código requerido"),
-      NumberPhone: (value) => (value ? null : "Teléfono requerido"),
-      id: (value) => (value ? null : "requerido"),
-      NumberId: (value) =>
+      email: (value: string) =>
+        /^\S+@\S+$/.test(value) ? null : "Email inválido",
+      name: (value: string) => (value ? null : "Nombre requerido"),
+      PhoneCode: (value: string) => (value ? null : "Código requerido"),
+      NumberPhone: (value: string) => (value ? null : "Teléfono requerido"),
+      id: (value: string) => (value ? null : "requerido"),
+      NumberId: (value: string) =>
         String(value).length > 6 ? null : "Cédula requerida",
-      bank: (value) =>
+      bank: (value: string) =>
         methodPage === "Venezuela" ? (value ? null : "Banco requerido") : null,
-      reference: (value) =>
+      reference: (value: string) =>
         String(value).length > 5 ? null : "Referencia requerida",
-      file: (value) => (value ? null : "Comprobante requerido"),
+      file: (value: File | null) => (value ? null : "Comprobante requerido"),
     },
   });
 

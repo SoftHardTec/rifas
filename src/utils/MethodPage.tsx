@@ -122,6 +122,11 @@ export function Venezuela({ ticketCount }: MethodProps) {
     <BaseMethodComponent methodKey="Venezuela" ticketCount={ticketCount} />
   );
 }
+export function Mercantil({ ticketCount }: MethodProps) {
+  return (
+    <BaseMethodComponent methodKey="Mercantil" ticketCount={ticketCount} />
+  );
+}
 export function Yape({ ticketCount }: MethodProps) {
   return <BaseMethodComponent methodKey="Yape" ticketCount={ticketCount} />;
 }
@@ -142,11 +147,10 @@ export function Zelle({ ticketCount }: MethodProps) {
 
 export const methodPage = [
   {
-    key: "Venezuela",
-    label: "Venezuela",
-    title: "Pago Movil Venezuela",
+    key: "Mercantil",
+    label: "Mercantil",
+    title: "Pago Movil Mercantil",
     pricePerTicket: 140,
-    priceOffer: 110,
     minTickets: 2,
     formatAmount(count: number) {
       let priceTickets = 0;
@@ -173,11 +177,11 @@ export const methodPage = [
       );
     },
     details: [
-      { label: "Cuenta:", value: "0102" },
+      { label: "Cuenta:", value: "0105" },
       { label: "Cédula:", value: "22.338.937" },
       { label: "Teléfono:", value: "04149454986" },
     ],
-    copyValue: "0102 Banco Venezuela\n22338937\n04149454986",
+    copyValue: "0105 Banco Mercantil\n22338937\n04149454986",
   },
   {
     key: "Yape",
@@ -199,26 +203,6 @@ export const methodPage = [
       { label: "Titular", value: "Evimar Medina" },
     ],
     copyValue: `917756288`,
-  },
-  {
-    key: "Zinli",
-    label: "Zinli",
-    title: "Zinli (Min 6 tickets)",
-    pricePerTicket: 1,
-    minTickets: 6,
-    formatAmount(count: number) {
-      return (
-        "$" +
-        (count * this.pricePerTicket).toLocaleString("es-ES", {
-          minimumFractionDigits: 2,
-        })
-      );
-    },
-    details: [
-      { label: "Correo", value: "dv0510.27@gmail.com" },
-      { label: "Titular", value: "Damelis Aguilar" },
-    ],
-    copyValue: "dv0510.27@gmail.com",
   },
   {
     key: "Binance",
