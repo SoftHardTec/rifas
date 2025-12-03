@@ -131,10 +131,6 @@ export function Yape({ ticketCount }: MethodProps) {
   return <BaseMethodComponent methodKey="Yape" ticketCount={ticketCount} />;
 }
 
-export function Zinli({ ticketCount }: MethodProps) {
-  return <BaseMethodComponent methodKey="Zinli" ticketCount={ticketCount} />;
-}
-
 export function Binance({ ticketCount }: MethodProps) {
   return <BaseMethodComponent methodKey="Binance" ticketCount={ticketCount} />;
 }
