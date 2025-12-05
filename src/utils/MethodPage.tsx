@@ -149,24 +149,9 @@ export const methodPage = [
     pricePerTicket: 140,
     minTickets: 2,
     formatAmount(count: number) {
-      let priceTickets = 0;
-
-      switch (count) {
-        case 5:
-          priceTickets = 620;
-          break;
-        case 10:
-          priceTickets = 1150;
-          break;
-        case 20:
-          priceTickets = 2160;
-          break;
-        default:
-          priceTickets = count * this.pricePerTicket;
-      }
       return (
         "Bs. " +
-        priceTickets.toLocaleString("es-ES", {
+        (this.pricePerTicket * count).toLocaleString("es-ES", {
           minimumFractionDigits: 2,
           useGrouping: true,
         })
