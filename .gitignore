@@ -28,6 +28,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+#pnpm
+.pnpm-lock.yaml
+pnpm-workspace.yaml
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
